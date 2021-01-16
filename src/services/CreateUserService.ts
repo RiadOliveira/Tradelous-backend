@@ -1,7 +1,8 @@
 import User from '../database/entities/User';
-import UsersRepository from '../database/repositories/UsersRepository';
-import AppError from '../errors/AppError';
-import BCryptHashProvider from '../providers/HashProvider/implementations/BCryptProvider';
+import IUsersRepository from '../database/repositories/IUsersRepository';
+import IHashProvider from '../providers/HashProvider/IHashProvider';
+import AppError from '../http/errors/AppError';
+import { injectable, inject } from 'tsyringe';
 
 interface UserData {
     name: string;
@@ -10,17 +11,20 @@ interface UserData {
     isAdmin: boolean;
 }
 
+@injectable()
 export default class CreateUserService {
+    constructor(
+        @inject('UsersRepository') private usersRepository: IUsersRepository,
+        @inject('HashProvider') private hashProvider: IHashProvider,
+    ) {}
+
     public async execute({
         name,
         password,
         email,
         isAdmin,
     }: UserData): Promise<User> {
-        const usersRepository = new UsersRepository();
-        const hashProvider = new BCryptHashProvider();
-
-        const findedUser = await usersRepository.findByEmail(email);
+        const findedUser = await this.usersRepository.findByEmail(email);
 
         if (findedUser) {
             throw new AppError("User's email already exists");
@@ -28,9 +32,9 @@ export default class CreateUserService {
 
         console.log('TESTE');
 
-        const hashedPassword = await hashProvider.hash(password);
+        const hashedPassword = await this.hashProvider.hash(password);
 
-        const newUser = await usersRepository.create({
+        const newUser = await this.usersRepository.create({
             name,
             password: hashedPassword,
             isAdmin,

@@ -1,8 +1,11 @@
 import express from 'express';
 import './database/createConnection';
 import 'express-async-errors';
-import GlobalErrorHandler from './errors/GlobalErrorHandler';
-import routes from './routes';
+import 'dotenv/config';
+import 'reflect-metadata';
+import './container';
+import GlobalErrorHandler from './http/errors/GlobalErrorHandler';
+import routes from './http/routes';
 
 const app = express();
 
