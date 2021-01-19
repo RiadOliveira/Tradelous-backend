@@ -1,11 +1,11 @@
 import express from 'express';
-import './database/createConnection';
+import '../typeorm/createConnection';
 import 'express-async-errors';
 import 'dotenv/config';
 import 'reflect-metadata';
-import './container';
-import GlobalErrorHandler from './http/errors/GlobalErrorHandler';
-import routes from './http/routes';
+import '../container';
+import GlobalErrorHandler from '../errors/GlobalErrorHandler';
+import routes from './routes';
 
 const app = express();
 

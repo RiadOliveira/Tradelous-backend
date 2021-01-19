@@ -4,8 +4,10 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    ManyToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import Company from './Company';
 
 @Entity('users')
 export default class User {
@@ -23,10 +25,20 @@ export default class User {
     password: string;
 
     @Column('uuid')
-    companyID: string;
+    companyId?: string;
+
+    @ManyToOne(() => Company, company => company.workers, {
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        lazy: true,
+    })
+    company: Company;
 
     @Column('boolean')
     isAdmin: boolean;
+
+    @Column()
+    avatar?: string;
 
     @CreateDateColumn()
     createdAt: Date;

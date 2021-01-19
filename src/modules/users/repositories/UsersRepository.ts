@@ -1,7 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
-import User from '../entities/User';
-import UsersRepositoryDTO from './dtos/UsersRepositoryDTO';
+import User from '@shared/typeorm/entities/User';
+import CreateUserDTO from './dtos/CreateUserDTO';
 import IUsersRepository from './IUsersRepository';
+import UpdateUserDTO from './dtos/UpdateUserDTO';
 
 class UsersRepository implements IUsersRepository {
     private UsersRepository: Repository<User>;
@@ -10,25 +11,15 @@ class UsersRepository implements IUsersRepository {
         this.UsersRepository = getRepository(User);
     }
 
-    public async create({
-        name,
-        email,
-        isAdmin,
-        password,
-    }: UsersRepositoryDTO): Promise<User> {
-        const newUser = this.UsersRepository.create({
-            name,
-            password,
-            email,
-            isAdmin,
-        });
+    public async create(user: CreateUserDTO): Promise<User> {
+        const newUser = this.UsersRepository.create(user);
 
         await this.UsersRepository.save(newUser);
 
         return newUser;
     }
 
-    public async update(user: User): Promise<User> {
+    public async save(user: UpdateUserDTO): Promise<User> {
         const updatedUser = await this.UsersRepository.save(user);
 
         return updatedUser;
@@ -38,6 +29,12 @@ class UsersRepository implements IUsersRepository {
         const findedUser = await this.UsersRepository.findOne({
             where: { email },
         });
+
+        return findedUser;
+    }
+
+    public async findById(id: string): Promise<User | undefined> {
+        const findedUser = await this.UsersRepository.findOne(id);
 
         return findedUser;
     }

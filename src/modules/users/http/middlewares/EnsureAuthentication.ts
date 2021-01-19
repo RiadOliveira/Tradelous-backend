@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
-import AppError from '../errors/AppError';
-import jwtConfig from '../../config/jwtToken';
+import AppError from '@shared/errors/AppError';
+import jwtConfig from '@config/jwtToken';
 
 interface IJWT {
     iat: string;

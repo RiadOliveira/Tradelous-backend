@@ -1,13 +1,13 @@
-import User from '../database/entities/User';
-import IUsersRepository from '../database/repositories/IUsersRepository';
-import IHashProvider from '../providers/HashProvider/IHashProvider';
-import AppError from '../http/errors/AppError';
+import User from '@shared/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
+import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 
 interface UserData {
     name: string;
-    password: string;
     email: string;
+    password: string;
     isAdmin: boolean;
 }
 
@@ -29,8 +29,6 @@ export default class CreateUserService {
         if (findedUser) {
             throw new AppError("User's email already exists");
         }
-
-        console.log('TESTE');
 
         const hashedPassword = await this.hashProvider.hash(password);
 

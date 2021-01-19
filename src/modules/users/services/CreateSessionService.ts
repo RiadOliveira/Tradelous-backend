@@ -1,10 +1,10 @@
-import User from '../database/entities/User';
-import AppError from '../http/errors/AppError';
+import User from '@shared/typeorm/entities/User';
+import AppError from '@shared/errors/AppError';
 import { sign } from 'jsonwebtoken';
-import jwtConfig from '../config/jwtToken';
+import jwtConfig from '@config/jwtToken';
 import { injectable, inject } from 'tsyringe';
-import IUsersRepository from '../database/repositories/IUsersRepository';
-import IHashProvider from '../providers/HashProvider/IHashProvider';
+import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
 
 interface UserData {
     email: string;

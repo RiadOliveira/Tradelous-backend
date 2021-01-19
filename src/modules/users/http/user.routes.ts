@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import CreateUserService from '../../services/CreateUserService';
-import CreateSessionService from '../../services/CreateSessionService';
+import CreateUserService from '../services/CreateUserService';
+import CreateSessionService from '../services/CreateSessionService';
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
 
@@ -31,7 +31,7 @@ userRoutes.post('/signUp', async (request: Request, response: Response) => {
         isAdmin,
     });
 
-    return response.json(classToClass(createdUser));
+    return response.json(createdUser);
 });
 
 export default userRoutes;
