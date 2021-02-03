@@ -16,7 +16,7 @@ companyRoutes.post(
     upload.single('logo'),
     async (request: Request, response: Response) => {
         const { name, cnpj, adress, adminID } = request.body;
-        const logo = request.file.originalname;
+        const logo = request.file.filename;
 
         const registerCompany = container.resolve(RegisterCompanyService);
 
