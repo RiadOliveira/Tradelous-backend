@@ -15,9 +15,8 @@ function EnsureAuthentication(
     next: NextFunction,
 ): void {
     const bearerToken = request.headers.authorization;
-
     if (!bearerToken) {
-        throw new AppError('Invalid JWT token');
+        throw new AppError('JWT token is missing', 401);
     }
 
     const [, token] = bearerToken.split(' ');
@@ -29,9 +28,9 @@ function EnsureAuthentication(
             id: decoded.sub,
         };
 
-        next();
+        return next();
     } catch {
-        throw new AppError('Invalid JWT token');
+        throw new AppError('Invalid JWT token', 401);
     }
 }
 

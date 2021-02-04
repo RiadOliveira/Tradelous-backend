@@ -1,10 +1,16 @@
 import { Router, Request, Response } from 'express';
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
+import UpdateUserService from '../services/UpdateUserService';
+
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
+import multerConfig from '@config/upload';
+import multer from 'multer';
+import EnsureAuthentication from './middlewares/EnsureAuthentication';
 
 const userRoutes = Router();
+const upload = multer(multerConfig);
 
 userRoutes.post('/sessions', async (request: Request, response: Response) => {
     const { email, password } = request.body;
@@ -33,5 +39,35 @@ userRoutes.post('/signUp', async (request: Request, response: Response) => {
 
     return response.json(createdUser);
 });
+
+userRoutes.put(
+    '/update',
+    EnsureAuthentication,
+    upload.single('avatar'),
+    async (request: Request, response: Response) => {
+        const { name, email, oldPassword, newPassword } = request.body;
+
+        const userID = request.user.id;
+
+        let avatar;
+
+        if (request.file) {
+            avatar = request.file.filename;
+        }
+
+        const updateUserService = container.resolve(UpdateUserService);
+
+        const updatedUser = await updateUserService.execute({
+            name,
+            email,
+            avatar,
+            oldPassword,
+            newPassword,
+            userID,
+        });
+
+        return response.json(updatedUser);
+    },
+);
 
 export default userRoutes;

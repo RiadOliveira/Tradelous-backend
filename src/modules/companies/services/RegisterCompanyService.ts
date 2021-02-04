@@ -3,6 +3,7 @@ import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import Company from '@shared/typeorm/entities/Company';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 
 interface CompanyData {
     name: string;
@@ -19,6 +20,7 @@ export default class RegisterCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('StorageProvider') private storageProvider: IStorageProvider,
     ) {}
 
     public async execute({
@@ -46,6 +48,10 @@ export default class RegisterCompanyService {
 
         if (!findedUser) {
             throw new AppError('Inexisting user');
+        }
+
+        if (logo) {
+            await this.storageProvider.save(logo);
         }
 
         findedUser.companyId = newCompany.id;

@@ -1,5 +1,9 @@
 node_modules
 ormconfig.json
 .env
+
 tmp/*
 !tmp/.gitkeep
+!tmp/uploads
+tmp/uploads/*
+!tmp/uploads/.gitkeep
