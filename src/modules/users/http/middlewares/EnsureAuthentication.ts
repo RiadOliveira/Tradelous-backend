@@ -15,6 +15,7 @@ function EnsureAuthentication(
     next: NextFunction,
 ): void {
     const bearerToken = request.headers.authorization;
+
     if (!bearerToken) {
         throw new AppError('JWT token is missing', 401);
     }

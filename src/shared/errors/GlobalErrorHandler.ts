@@ -10,12 +10,10 @@ function GlobalErrorHandler(
     next: NextFunction,
 ): Response {
     if (request.file) {
-        console.log(request.file);
-
         const diskProvider = new DiskProvider();
 
         setTimeout(async () => {
-            await diskProvider.clearTemp(request.file.filename);
+            await diskProvider.deleteFileFromTemp(request.file.filename);
         }, 5000);
     }
 

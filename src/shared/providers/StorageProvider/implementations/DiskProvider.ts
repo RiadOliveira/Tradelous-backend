@@ -16,7 +16,7 @@ export default class DiskProvider implements IStorageProvider {
         await fs.promises.unlink(`tmp/uploads/${filename}`);
     }
 
-    public async clearTemp(filename: string): Promise<void> {
+    public async deleteFileFromTemp(filename: string): Promise<void> {
         await fs.promises.unlink(`tmp/${filename}`);
     }
 }

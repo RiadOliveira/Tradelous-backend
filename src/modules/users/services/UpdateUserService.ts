@@ -47,7 +47,7 @@ export default class UpdateUserService {
             findedUser.email = email;
         }
 
-        if (oldPassword) {
+        if (oldPassword && newPassword) {
             const verifyPassword = await this.hashProvider.compareHash(
                 oldPassword,
                 findedUser.password,
@@ -59,13 +59,9 @@ export default class UpdateUserService {
                 );
             }
 
-            if (newPassword) {
-                const hashedPassword = await this.hashProvider.hash(
-                    newPassword,
-                );
+            const hashedPassword = await this.hashProvider.hash(newPassword);
 
-                findedUser.password = hashedPassword;
-            }
+            findedUser.password = hashedPassword;
         }
 
         if (findedUser.avatar && avatar) {
