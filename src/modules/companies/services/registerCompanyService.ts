@@ -33,7 +33,7 @@ export default class RegisterCompanyService {
         const findedCompany = await this.companiesRepository.findByCnpj(cnpj);
 
         if (findedCompany) {
-            throw new AppError("Company's cnpj already exists");
+            throw new AppError("Company's cnpj already exists", 400);
         }
 
         const newCompany = await this.companiesRepository.create({
@@ -47,7 +47,7 @@ export default class RegisterCompanyService {
         const findedUser = await this.usersRepository.findById(adminID);
 
         if (!findedUser) {
-            throw new AppError('Inexisting user');
+            throw new AppError('User not found', 400);
         }
 
         if (logo) {

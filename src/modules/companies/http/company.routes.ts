@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import RegisterCompanyService from '../services/RegisterCompanyService';
+import RegisterCompanyService from '../services/registerCompanyService';
 import addWorkerToCompanyService from '../services/addWorkerToCompanyService';
 import removeWorkerFromCompanyService from '../services/removeWorkerFromCompanyService';
-import ListWorkersFromCompanyService from '../services/ListWorkersFromCompanyService';
+import ListWorkersFromCompanyService from '../services/listWorkersFromCompanyService';
 import multerConfig from '@config/upload';
 import multer from 'multer';
 
@@ -36,37 +36,42 @@ companyRoutes.post(
     },
 );
 
-companyRoutes.post(
+companyRoutes.patch(
     '/add-worker',
     async (request: Request, response: Response) => {
-        const { companyId, workerEmail } = request.body;
+        const { companyId, workerId } = request.body;
+
+        const adminId = request.user.id;
 
         const addWorkerToCompany = container.resolve(addWorkerToCompanyService);
 
         const newWorker = await addWorkerToCompany.execute({
             companyId,
-            workerEmail,
+            workerId,
+            adminId,
         });
 
         return response.json(newWorker);
     },
 );
 
-companyRoutes.post(
+companyRoutes.patch(
     '/remove-worker',
     async (request: Request, response: Response) => {
-        const { companyId, workerEmail } = request.body;
+        const { workerId } = request.body;
+
+        const adminId = request.user.id;
 
         const removeWorkerFromCompany = container.resolve(
             removeWorkerFromCompanyService,
         );
 
-        const removedWorker = await removeWorkerFromCompany.execute({
-            companyId,
-            workerEmail,
+        await removeWorkerFromCompany.execute({
+            adminId,
+            workerId,
         });
 
-        return response.json(removedWorker);
+        return response.json().status(200);
     },
 );
 
@@ -74,10 +79,11 @@ companyRoutes.get(
     '/list-workers/:companyId',
     async (request: Request, response: Response) => {
         const { companyId } = request.params;
+        const userId = request.user.id;
 
         const listWorkers = container.resolve(ListWorkersFromCompanyService);
 
-        const workers = await listWorkers.execute(companyId);
+        const workers = await listWorkers.execute(companyId, userId);
 
         return response.json(workers);
     },

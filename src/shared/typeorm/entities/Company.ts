@@ -6,6 +6,7 @@ import {
     UpdateDateColumn,
     OneToMany,
 } from 'typeorm';
+import Product from './Product';
 import User from './User';
 
 @Entity('companies')
@@ -26,10 +27,16 @@ export default class Company {
     adminID: string;
 
     @OneToMany(() => User, user => user.company, {
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
     workers: User[];
+
+    @OneToMany(() => Product, product => product.companyId, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
+    products: Product[];
 
     @Column()
     logo?: string;

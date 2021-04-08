@@ -27,7 +27,7 @@ export default class CreateSessionService {
         const findedUser = await this.usersRepository.findByEmail(email);
 
         if (!findedUser) {
-            throw new AppError('Incorrect e-mail or password');
+            throw new AppError('Incorrect e-mail or password', 400);
         }
 
         const verifyHash = await this.hashProvider.compareHash(
@@ -36,7 +36,7 @@ export default class CreateSessionService {
         );
 
         if (!verifyHash) {
-            throw new AppError('Incorrect e-mail or password');
+            throw new AppError('Incorrect e-mail or password', 400);
         }
 
         const token = sign({ name: findedUser.name }, jwtConfig.secret, {
