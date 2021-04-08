@@ -24,7 +24,7 @@ userRoutes.post('/signUp', async (request: Request, response: Response) => {
         isAdmin,
     });
 
-    return response.json(createdUser);
+    return response.json(createdUser).status(201);
 });
 
 userRoutes.post('/sessions', async (request: Request, response: Response) => {
@@ -66,7 +66,7 @@ userRoutes.put(
             userID,
         });
 
-        return response.json(updatedUser);
+        return response.json(updatedUser).status(202);
     },
 );
 

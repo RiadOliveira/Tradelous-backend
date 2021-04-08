@@ -1,6 +1,5 @@
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
-import User from '@shared/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
 

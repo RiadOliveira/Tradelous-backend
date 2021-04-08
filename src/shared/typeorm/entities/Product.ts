@@ -2,9 +2,11 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import Company from './Company';
 
 @Entity('products')
 export default class Product {
@@ -16,6 +18,12 @@ export default class Product {
 
     @Column()
     companyId: string;
+
+    @ManyToOne(() => Company, company => company.products, {
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+    })
+    company: Company;
 
     @Column()
     price: number;

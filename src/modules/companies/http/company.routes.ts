@@ -32,7 +32,7 @@ companyRoutes.post(
             logo,
         });
 
-        return response.json(newCompany);
+        return response.json(newCompany).status(201);
     },
 );
 
@@ -56,9 +56,9 @@ companyRoutes.patch(
 );
 
 companyRoutes.patch(
-    '/remove-worker',
+    '/remove-worker/:workerId',
     async (request: Request, response: Response) => {
-        const { workerId } = request.body;
+        const { workerId } = request.params;
 
         const adminId = request.user.id;
 
@@ -71,7 +71,7 @@ companyRoutes.patch(
             workerId,
         });
 
-        return response.json().status(200);
+        return response.json();
     },
 );
 

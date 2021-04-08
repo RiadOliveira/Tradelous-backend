@@ -30,7 +30,6 @@ export default class User {
     @ManyToOne(() => Company, company => company.workers, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
-        lazy: true,
     })
     company: Company;
 

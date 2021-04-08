@@ -30,16 +30,8 @@ export default class addWorkerToCompanyService {
         const findedWorker = await this.usersRepository.findById(workerId);
         const findedAdmin = await this.usersRepository.findById(adminId);
 
-        if (!findedCompany) {
-            throw new AppError('Company not found', 400);
-        }
-
-        if (!findedWorker) {
-            throw new AppError('Worker not found', 400);
-        }
-
-        if (!findedAdmin) {
-            throw new AppError('Admin not found', 400);
+        if (!findedCompany || !findedWorker || !findedAdmin) {
+            throw new AppError('Invalid data passed', 400);
         }
 
         if (findedWorker.companyId === findedCompany.id) {

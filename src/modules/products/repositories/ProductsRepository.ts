@@ -1,6 +1,7 @@
 import { getRepository, Repository } from 'typeorm';
 import Product from '@shared/typeorm/entities/Product';
 import IProductsRepository from './IProductsRepository';
+import CreateProductDTO from './dtos/CreateProductDTO';
 
 class ProductsRepository implements IProductsRepository {
     private ProductsRepository: Repository<Product>;
@@ -9,11 +10,8 @@ class ProductsRepository implements IProductsRepository {
         this.ProductsRepository = getRepository(Product);
     }
 
-    public async create(product: Product, companyId: string): Promise<Product> {
-        const newProduct = this.ProductsRepository.create({
-            ...product,
-            companyId,
-        });
+    public async create(product: CreateProductDTO): Promise<Product> {
+        const newProduct = this.ProductsRepository.create(product);
 
         return this.ProductsRepository.save(newProduct);
     }

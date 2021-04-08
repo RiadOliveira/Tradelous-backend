@@ -27,12 +27,12 @@ export default class Company {
     adminID: string;
 
     @OneToMany(() => User, user => user.company, {
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
     })
     workers: User[];
 
-    @OneToMany(() => Product, product => product.companyId, {
+    @OneToMany(() => Product, product => product.company, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })

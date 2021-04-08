@@ -30,7 +30,7 @@ class CompaniesRepository implements ICompaniesRepository {
 
     public async findById(id: string): Promise<Company | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne(id, {
-            relations: ['workers'],
+            relations: ['workers', 'products'],
         });
 
         if (findedCompany) {
@@ -45,7 +45,7 @@ class CompaniesRepository implements ICompaniesRepository {
     public async findByCnpj(cnpj: string): Promise<Company | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne({
             where: { cnpj },
-            relations: ['workers'],
+            relations: ['workers', 'products'],
         });
 
         if (findedCompany) {
