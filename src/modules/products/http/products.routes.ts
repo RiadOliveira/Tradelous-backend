@@ -40,7 +40,7 @@ productsRoutes.post('/add', async (request: Request, response: Response) => {
         userId,
     );
 
-    return response.json(newProduct).status(201);
+    return response.status(201).json(newProduct);
 });
 
 productsRoutes.put('/update', async (request: Request, response: Response) => {
@@ -56,7 +56,7 @@ productsRoutes.put('/update', async (request: Request, response: Response) => {
         id,
     });
 
-    return response.json(updatedProduct).status(202);
+    return response.status(202).json(updatedProduct);
 });
 
 productsRoutes.delete(
@@ -72,7 +72,7 @@ productsRoutes.delete(
 
         await deleteProductFromCompany.execute(productId, userId);
 
-        return response.json().status(204);
+        return response.status(204).json();
     },
 );
 

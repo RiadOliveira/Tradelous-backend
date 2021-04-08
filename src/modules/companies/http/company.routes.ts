@@ -32,7 +32,7 @@ companyRoutes.post(
             logo,
         });
 
-        return response.json(newCompany).status(201);
+        return response.status(201).json(newCompany);
     },
 );
 
@@ -51,7 +51,7 @@ companyRoutes.patch(
             adminId,
         });
 
-        return response.json(newWorker);
+        return response.status(202).json(newWorker);
     },
 );
 
@@ -71,7 +71,7 @@ companyRoutes.patch(
             workerId,
         });
 
-        return response.json();
+        return response.status(204).json();
     },
 );
 
