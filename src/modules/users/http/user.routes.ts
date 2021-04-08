@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import CreateUserService from '../services/createUserService';
-import CreateSessionService from '../services/createSessionService';
-import UpdateUserService from '../services/updateUserService';
+import CreateUserService from '../services/CreateUserService';
+import CreateSessionService from '../services/CreateSessionService';
+import UpdateUserService from '../services/UpdateUserService';
 
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';

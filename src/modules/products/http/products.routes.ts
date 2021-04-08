@@ -1,8 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import ListProductsFromCompanyService from '../services/listProductsFromCompanyService';
-import AddProductToCompanyService from '../services/addProductToCompanyService';
-import DeleteProductFromCompanyService from '../services/deleteProductFromCompanyService';
+import ListProductsFromCompanyService from '../services/ListProductsFromCompanyService';
+import AddProductToCompanyService from '../services/AddProductToCompanyService';
+import DeleteProductFromCompanyService from '../services/DeleteProductFromCompanyService';
+import UpdateProductService from '../services/UpdateProductService';
 
 const productsRoutes = Router();
 
@@ -24,23 +25,38 @@ productsRoutes.get(
 productsRoutes.post('/add', async (request: Request, response: Response) => {
     const { name, companyId, price, brand, qrCode } = request.body;
 
+    const userId = request.user.id;
+
     const addProductToCompany = container.resolve(AddProductToCompanyService);
 
-    const newProduct = await addProductToCompany.execute({
-        name,
-        companyId,
-        price,
-        brand,
-        qrCode,
-    });
+    const newProduct = await addProductToCompany.execute(
+        {
+            name,
+            companyId,
+            price,
+            brand,
+            qrCode,
+        },
+        userId,
+    );
 
     return response.json(newProduct).status(201);
 });
 
 productsRoutes.put('/update', async (request: Request, response: Response) => {
-    //To finish
     const { name, price, brand, qrCode, id } = request.body;
-    return response.json();
+
+    const updateProduct = container.resolve(UpdateProductService);
+
+    const updatedProduct = await updateProduct.execute({
+        name,
+        price,
+        brand,
+        qrCode,
+        id,
+    });
+
+    return response.json(updatedProduct).status(202);
 });
 
 productsRoutes.delete(

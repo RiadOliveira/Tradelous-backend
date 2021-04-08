@@ -12,14 +12,13 @@ interface UpdateProductData {
 }
 
 @injectable()
-export default class updateProductService {
+export default class UpdateProductService {
     constructor(
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
     ) {}
 
     public async execute(product: UpdateProductData): Promise<Product> {
-        //To finish
         const verifyProduct = await this.productsRepository.findById(
             product.id,
         );
@@ -28,15 +27,13 @@ export default class updateProductService {
             throw new AppError('Product not found', 400);
         }
 
-        // type keys = 'name' | 'id' | 'price' | 'brand' | 'qrCode';
+        const updatedProduct: Product = {
+            ...verifyProduct,
+            ...product,
+        };
 
-        // const productKeys = Object.keys(product) as keys[];
-        // const productValues = Object.values(product) as string | number[];
+        await this.productsRepository.save(updatedProduct);
 
-        // productKeys.forEach((key, index) => {
-        //     verifyProduct[key] = productValues[index];
-        // });
-
-        return verifyProduct;
+        return updatedProduct;
     }
 }

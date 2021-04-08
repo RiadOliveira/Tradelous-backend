@@ -4,7 +4,7 @@ import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
 
 @injectable()
-export default class listProductsFromCompanyService {
+export default class ListProductsFromCompanyService {
     constructor(
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,

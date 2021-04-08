@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import RegisterCompanyService from '../services/registerCompanyService';
-import addWorkerToCompanyService from '../services/addWorkerToCompanyService';
-import removeWorkerFromCompanyService from '../services/removeWorkerFromCompanyService';
-import ListWorkersFromCompanyService from '../services/listWorkersFromCompanyService';
+import RegisterCompanyService from '../services/RegisterCompanyService';
+import addWorkerToCompanyService from '../services/AddWorkerToCompanyService';
+import removeWorkerFromCompanyService from '../services/RemoveWorkerFromCompanyService';
+import ListWorkersFromCompanyService from '../services/ListWorkersFromCompanyService';
 import multerConfig from '@config/upload';
 import multer from 'multer';
 

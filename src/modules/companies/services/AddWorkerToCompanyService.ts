@@ -11,7 +11,7 @@ interface Request {
 }
 
 @injectable()
-export default class addWorkerToCompanyService {
+export default class AddWorkerToCompanyService {
     constructor(
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
