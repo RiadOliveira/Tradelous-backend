@@ -4,6 +4,19 @@ ormconfig.json
 
 tmp/*
 !tmp/.gitkeep
+
 !tmp/uploads
 tmp/uploads/*
 !tmp/uploads/.gitkeep
+
+!tmp/uploads/avatar
+tmp/uploads/avatar/*
+!tmp/uploads/avatar/.gitkeep
+
+!tmp/uploads/logo
+tmp/uploads/logo/*
+!tmp/uploads/logo/.gitkeep
+
+!tmp/uploads/productImage
+tmp/uploads/productImage/*
+!tmp/uploads/productImage/.gitkeep
