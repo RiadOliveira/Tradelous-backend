@@ -1,5 +1,6 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
 
@@ -10,6 +11,8 @@ export default class DeleteProductToCompanyService {
         private productsRepository: IProductsRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider,
     ) {}
 
     public async execute(productId: string, userId: string): Promise<void> {
@@ -28,6 +31,13 @@ export default class DeleteProductToCompanyService {
             throw new AppError(
                 'The user does not have permission to execute this action',
                 401,
+            );
+        }
+
+        if (verifyProduct.image) {
+            await this.storageProvider.delete(
+                verifyProduct.image,
+                'productImage',
             );
         }
 

@@ -67,13 +67,13 @@ export default class UpdateUserService {
         }
 
         if (findedUser.avatar && avatar) {
-            await this.storageProvider.delete(findedUser.avatar);
+            await this.storageProvider.delete(findedUser.avatar, 'avatar');
 
-            await this.storageProvider.save(avatar);
+            await this.storageProvider.save(avatar, 'avatar');
 
             findedUser.avatar = avatar;
         } else if (avatar) {
-            await this.storageProvider.save(avatar);
+            await this.storageProvider.save(avatar, 'avatar');
 
             findedUser.avatar = avatar;
         }

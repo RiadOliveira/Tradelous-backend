@@ -40,6 +40,11 @@ export class CreateProductsTable1617853473046 implements MigrationInterface {
                         isUnique: true,
                     },
                     {
+                        name: 'image',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
                         name: 'createdAt',
                         type: 'timestamp',
                         default: 'now()',

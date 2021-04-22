@@ -51,7 +51,7 @@ export default class RegisterCompanyService {
         }
 
         if (logo) {
-            await this.storageProvider.save(logo);
+            await this.storageProvider.save(logo, 'logo');
         }
 
         findedUser.companyId = newCompany.id;

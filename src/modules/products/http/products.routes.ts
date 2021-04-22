@@ -4,8 +4,11 @@ import ListProductsFromCompanyService from '../services/ListProductsFromCompanyS
 import AddProductToCompanyService from '../services/AddProductToCompanyService';
 import DeleteProductFromCompanyService from '../services/DeleteProductFromCompanyService';
 import UpdateProductService from '../services/UpdateProductService';
+import multer from 'multer';
+import multerConfig from '@config/upload';
 
 const productsRoutes = Router();
+const upload = multer(multerConfig);
 
 productsRoutes.get(
     '/:companyId',
@@ -22,42 +25,58 @@ productsRoutes.get(
     },
 );
 
-productsRoutes.post('/add', async (request: Request, response: Response) => {
-    const { name, companyId, price, brand, qrCode } = request.body;
+productsRoutes.post(
+    '/add',
+    upload.single('image'),
+    async (request: Request, response: Response) => {
+        const { name, companyId, price, brand, qrCode } = request.body;
 
-    const userId = request.user.id;
+        let image;
+        if (request.file) {
+            image = request.file.filename;
+        }
 
-    const addProductToCompany = container.resolve(AddProductToCompanyService);
+        const userId = request.user.id;
 
-    const newProduct = await addProductToCompany.execute(
-        {
+        const addProductToCompany = container.resolve(
+            AddProductToCompanyService,
+        );
+
+        const newProduct = await addProductToCompany.execute(
+            {
+                name,
+                companyId,
+                price,
+                brand,
+                qrCode,
+                image,
+            },
+            userId,
+        );
+
+        return response.status(201).json(newProduct);
+    },
+);
+
+productsRoutes.put(
+    '/update',
+    upload.single('image'),
+    async (request: Request, response: Response) => {
+        const { name, price, brand, qrCode, id } = request.body;
+
+        const updateProduct = container.resolve(UpdateProductService);
+
+        const updatedProduct = await updateProduct.execute({
             name,
-            companyId,
             price,
             brand,
             qrCode,
-        },
-        userId,
-    );
+            id,
+        });
 
-    return response.status(201).json(newProduct);
-});
-
-productsRoutes.put('/update', async (request: Request, response: Response) => {
-    const { name, price, brand, qrCode, id } = request.body;
-
-    const updateProduct = container.resolve(UpdateProductService);
-
-    const updatedProduct = await updateProduct.execute({
-        name,
-        price,
-        brand,
-        qrCode,
-        id,
-    });
-
-    return response.status(202).json(updatedProduct);
-});
+        return response.status(202).json(updatedProduct);
+    },
+);
 
 productsRoutes.delete(
     '/delete/:productId',

@@ -1,6 +1,7 @@
 import ICompaniesRepository from '@modules/companies/repositories/ICompaniesRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
@@ -11,6 +12,7 @@ interface ProductData {
     price: number;
     brand: string;
     qrCode?: string;
+    image?: string;
 }
 
 @injectable()
@@ -22,6 +24,8 @@ export default class AddProductToCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider,
     ) {}
 
     public async execute(
@@ -46,6 +50,10 @@ export default class AddProductToCompanyService {
                 'The user does not have permission to execute this action',
                 401,
             );
+        }
+
+        if (product.image) {
+            await this.storageProvider.save(product.image, 'productImage');
         }
 
         return this.productsRepository.create(product);

@@ -34,6 +34,9 @@ export default class Product {
     @Column()
     qrCode?: string;
 
+    @Column()
+    image?: string;
+
     @CreateDateColumn()
     createdAt: string;
 
