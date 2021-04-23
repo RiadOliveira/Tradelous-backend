@@ -22,11 +22,11 @@ export default class removeWorkerFromCompanyService {
         const findedAdmin = await this.usersRepository.findById(adminId);
 
         if (!findedWorker) {
-            throw new AppError('Worker not found');
+            throw new AppError('Worker not found.');
         }
 
         if (!findedAdmin) {
-            throw new AppError('Admin not found');
+            throw new AppError('Admin not found.');
         }
 
         if (
@@ -35,7 +35,7 @@ export default class removeWorkerFromCompanyService {
                 findedWorker.companyId !== findedAdmin.companyId)
         ) {
             throw new AppError(
-                'The indicated user does not have the permission to execute this action',
+                'The indicated user does not have the permission to execute this action.',
                 401,
             );
         }

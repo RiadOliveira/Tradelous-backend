@@ -33,7 +33,7 @@ export default class UpdateUserService {
         const findedUser = await this.usersRepository.findById(userID);
 
         if (!findedUser) {
-            throw new AppError('Informed user does not exist');
+            throw new AppError('Informed user does not exist.');
         }
 
         if (email !== findedUser.email) {
@@ -41,7 +41,7 @@ export default class UpdateUserService {
 
             if (verifyEmail) {
                 throw new AppError(
-                    'A user with the informed email already exists',
+                    'A user with the informed email already exists.',
                 );
             }
             findedUser.email = email;
@@ -55,7 +55,7 @@ export default class UpdateUserService {
 
             if (!verifyPassword) {
                 throw new AppError(
-                    "Informed old password is not equal to user's original password",
+                    "Informed old password is not equal to user's original password.",
                 );
             }
 
@@ -85,8 +85,6 @@ export default class UpdateUserService {
 
         findedUser.name = name;
 
-        const newUser = await this.usersRepository.save(findedUser);
-
-        return newUser;
+        return this.usersRepository.save(findedUser);
     }
 }

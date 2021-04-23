@@ -20,16 +20,16 @@ export default class DeleteProductToCompanyService {
         const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyProduct) {
-            throw new AppError('Product not found');
+            throw new AppError('Product not found.');
         }
 
         if (!verifyUser) {
-            throw new AppError('User not found');
+            throw new AppError('User not found.');
         }
 
         if (verifyUser.companyId !== verifyProduct.companyId) {
             throw new AppError(
-                'The user does not have permission to execute this action',
+                'The user does not have permission to execute this action.',
                 401,
             );
         }

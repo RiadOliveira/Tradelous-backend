@@ -31,12 +31,12 @@ export default class AddWorkerToCompanyService {
         const findedAdmin = await this.usersRepository.findById(adminId);
 
         if (!findedCompany || !findedWorker || !findedAdmin) {
-            throw new AppError('Invalid data passed');
+            throw new AppError('Invalid data passed.');
         }
 
         if (findedWorker.companyId === findedCompany.id) {
             throw new AppError(
-                'The requested worker is already on the company',
+                'The requested worker is already on the company.',
             );
         }
 
@@ -45,7 +45,7 @@ export default class AddWorkerToCompanyService {
             findedWorker.companyId !== findedCompany.id
         ) {
             throw new AppError(
-                'The requested user is already associated to another company',
+                'The requested user is already associated to another company.',
             );
         }
 
@@ -54,7 +54,7 @@ export default class AddWorkerToCompanyService {
             (findedAdmin.isAdmin && findedWorker.companyId)
         ) {
             throw new AppError(
-                'The user does not have permission to execute this action',
+                'The user does not have permission to execute this action.',
                 401,
             );
         }

@@ -23,7 +23,8 @@ export class CreateCompaniesTable1611030429428 implements MigrationInterface {
                     },
                     {
                         name: 'cnpj',
-                        type: 'varchar',
+                        type: 'bigserial',
+                        width: 14,
                     },
                     {
                         name: 'adress',
@@ -35,7 +36,7 @@ export class CreateCompaniesTable1611030429428 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: 'adminID',
+                        name: 'adminId',
                         type: 'uuid',
                     },
                     {

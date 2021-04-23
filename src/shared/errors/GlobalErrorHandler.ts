@@ -26,7 +26,7 @@ function GlobalErrorHandler(
     console.error(err);
 
     return response.status(500).json({
-        error: { message: 'Internal Server Error', status: 'error' },
+        error: { message: 'Internal Server Error.', status: 'error' },
     });
 }
 

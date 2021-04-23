@@ -17,12 +17,12 @@ export default class ListWorkersFromCompanyService {
         const findedUser = await this.usersRepository.findById(userId);
 
         if (!findedUser) {
-            throw new AppError('User not found');
+            throw new AppError('User not found.');
         }
 
         if (findedUser.companyId !== companyId) {
             throw new AppError(
-                'The user does not have permission to execute this action',
+                'The user does not have permission to execute this action.',
                 401,
             );
         }
@@ -32,7 +32,7 @@ export default class ListWorkersFromCompanyService {
         );
 
         if (!findedCompany) {
-            throw new AppError('Company not found');
+            throw new AppError('Company not found.');
         }
 
         return findedCompany;

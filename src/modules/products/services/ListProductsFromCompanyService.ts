@@ -16,7 +16,7 @@ export default class ListProductsFromCompanyService {
         );
 
         if (!findedCompany) {
-            throw new AppError('Company not found');
+            throw new AppError('Company not found.');
         }
 
         return findedCompany.products;

@@ -7,9 +7,9 @@ import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider
 
 interface CompanyData {
     name: string;
-    cnpj: string;
+    cnpj: number;
     adress: string;
-    adminID: string;
+    adminId: string;
     logo?: string;
 }
 
@@ -23,36 +23,31 @@ export default class RegisterCompanyService {
         @inject('StorageProvider') private storageProvider: IStorageProvider,
     ) {}
 
-    public async execute({
-        name,
-        cnpj,
-        adress,
-        adminID,
-        logo,
-    }: CompanyData): Promise<Company> {
-        const findedCompany = await this.companiesRepository.findByCnpj(cnpj);
+    public async execute(company: CompanyData): Promise<Company> {
+        const findedCompany = await this.companiesRepository.findByCnpj(
+            company.cnpj,
+        );
+        const findedUser = await this.usersRepository.findById(company.adminId);
 
         if (findedCompany) {
-            throw new AppError("Company's cnpj already exists");
+            throw new AppError("Company's cnpj already exists.");
         }
-
-        const newCompany = await this.companiesRepository.create({
-            name,
-            cnpj,
-            adress,
-            adminID,
-            logo,
-        });
-
-        const findedUser = await this.usersRepository.findById(adminID);
 
         if (!findedUser) {
-            throw new AppError('User not found');
+            throw new AppError('User not found.');
         }
 
-        if (logo) {
-            await this.storageProvider.save(logo, 'logo');
+        if (findedUser.companyId) {
+            throw new AppError(
+                'The requested user already is associated to a company.',
+            );
         }
+
+        if (company.logo) {
+            await this.storageProvider.save(company.logo, 'logo');
+        }
+
+        const newCompany = await this.companiesRepository.create(company);
 
         findedUser.companyId = newCompany.id;
 

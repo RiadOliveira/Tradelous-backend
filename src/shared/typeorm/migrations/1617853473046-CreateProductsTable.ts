@@ -61,7 +61,7 @@ export class CreateProductsTable1617853473046 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        name: 'companyID',
+                        name: 'companyId',
                         columnNames: ['companyId'],
                         referencedTableName: 'companies',
                         referencedColumnNames: ['id'],

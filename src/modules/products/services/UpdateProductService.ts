@@ -36,20 +36,20 @@ export default class UpdateProductService {
         const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyProduct) {
-            throw new AppError('Product not found');
+            throw new AppError('Product not found.');
         }
 
         if (!verifyUser) {
-            throw new AppError('User not found');
+            throw new AppError('User not found.');
         }
 
         if (!verifyUser.companyId) {
-            throw new AppError('The user is not associated to a company');
+            throw new AppError('The user is not associated to a company.');
         }
 
         if (verifyUser.companyId !== verifyProduct.companyId) {
             throw new AppError(
-                'The user does not have permission to execute this action',
+                'The user does not have permission to execute this action.',
                 401,
             );
         }
@@ -82,8 +82,6 @@ export default class UpdateProductService {
             ...product,
         };
 
-        await this.productsRepository.save(updatedProduct);
-
-        return updatedProduct;
+        return this.productsRepository.save(updatedProduct);
     }
 }

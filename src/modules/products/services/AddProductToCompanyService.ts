@@ -33,11 +33,11 @@ export default class AddProductToCompanyService {
         const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyUser) {
-            throw new AppError('User not found');
+            throw new AppError('User not found.');
         }
 
         if (!verifyUser.companyId) {
-            throw new AppError('The user is not associated to a company');
+            throw new AppError('The user is not associated to a company.');
         }
 
         if (product.image) {

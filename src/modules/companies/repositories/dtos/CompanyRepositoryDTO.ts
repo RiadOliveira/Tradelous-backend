@@ -1,8 +1,8 @@
 export default interface CompanyRepositoryDTO {
     name: string;
     id: string;
-    adminID: string;
+    adminId: string;
     logo?: string;
-    cnpj: string;
+    cnpj: number;
     adress: string;
 }

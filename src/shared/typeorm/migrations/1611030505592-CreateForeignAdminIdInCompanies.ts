@@ -6,7 +6,7 @@ export class CreateForeignAdminIdInCompanies1611030505592
         await queryRunner.createForeignKey(
             'companies',
             new TableForeignKey({
-                columnNames: ['adminID'],
+                columnNames: ['adminId'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'users',
                 onDelete: 'SET NULL',
@@ -16,6 +16,6 @@ export class CreateForeignAdminIdInCompanies1611030505592
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropColumn('companies', 'adminID');
+        await queryRunner.dropColumn('companies', 'adminId');
     }
 }

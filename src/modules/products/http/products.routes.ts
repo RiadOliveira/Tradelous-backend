@@ -59,10 +59,11 @@ productsRoutes.post(
 );
 
 productsRoutes.put(
-    '/update',
+    '/update/:productId',
     upload.single('image'),
     async (request: Request, response: Response) => {
-        const { name, id, price, quantity, brand, qrCode } = request.body;
+        const { productId } = request.params;
+        const { name, price, quantity, brand, qrCode } = request.body;
 
         let image;
         if (request.file) {
@@ -76,7 +77,7 @@ productsRoutes.put(
         const updatedProduct = await updateProduct.execute(
             {
                 name,
-                id,
+                id: productId,
                 price,
                 quantity,
                 brand,

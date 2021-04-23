@@ -18,13 +18,13 @@ export default class Company {
     name: string;
 
     @Column()
-    cnpj: string;
+    cnpj: number;
 
     @Column()
     adress: string;
 
     @Column('uuid')
-    adminID: string;
+    adminId: string;
 
     @OneToMany(() => User, user => user.company, {
         onDelete: 'SET NULL',
