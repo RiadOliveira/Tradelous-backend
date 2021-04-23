@@ -17,7 +17,7 @@ export default class ListWorkersFromCompanyService {
         const findedUser = await this.usersRepository.findById(userId);
 
         if (!findedUser) {
-            throw new AppError('User not found', 400);
+            throw new AppError('User not found');
         }
 
         if (findedUser.companyId !== companyId) {
@@ -32,7 +32,7 @@ export default class ListWorkersFromCompanyService {
         );
 
         if (!findedCompany) {
-            throw new AppError('Company not found', 400);
+            throw new AppError('Company not found');
         }
 
         return findedCompany;

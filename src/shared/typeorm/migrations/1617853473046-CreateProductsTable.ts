@@ -30,6 +30,10 @@ export class CreateProductsTable1617853473046 implements MigrationInterface {
                         type: 'numeric',
                     },
                     {
+                        name: 'quantity',
+                        type: 'serial',
+                    },
+                    {
                         name: 'brand',
                         type: 'varchar',
                     },

@@ -38,6 +38,12 @@ class UsersRepository implements IUsersRepository {
 
         return findedUser;
     }
+
+    public async removeAvatarFromUser(userId: string): Promise<void> {
+        await this.UsersRepository.query(
+            `UPDATE users SET "avatar" = NULL WHERE id = '${userId}'`,
+        );
+    }
 }
 
 export default UsersRepository;

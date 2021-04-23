@@ -8,8 +8,8 @@ import IProductsRepository from '../repositories/IProductsRepository';
 
 interface ProductData {
     name: string;
-    companyId: string;
     price: number;
+    quantity: number;
     brand: string;
     qrCode?: string;
     image?: string;
@@ -20,8 +20,6 @@ export default class AddProductToCompanyService {
     constructor(
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
-        @inject('CompaniesRepository')
-        private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
         @inject('StorageProvider')
@@ -32,30 +30,27 @@ export default class AddProductToCompanyService {
         product: ProductData,
         userId: string,
     ): Promise<Product> {
-        const findedCompany = await this.companiesRepository.findById(
-            product.companyId,
-        );
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!findedCompany) {
-            throw new AppError('Company not found', 400);
-        }
 
         if (!verifyUser) {
             throw new AppError('User not found');
         }
 
-        if (verifyUser.companyId !== product.companyId) {
-            throw new AppError(
-                'The user does not have permission to execute this action',
-                401,
-            );
+        if (!verifyUser.companyId) {
+            throw new AppError('The user is not associated to a company');
         }
 
         if (product.image) {
             await this.storageProvider.save(product.image, 'productImage');
         }
 
-        return this.productsRepository.create(product);
+        if (!product.quantity) {
+            product.quantity = 0;
+        }
+
+        return this.productsRepository.create({
+            ...product,
+            companyId: verifyUser.companyId,
+        });
     }
 }

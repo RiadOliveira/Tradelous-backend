@@ -7,4 +7,5 @@ export default interface IProductsRepository {
     listCompanysProducts(companyId: string): Promise<Product[] | undefined>;
     removeProduct(productId: string): Promise<void>;
     findById(productId: string): Promise<Product | undefined>;
+    removeImageFromProduct(productId: string): Promise<void>;
 }

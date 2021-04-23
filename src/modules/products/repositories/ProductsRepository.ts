@@ -39,6 +39,12 @@ class ProductsRepository implements IProductsRepository {
 
         return findedProduct;
     }
+
+    public async removeImageFromProduct(productId: string): Promise<void> {
+        await this.ProductsRepository.query(
+            `UPDATE products SET "image" = NULL WHERE id = '${productId}'`,
+        );
+    }
 }
 
 export default ProductsRepository;

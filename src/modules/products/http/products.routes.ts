@@ -29,7 +29,7 @@ productsRoutes.post(
     '/add',
     upload.single('image'),
     async (request: Request, response: Response) => {
-        const { name, companyId, price, brand, qrCode } = request.body;
+        const { name, price, quantity, brand, qrCode } = request.body;
 
         let image;
         if (request.file) {
@@ -45,8 +45,8 @@ productsRoutes.post(
         const newProduct = await addProductToCompany.execute(
             {
                 name,
-                companyId,
                 price,
+                quantity,
                 brand,
                 qrCode,
                 image,
@@ -62,17 +62,29 @@ productsRoutes.put(
     '/update',
     upload.single('image'),
     async (request: Request, response: Response) => {
-        const { name, price, brand, qrCode, id } = request.body;
+        const { name, id, price, quantity, brand, qrCode } = request.body;
+
+        let image;
+        if (request.file) {
+            image = request.file.filename;
+        }
+
+        const userId = request.user.id;
 
         const updateProduct = container.resolve(UpdateProductService);
 
-        const updatedProduct = await updateProduct.execute({
-            name,
-            price,
-            brand,
-            qrCode,
-            id,
-        });
+        const updatedProduct = await updateProduct.execute(
+            {
+                name,
+                id,
+                price,
+                quantity,
+                brand,
+                qrCode,
+                image,
+            },
+            userId,
+        );
 
         return response.status(202).json(updatedProduct);
     },

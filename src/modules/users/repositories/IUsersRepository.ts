@@ -7,4 +7,5 @@ export default interface IUsersRepository {
     save(user: UpdateUserDTO): Promise<User>;
     findByEmail(email: string): Promise<User | undefined>;
     findById(id: string): Promise<User | undefined>;
+    removeAvatarFromUser(userId: string): Promise<void>;
 }

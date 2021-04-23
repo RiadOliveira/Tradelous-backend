@@ -29,6 +29,9 @@ export default class Product {
     price: number;
 
     @Column()
+    quantity: number;
+
+    @Column()
     brand: string;
 
     @Column()

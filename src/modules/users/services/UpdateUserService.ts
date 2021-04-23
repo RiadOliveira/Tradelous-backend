@@ -33,7 +33,7 @@ export default class UpdateUserService {
         const findedUser = await this.usersRepository.findById(userID);
 
         if (!findedUser) {
-            throw new AppError('Informed user does not exist', 400);
+            throw new AppError('Informed user does not exist');
         }
 
         if (email !== findedUser.email) {
@@ -42,7 +42,6 @@ export default class UpdateUserService {
             if (verifyEmail) {
                 throw new AppError(
                     'A user with the informed email already exists',
-                    400,
                 );
             }
             findedUser.email = email;
@@ -57,7 +56,6 @@ export default class UpdateUserService {
             if (!verifyPassword) {
                 throw new AppError(
                     "Informed old password is not equal to user's original password",
-                    400,
                 );
             }
 
@@ -76,6 +74,13 @@ export default class UpdateUserService {
             await this.storageProvider.save(avatar, 'avatar');
 
             findedUser.avatar = avatar;
+        }
+
+        if (findedUser.avatar && !avatar) {
+            //If not receive the avatar name, indicates that the user's avatar was removed.
+            await this.storageProvider.delete(findedUser.avatar, 'avatar');
+
+            await this.usersRepository.removeAvatarFromUser(findedUser.id);
         }
 
         findedUser.name = name;

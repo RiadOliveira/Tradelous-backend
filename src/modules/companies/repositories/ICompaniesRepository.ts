@@ -9,4 +9,5 @@ export default interface ICompaniesRepository {
     findByCnpj(cnpj: string): Promise<Company | undefined>;
     listWorkers(companyId: string): Promise<User[] | undefined>;
     removeWorker(workerId: string): Promise<void>;
+    removeCompanyLogo(companyId: string): Promise<void>;
 }

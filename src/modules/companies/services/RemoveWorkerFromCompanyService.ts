@@ -22,11 +22,11 @@ export default class removeWorkerFromCompanyService {
         const findedAdmin = await this.usersRepository.findById(adminId);
 
         if (!findedWorker) {
-            throw new AppError('Worker not found', 400);
+            throw new AppError('Worker not found');
         }
 
         if (!findedAdmin) {
-            throw new AppError('Admin not found', 400);
+            throw new AppError('Admin not found');
         }
 
         if (

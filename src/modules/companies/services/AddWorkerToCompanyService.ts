@@ -31,13 +31,12 @@ export default class AddWorkerToCompanyService {
         const findedAdmin = await this.usersRepository.findById(adminId);
 
         if (!findedCompany || !findedWorker || !findedAdmin) {
-            throw new AppError('Invalid data passed', 400);
+            throw new AppError('Invalid data passed');
         }
 
         if (findedWorker.companyId === findedCompany.id) {
             throw new AppError(
                 'The requested worker is already on the company',
-                400,
             );
         }
 
@@ -47,7 +46,6 @@ export default class AddWorkerToCompanyService {
         ) {
             throw new AppError(
                 'The requested user is already associated to another company',
-                400,
             );
         }
 
