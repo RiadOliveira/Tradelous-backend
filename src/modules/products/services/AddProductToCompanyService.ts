@@ -1,4 +1,3 @@
-import ICompaniesRepository from '@modules/companies/repositories/ICompaniesRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
@@ -11,7 +10,7 @@ interface ProductData {
     price: number;
     quantity: number;
     brand: string;
-    qrCode?: string;
+    barCode?: string;
     image?: string;
 }
 

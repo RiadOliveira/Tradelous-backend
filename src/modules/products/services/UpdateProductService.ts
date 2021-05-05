@@ -11,7 +11,7 @@ interface UpdateProductData {
     price: number;
     quantity: number;
     brand: string;
-    qrCode?: string;
+    barCode?: string;
     image?: string;
 }
 

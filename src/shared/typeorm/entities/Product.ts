@@ -35,7 +35,7 @@ export default class Product {
     brand: string;
 
     @Column()
-    qrCode?: string;
+    barCode?: string;
 
     @Column()
     image?: string;

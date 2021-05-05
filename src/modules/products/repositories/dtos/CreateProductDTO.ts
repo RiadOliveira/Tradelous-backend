@@ -3,5 +3,5 @@ export default interface CreateProductDTO {
     companyId: string;
     price: number;
     brand: string;
-    qrCode?: string;
+    barCode?: string;
 }

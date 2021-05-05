@@ -29,7 +29,7 @@ productsRoutes.post(
     '/add',
     upload.single('image'),
     async (request: Request, response: Response) => {
-        const { name, price, quantity, brand, qrCode } = request.body;
+        const { name, price, quantity, brand, barCode } = request.body;
 
         let image;
         if (request.file) {
@@ -48,7 +48,7 @@ productsRoutes.post(
                 price,
                 quantity,
                 brand,
-                qrCode,
+                barCode,
                 image,
             },
             userId,
@@ -63,7 +63,7 @@ productsRoutes.put(
     upload.single('image'),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
-        const { name, price, quantity, brand, qrCode } = request.body;
+        const { name, price, quantity, brand, barCode } = request.body;
 
         let image;
         if (request.file) {
@@ -81,7 +81,7 @@ productsRoutes.put(
                 price,
                 quantity,
                 brand,
-                qrCode,
+                barCode,
                 image,
             },
             userId,
