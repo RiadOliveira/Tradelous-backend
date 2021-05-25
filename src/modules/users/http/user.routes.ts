@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
 import UpdateUserService from '../services/UpdateUserService';
+import UpdateUsersAvatarService from '../services/UpdateUsersAvatarService';
 
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
@@ -24,7 +25,7 @@ userRoutes.post('/signUp', async (request: Request, response: Response) => {
         isAdmin,
     });
 
-    return response.status(201).json(createdUser);
+    return response.status(201).json(classToClass(createdUser));
 });
 
 userRoutes.post('/sessions', async (request: Request, response: Response) => {
@@ -43,30 +44,48 @@ userRoutes.post('/sessions', async (request: Request, response: Response) => {
 userRoutes.put(
     '/update',
     EnsureAuthentication,
-    upload.single('avatar'),
     async (request: Request, response: Response) => {
         const { name, email, oldPassword, newPassword } = request.body;
 
-        const userID = request.user.id;
-
-        let avatar;
-
-        if (request.file) {
-            avatar = request.file.filename;
-        }
+        const userId = request.user.id;
 
         const updateUserService = container.resolve(UpdateUserService);
 
         const updatedUser = await updateUserService.execute({
             name,
             email,
-            avatar,
             oldPassword,
             newPassword,
-            userID,
+            userId,
         });
 
-        return response.status(202).json(updatedUser);
+        return response.status(202).json(classToClass(updatedUser));
+    },
+);
+
+userRoutes.patch(
+    '/updateAvatar',
+    EnsureAuthentication,
+    upload.single('avatar'),
+    async (request: Request, response: Response) => {
+        const userId = request.user.id;
+
+        let avatar = '';
+
+        if (request.file) {
+            avatar = request.file.filename;
+        }
+
+        const updateUsersAvatarService = container.resolve(
+            UpdateUsersAvatarService,
+        );
+
+        const updatedUser = await updateUsersAvatarService.execute({
+            userId,
+            avatar,
+        });
+
+        return response.status(202).json(classToClass(updatedUser));
     },
 );
 

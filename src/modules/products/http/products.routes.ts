@@ -6,6 +6,7 @@ import DeleteProductFromCompanyService from '../services/DeleteProductFromCompan
 import UpdateProductService from '../services/UpdateProductService';
 import multer from 'multer';
 import multerConfig from '@config/upload';
+import UpdateProductsImageService from '../services/UpdateProductsImageService';
 
 const productsRoutes = Router();
 const upload = multer(multerConfig);
@@ -60,15 +61,9 @@ productsRoutes.post(
 
 productsRoutes.put(
     '/update/:productId',
-    upload.single('image'),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
         const { name, price, quantity, brand, barCode } = request.body;
-
-        let image;
-        if (request.file) {
-            image = request.file.filename;
-        }
 
         const userId = request.user.id;
 
@@ -82,6 +77,34 @@ productsRoutes.put(
                 quantity,
                 brand,
                 barCode,
+            },
+            userId,
+        );
+
+        return response.status(202).json(updatedProduct);
+    },
+);
+
+productsRoutes.patch(
+    '/updateImage/:productId',
+    upload.single('image'),
+    async (request: Request, response: Response) => {
+        const { productId } = request.params;
+
+        let image = '';
+        if (request.file) {
+            image = request.file.filename;
+        }
+
+        const userId = request.user.id;
+
+        const updateProductsImage = container.resolve(
+            UpdateProductsImageService,
+        );
+
+        const updatedProduct = await updateProductsImage.execute(
+            {
+                productId,
                 image,
             },
             userId,

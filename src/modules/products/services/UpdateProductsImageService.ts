@@ -1,25 +1,24 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
 
 interface UpdateProductData {
-    name: string;
-    id: string;
-    price: number;
-    quantity: number;
-    brand: string;
-    barCode?: string;
+    productId: string;
+    image: string;
 }
 
 @injectable()
-export default class UpdateProductService {
+export default class UpdateProductsImageService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider,
     ) {}
 
     public async execute(
@@ -27,7 +26,7 @@ export default class UpdateProductService {
         userId: string,
     ): Promise<Product> {
         const verifyProduct = await this.productsRepository.findById(
-            product.id,
+            product.productId,
         );
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -50,11 +49,33 @@ export default class UpdateProductService {
             );
         }
 
-        const updatedProduct: Product = {
-            ...verifyProduct,
-            ...product,
-        };
+        if (verifyProduct.image && !product.image) {
+            //If not receive the image name, indicates that the product's image was removed by the user.
+            await this.storageProvider.delete(
+                verifyProduct.image,
+                'productImage',
+            );
 
-        return this.productsRepository.save(updatedProduct);
+            await this.productsRepository.removeImageFromProduct(
+                verifyProduct.id,
+            );
+
+            verifyProduct.image = undefined;
+
+            return verifyProduct;
+        }
+
+        if (verifyProduct.image) {
+            await this.storageProvider.delete(
+                verifyProduct.image,
+                'productImage',
+            );
+        }
+
+        await this.storageProvider.save(product.image, 'productImage');
+
+        verifyProduct.image = product.image;
+
+        return this.productsRepository.save(verifyProduct);
     }
 }

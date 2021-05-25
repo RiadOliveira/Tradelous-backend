@@ -3,15 +3,13 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
-import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 
 interface UserData {
     name: string;
     email: string;
-    avatar?: string;
     oldPassword?: string;
     newPassword?: string;
-    userID: string;
+    userId: string;
 }
 
 @injectable()
@@ -19,18 +17,16 @@ export default class UpdateUserService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
         @inject('HashProvider') private hashProvider: IHashProvider,
-        @inject('StorageProvider') private storageProvider: IStorageProvider,
     ) {}
 
     public async execute({
         name,
         email,
-        avatar,
         oldPassword,
         newPassword,
-        userID,
+        userId,
     }: UserData): Promise<User> {
-        const findedUser = await this.usersRepository.findById(userID);
+        const findedUser = await this.usersRepository.findById(userId);
 
         if (!findedUser) {
             throw new AppError('Informed user does not exist.');
@@ -62,25 +58,6 @@ export default class UpdateUserService {
             const hashedPassword = await this.hashProvider.hash(newPassword);
 
             findedUser.password = hashedPassword;
-        }
-
-        if (findedUser.avatar && avatar) {
-            await this.storageProvider.delete(findedUser.avatar, 'avatar');
-
-            await this.storageProvider.save(avatar, 'avatar');
-
-            findedUser.avatar = avatar;
-        } else if (avatar) {
-            await this.storageProvider.save(avatar, 'avatar');
-
-            findedUser.avatar = avatar;
-        }
-
-        if (findedUser.avatar && !avatar) {
-            //If not receive the avatar name, indicates that the user's avatar was removed.
-            await this.storageProvider.delete(findedUser.avatar, 'avatar');
-
-            await this.usersRepository.removeAvatarFromUser(findedUser.id);
         }
 
         findedUser.name = name;
