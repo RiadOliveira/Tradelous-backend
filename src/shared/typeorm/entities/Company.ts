@@ -30,7 +30,7 @@ export default class Company {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
     })
-    workers: User[];
+    employees: User[];
 
     @OneToMany(() => Product, product => product.company, {
         onDelete: 'CASCADE',

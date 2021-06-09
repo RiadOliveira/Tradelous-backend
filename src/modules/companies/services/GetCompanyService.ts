@@ -1,11 +1,11 @@
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
-import { injectable, inject } from 'tsyringe';
-import User from '@shared/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import { injectable, inject } from 'tsyringe';
+import Company from '@shared/typeorm/entities/Company';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 @injectable()
-export default class ListWorkersFromCompanyService {
+export default class GetCompanyService {
     constructor(
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
@@ -13,28 +13,27 @@ export default class ListWorkersFromCompanyService {
         private usersRepository: IUsersRepository,
     ) {}
 
-    public async execute(companyId: string, userId: string): Promise<User[]> {
+    public async execute(userId: string): Promise<Company> {
         const findedUser = await this.usersRepository.findById(userId);
 
         if (!findedUser) {
             throw new AppError('User not found.');
         }
 
-        if (findedUser.companyId !== companyId) {
+        if (!findedUser.companyId) {
             throw new AppError(
-                'The user does not have permission to execute this action.',
-                401,
+                'The requested user is not associated to a company.',
             );
         }
 
-        const findedCompany = await this.companiesRepository.listWorkers(
-            companyId,
+        const verifyCompany = await this.companiesRepository.findById(
+            findedUser.companyId,
         );
 
-        if (!findedCompany) {
+        if (!verifyCompany) {
             throw new AppError('Company not found.');
         }
 
-        return findedCompany;
+        return verifyCompany;
     }
 }

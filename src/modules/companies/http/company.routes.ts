@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import RegisterCompanyService from '../services/RegisterCompanyService';
-import addWorkerToCompanyService from '../services/AddWorkerToCompanyService';
-import removeWorkerFromCompanyService from '../services/RemoveWorkerFromCompanyService';
-import ListWorkersFromCompanyService from '../services/ListWorkersFromCompanyService';
+import AddEmployeeToCompanyService from '../services/AddEmployeeToCompanyService';
+import RemoveEmployeeFromCompanyService from '../services/RemoveEmployeeFromCompanyService';
+import ListEmployeesFromCompanyService from '../services/ListEmployeesFromCompanyService';
 import UpdateCompanyService from '../services/UpdateCompanyService';
+import GetCompanyService from '../services/GetCompanyService';
 
 import multerConfig from '@config/upload';
 import multer from 'multer';
@@ -13,16 +14,23 @@ const companyRoutes = Router();
 
 const upload = multer(multerConfig);
 
+companyRoutes.get('/show', async (request: Request, response: Response) => {
+    const userId = request.user.id;
+
+    const getCompany = container.resolve(GetCompanyService);
+
+    const company = await getCompany.execute(userId);
+
+    return response.status(200).json(company);
+});
+
 companyRoutes.post(
     '/register',
     upload.single('logo'),
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;
 
-        let logo;
-        if (request.file) {
-            logo = request.file.filename;
-        }
+        const logo = request.file.filename;
 
         const adminId = request.user.id;
 
@@ -41,77 +49,71 @@ companyRoutes.post(
 );
 
 companyRoutes.patch(
-    '/add-worker',
+    '/add-employee',
     async (request: Request, response: Response) => {
-        const { companyId, workerId } = request.body;
+        const { employeeId } = request.body;
 
         const adminId = request.user.id;
 
-        const addWorkerToCompany = container.resolve(addWorkerToCompanyService);
+        const addEmployeeToCompany = container.resolve(
+            AddEmployeeToCompanyService,
+        );
 
-        const newWorker = await addWorkerToCompany.execute({
-            companyId,
-            workerId,
+        const newEmployee = await addEmployeeToCompany.execute(
             adminId,
-        });
+            employeeId,
+        );
 
-        return response.status(202).json(newWorker);
+        return response.status(202).json(newEmployee);
     },
 );
 
 companyRoutes.patch(
-    '/remove-worker/:workerId',
+    '/remove-employee/:employeeId',
     async (request: Request, response: Response) => {
-        const { workerId } = request.params;
-
+        const { employeeId } = request.params;
         const adminId = request.user.id;
 
-        const removeWorkerFromCompany = container.resolve(
-            removeWorkerFromCompanyService,
+        const removeEmployeeFromCompany = container.resolve(
+            RemoveEmployeeFromCompanyService,
         );
 
-        await removeWorkerFromCompany.execute({
-            adminId,
-            workerId,
-        });
+        await removeEmployeeFromCompany.execute(adminId, employeeId);
 
         return response.status(204).json();
     },
 );
 
 companyRoutes.get(
-    '/list-workers/:companyId',
+    '/list-employees',
     async (request: Request, response: Response) => {
-        const { companyId } = request.params;
         const userId = request.user.id;
 
-        const listWorkers = container.resolve(ListWorkersFromCompanyService);
+        const listEmployees = container.resolve(
+            ListEmployeesFromCompanyService,
+        );
 
-        const workers = await listWorkers.execute(companyId, userId);
+        const employees = await listEmployees.execute(userId);
 
-        return response.json(workers);
+        return response.json(employees);
     },
 );
 
 companyRoutes.put(
-    '/update/:companyId',
+    '/update',
     upload.single('logo'),
     async (request: Request, response: Response) => {
-        const { companyId } = request.params;
-        const { name, cnpj, adress, adminId } = request.body;
+        const { name, cnpj, adress } = request.body;
 
-        let logo;
-        if (request.file) {
-            logo = request.file.filename;
-        }
+        const logo = request.file.filename;
 
-        const userId = request.user.id;
+        const adminId = request.user.id;
 
         const updateCompany = container.resolve(UpdateCompanyService);
 
         const updatedCompany = await updateCompany.execute(
-            { id: companyId, name, cnpj, adress, adminId, logo },
-            userId,
+            { name, cnpj, adress, adminId, logo },
+            adminId,
         );
 
         return response.status(202).json(updatedCompany);

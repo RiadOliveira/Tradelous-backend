@@ -27,7 +27,7 @@ export default class User {
     @Column('uuid')
     companyId?: string;
 
-    @ManyToOne(() => Company, company => company.workers, {
+    @ManyToOne(() => Company, company => company.employees, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
     })

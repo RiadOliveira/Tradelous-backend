@@ -20,16 +20,6 @@ class ProductsRepository implements IProductsRepository {
         return this.ProductsRepository.save(product);
     }
 
-    public async listCompanysProducts(
-        companyId: string,
-    ): Promise<Product[] | undefined> {
-        const companysProducts = await this.ProductsRepository.find({
-            where: { companyId },
-        });
-
-        return companysProducts;
-    }
-
     public async removeProduct(productId: string): Promise<void> {
         await this.ProductsRepository.delete(productId);
     }

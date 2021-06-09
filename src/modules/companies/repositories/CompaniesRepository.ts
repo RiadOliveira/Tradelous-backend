@@ -4,6 +4,7 @@ import CompanyRepositoryDTO from './dtos/CompanyRepositoryDTO';
 import ICompaniesRepository from './ICompaniesRepository';
 import { classToClass } from 'class-transformer';
 import User from '@shared/typeorm/entities/User';
+import Product from '@shared/typeorm/entities/Product';
 
 class CompaniesRepository implements ICompaniesRepository {
     private CompaniesRepository: Repository<Company>;
@@ -29,15 +30,7 @@ class CompaniesRepository implements ICompaniesRepository {
     }
 
     public async findById(id: string): Promise<Company | undefined> {
-        const findedCompany = await this.CompaniesRepository.findOne(id, {
-            relations: ['workers', 'products'],
-        });
-
-        if (findedCompany) {
-            findedCompany.workers.forEach((worker, index) => {
-                findedCompany.workers[index] = classToClass(worker);
-            });
-        }
+        const findedCompany = await this.CompaniesRepository.findOne(id);
 
         return findedCompany;
     }
@@ -45,32 +38,44 @@ class CompaniesRepository implements ICompaniesRepository {
     public async findByCnpj(cnpj: number): Promise<Company | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne({
             where: { cnpj },
-            relations: ['workers', 'products'],
         });
-
-        if (findedCompany) {
-            findedCompany.workers.forEach((worker, index) => {
-                findedCompany.workers[index] = classToClass(worker);
-            });
-        }
 
         return findedCompany;
     }
 
-    public async listWorkers(companyId: string): Promise<User[] | undefined> {
+    public async listEmployees(companyId: string): Promise<User[] | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne(
             companyId,
             {
-                relations: ['workers'],
+                relations: ['employees'],
             },
         );
 
-        return findedCompany ? findedCompany.workers : undefined;
+        if (findedCompany) {
+            findedCompany.employees.forEach((employee, index) => {
+                findedCompany.employees[index] = classToClass(employee);
+            });
+        }
+
+        return findedCompany ? findedCompany.employees : undefined;
     }
 
-    public async removeWorker(workerId: string): Promise<void> {
+    public async listProducts(
+        companyId: string,
+    ): Promise<Product[] | undefined> {
+        const findedCompany = await this.CompaniesRepository.findOne(
+            companyId,
+            {
+                relations: ['products'],
+            },
+        );
+
+        return findedCompany ? findedCompany.products : undefined;
+    }
+
+    public async removeEmployee(employeeId: string): Promise<void> {
         await this.UsersRepository.query(
-            `UPDATE users SET "companyId" = NULL WHERE id = '${workerId}'`,
+            `UPDATE users SET "companyId" = NULL WHERE id = '${employeeId}'`,
         );
     }
 
