@@ -14,7 +14,7 @@ const companyRoutes = Router();
 
 const upload = multer(multerConfig);
 
-companyRoutes.get('/show', async (request: Request, response: Response) => {
+companyRoutes.get('/', async (request: Request, response: Response) => {
     const userId = request.user.id;
 
     const getCompany = container.resolve(GetCompanyService);
@@ -25,7 +25,7 @@ companyRoutes.get('/show', async (request: Request, response: Response) => {
 });
 
 companyRoutes.post(
-    '/register',
+    '/',
     upload.single('logo'),
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;

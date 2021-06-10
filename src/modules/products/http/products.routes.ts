@@ -11,7 +11,7 @@ import UpdateProductsImageService from '../services/UpdateProductsImageService';
 const productsRoutes = Router();
 const upload = multer(multerConfig);
 
-productsRoutes.get('/list', async (request: Request, response: Response) => {
+productsRoutes.get('/', async (request: Request, response: Response) => {
     const userId = request.user.id;
 
     const listProductsFromCompany = container.resolve(
@@ -24,7 +24,7 @@ productsRoutes.get('/list', async (request: Request, response: Response) => {
 });
 
 productsRoutes.post(
-    '/add',
+    '/',
     upload.single('image'),
     async (request: Request, response: Response) => {
         const { name, price, quantity, brand, barCode } = request.body;
@@ -106,7 +106,7 @@ productsRoutes.patch(
 );
 
 productsRoutes.delete(
-    '/delete/:productId',
+    '/:productId',
     async (request: Request, response: Response) => {
         const { productId } = request.params;
 
