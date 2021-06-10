@@ -26,14 +26,14 @@ export default class ListProductsFromCompanyService {
             );
         }
 
-        const findedCompany = await this.companiesRepository.findById(
+        const findedProducts = await this.companiesRepository.listProducts(
             findedUser.companyId,
         );
 
-        if (!findedCompany) {
-            throw new AppError('Company not found.');
+        if (!findedProducts) {
+            throw new AppError('No products found.');
         }
 
-        return findedCompany.products;
+        return findedProducts;
     }
 }
