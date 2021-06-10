@@ -29,7 +29,7 @@ productsRoutes.post(
     async (request: Request, response: Response) => {
         const { name, price, quantity, brand, barCode } = request.body;
 
-        const image = request.file.filename;
+        const image = request.file ? request.file.filename : '';
 
         const userId = request.user.id;
 
@@ -85,7 +85,7 @@ productsRoutes.patch(
     async (request: Request, response: Response) => {
         const { productId } = request.params;
 
-        const image = request.file.filename;
+        const image = request.file ? request.file.filename : '';
 
         const userId = request.user.id;
 

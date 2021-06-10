@@ -70,7 +70,7 @@ userRoutes.patch(
     async (request: Request, response: Response) => {
         const userId = request.user.id;
 
-        const avatar = request.file.filename;
+        const avatar = request.file ? request.file.filename : '';
 
         const updateUsersAvatarService = container.resolve(
             UpdateUsersAvatarService,

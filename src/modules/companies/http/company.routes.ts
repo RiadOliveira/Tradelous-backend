@@ -30,7 +30,7 @@ companyRoutes.post(
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;
 
-        const logo = request.file.filename;
+        const logo = request.file ? request.file.filename : '';
 
         const adminId = request.user.id;
 
@@ -105,7 +105,7 @@ companyRoutes.put(
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;
 
-        const logo = request.file.filename;
+        const logo = request.file ? request.file.filename : '';
 
         const adminId = request.user.id;
 
