@@ -5,6 +5,7 @@ import AddEmployeeToCompanyService from '../services/AddEmployeeToCompanyService
 import RemoveEmployeeFromCompanyService from '../services/RemoveEmployeeFromCompanyService';
 import ListEmployeesFromCompanyService from '../services/ListEmployeesFromCompanyService';
 import UpdateCompanyService from '../services/UpdateCompanyService';
+import UpdateCompanyLogoService from '../services/UpdateCompanyLogoService';
 import GetCompanyService from '../services/GetCompanyService';
 
 import multerConfig from '@config/upload';
@@ -105,16 +106,30 @@ companyRoutes.put(
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;
 
-        const logo = request.file ? request.file.filename : '';
-
         const adminId = request.user.id;
 
         const updateCompany = container.resolve(UpdateCompanyService);
 
         const updatedCompany = await updateCompany.execute(
-            { name, cnpj, adress, adminId, logo },
+            { name, cnpj, adress, adminId },
             adminId,
         );
+
+        return response.status(202).json(updatedCompany);
+    },
+);
+
+companyRoutes.patch(
+    '/updateLogo',
+    upload.single('logo'),
+    async (request: Request, response: Response) => {
+        const logo = request.file ? request.file.filename : '';
+
+        const adminId = request.user.id;
+
+        const updateCompanyLogo = container.resolve(UpdateCompanyLogoService);
+
+        const updatedCompany = await updateCompanyLogo.execute(logo, adminId);
 
         return response.status(202).json(updatedCompany);
     },

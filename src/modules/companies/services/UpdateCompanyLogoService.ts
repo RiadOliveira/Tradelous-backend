@@ -2,28 +2,21 @@ import ICompaniesRepository from '../repositories/ICompaniesRepository';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import Company from '@shared/typeorm/entities/Company';
+import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
-interface CompanyData {
-    name: string;
-    cnpj: number;
-    adress: string;
-    adminId: string;
-}
-
 @injectable()
-export default class UpdateCompanyService {
+export default class UpdateCompanyLogoService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider,
     ) {}
 
-    public async execute(
-        company: CompanyData,
-        adminId: string,
-    ): Promise<Company> {
+    public async execute(logo: string, adminId: string): Promise<Company> {
         const findedAdmin = await this.usersRepository.findById(adminId);
 
         if (!findedAdmin) {
@@ -51,18 +44,25 @@ export default class UpdateCompanyService {
             throw new AppError('Company not found.');
         }
 
-        const verifyCnpj = await this.companiesRepository.findByCnpj(
-            company.cnpj,
-        );
+        if (findedCompany.logo && !logo) {
+            //If not receive the image name, indicates that the product's image was removed by the user.
+            await this.storageProvider.delete(findedCompany.logo, 'logo');
 
-        if (verifyCnpj && verifyCnpj.id !== findedCompany.id) {
-            throw new AppError(
-                'A company with the informed cnpj already exists.',
-            );
+            await this.companiesRepository.removeCompanyLogo(findedCompany.id);
+
+            findedCompany.logo = undefined;
+
+            return findedCompany;
         }
 
-        const updatedCompany = { ...findedCompany, ...company };
+        if (findedCompany.logo) {
+            await this.storageProvider.delete(findedCompany.logo, 'logo');
+        }
 
-        return this.companiesRepository.save(updatedCompany);
+        await this.storageProvider.save(logo, 'logo');
+
+        findedCompany.logo = logo;
+
+        return this.companiesRepository.save(findedCompany);
     }
 }
