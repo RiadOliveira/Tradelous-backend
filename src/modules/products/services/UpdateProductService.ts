@@ -29,11 +29,12 @@ export default class UpdateProductService {
         const verifyProduct = await this.productsRepository.findById(
             product.id,
         );
-        const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyProduct) {
             throw new AppError('Product not found.');
         }
+
+        const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyUser) {
             throw new AppError('User not found.');

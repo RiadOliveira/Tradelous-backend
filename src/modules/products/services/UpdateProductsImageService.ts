@@ -56,9 +56,7 @@ export default class UpdateProductsImageService {
                 'productImage',
             );
 
-            await this.productsRepository.removeImageFromProduct(
-                verifyProduct.id,
-            );
+            await this.productsRepository.deleteImage(verifyProduct.id);
 
             verifyProduct.image = undefined;
 

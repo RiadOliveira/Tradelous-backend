@@ -26,7 +26,7 @@ export default class ListProductsFromCompanyService {
             );
         }
 
-        const findedProducts = await this.companiesRepository.listProducts(
+        const findedProducts = await this.companiesRepository.findProducts(
             findedUser.companyId,
         );
 

@@ -42,7 +42,7 @@ userRoutes.post('/sessions', async (request: Request, response: Response) => {
 });
 
 userRoutes.put(
-    '/update',
+    '/',
     EnsureAuthentication,
     async (request: Request, response: Response) => {
         const { name, email, oldPassword, newPassword } = request.body;

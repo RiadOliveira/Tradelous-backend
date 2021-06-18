@@ -54,7 +54,7 @@ productsRoutes.post(
 );
 
 productsRoutes.put(
-    '/update/:productId',
+    '/:productId',
     async (request: Request, response: Response) => {
         const { productId } = request.params;
         const { name, price, quantity, brand, barCode } = request.body;

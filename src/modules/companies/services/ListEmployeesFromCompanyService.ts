@@ -26,7 +26,7 @@ export default class ListEmployeesFromCompanyService {
             );
         }
 
-        const findedEmployees = await this.companiesRepository.listEmployees(
+        const findedEmployees = await this.companiesRepository.findEmployees(
             findedUser.companyId,
         );
 

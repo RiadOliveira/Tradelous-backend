@@ -17,11 +17,12 @@ export default class DeleteProductToCompanyService {
 
     public async execute(productId: string, userId: string): Promise<void> {
         const verifyProduct = await this.productsRepository.findById(productId);
-        const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyProduct) {
             throw new AppError('Product not found.');
         }
+
+        const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyUser) {
             throw new AppError('User not found.');
@@ -41,6 +42,6 @@ export default class DeleteProductToCompanyService {
             );
         }
 
-        await this.productsRepository.removeProduct(productId);
+        await this.productsRepository.delete(productId);
     }
 }

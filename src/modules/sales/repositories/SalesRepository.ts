@@ -24,6 +24,10 @@ class SalesRepository implements ISalesRepository {
         await this.SalesRepository.delete(saleId);
     }
 
+    public async findById(saleId: string): Promise<Sale | undefined> {
+        return this.SalesRepository.findOne(saleId);
+    }
+
     public async findAllFromCompany(
         companyId: string,
     ): Promise<Sale[] | undefined> {
@@ -36,7 +40,7 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOfEmployee(
+    public async findAllFromEmployee(
         employeeId: string,
     ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({

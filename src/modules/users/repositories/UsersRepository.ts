@@ -20,9 +20,7 @@ class UsersRepository implements IUsersRepository {
     }
 
     public async save(user: UpdateUserDTO): Promise<User> {
-        const updatedUser = await this.UsersRepository.save(user);
-
-        return updatedUser;
+        return this.UsersRepository.save(user);
     }
 
     public async findByEmail(email: string): Promise<User | undefined> {
@@ -34,9 +32,7 @@ class UsersRepository implements IUsersRepository {
     }
 
     public async findById(id: string): Promise<User | undefined> {
-        const findedUser = await this.UsersRepository.findOne(id);
-
-        return findedUser;
+        return this.UsersRepository.findOne(id);
     }
 
     public async removeAvatarFromUser(userId: string): Promise<void> {

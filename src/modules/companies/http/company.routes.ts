@@ -101,7 +101,7 @@ companyRoutes.get(
 );
 
 companyRoutes.put(
-    '/update',
+    '/',
     upload.single('logo'),
     async (request: Request, response: Response) => {
         const { name, cnpj, adress } = request.body;

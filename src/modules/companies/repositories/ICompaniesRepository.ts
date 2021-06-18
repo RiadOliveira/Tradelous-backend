@@ -8,8 +8,8 @@ export default interface ICompaniesRepository {
     save(company: Company): Promise<Company>;
     findById(id: string): Promise<Company | undefined>;
     findByCnpj(cnpj: number): Promise<Company | undefined>;
-    listEmployees(companyId: string): Promise<User[] | undefined>;
-    listProducts(companyId: string): Promise<Product[] | undefined>;
+    findEmployees(companyId: string): Promise<User[] | undefined>;
+    findProducts(companyId: string): Promise<Product[] | undefined>;
     removeEmployee(employeeId: string): Promise<void>;
     removeCompanyLogo(companyId: string): Promise<void>;
 }

@@ -30,9 +30,7 @@ class CompaniesRepository implements ICompaniesRepository {
     }
 
     public async findById(id: string): Promise<Company | undefined> {
-        const findedCompany = await this.CompaniesRepository.findOne(id);
-
-        return findedCompany;
+        return this.CompaniesRepository.findOne(id);
     }
 
     public async findByCnpj(cnpj: number): Promise<Company | undefined> {
@@ -43,7 +41,7 @@ class CompaniesRepository implements ICompaniesRepository {
         return findedCompany;
     }
 
-    public async listEmployees(companyId: string): Promise<User[] | undefined> {
+    public async findEmployees(companyId: string): Promise<User[] | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne(
             companyId,
             {
@@ -60,7 +58,7 @@ class CompaniesRepository implements ICompaniesRepository {
         return findedCompany ? findedCompany.employees : undefined;
     }
 
-    public async listProducts(
+    public async findProducts(
         companyId: string,
     ): Promise<Product[] | undefined> {
         const findedCompany = await this.CompaniesRepository.findOne(

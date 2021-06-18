@@ -26,7 +26,7 @@ export default class CreateSaleService {
         private salesRepository: ISalesRepository,
     ) {}
 
-    public async execute(sale: CreateSale): Promise<Sale | undefined> {
+    public async execute(sale: CreateSale): Promise<Sale> {
         const verifyEmployee = await this.usersRepository.findById(
             sale.employeeId,
         );
@@ -64,7 +64,7 @@ export default class CreateSaleService {
             throw new AppError('Product not found.');
         }
 
-        const verifyProductOnCompany = await this.companiesRepository.listProducts(
+        const verifyProductOnCompany = await this.companiesRepository.findProducts(
             verifyCompany.id,
         );
 

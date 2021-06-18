@@ -20,17 +20,15 @@ class ProductsRepository implements IProductsRepository {
         return this.ProductsRepository.save(product);
     }
 
-    public async removeProduct(productId: string): Promise<void> {
+    public async delete(productId: string): Promise<void> {
         await this.ProductsRepository.delete(productId);
     }
 
     public async findById(productId: string): Promise<Product | undefined> {
-        const findedProduct = await this.ProductsRepository.findOne(productId);
-
-        return findedProduct;
+        return this.ProductsRepository.findOne(productId);
     }
 
-    public async removeImageFromProduct(productId: string): Promise<void> {
+    public async deleteImage(productId: string): Promise<void> {
         await this.ProductsRepository.query(
             `UPDATE products SET "image" = NULL WHERE id = '${productId}'`,
         );
