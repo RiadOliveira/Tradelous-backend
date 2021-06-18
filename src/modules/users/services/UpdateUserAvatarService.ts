@@ -10,7 +10,7 @@ interface UserData {
 }
 
 @injectable()
-export default class UpdateUsersAvatarService {
+export default class UpdateUserAvatarService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
         @inject('StorageProvider') private storageProvider: IStorageProvider,
@@ -27,7 +27,7 @@ export default class UpdateUsersAvatarService {
             //If not receive the avatar name, indicates that the user's avatar was removed.
             await this.storageProvider.delete(findedUser.avatar, 'avatar');
 
-            await this.usersRepository.removeAvatarFromUser(findedUser.id);
+            await this.usersRepository.deleteAvatar(findedUser.id);
 
             findedUser.avatar = undefined;
 

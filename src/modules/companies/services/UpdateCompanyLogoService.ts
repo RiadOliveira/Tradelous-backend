@@ -48,7 +48,7 @@ export default class UpdateCompanyLogoService {
             //If not receive the image name, indicates that the product's image was removed by the user.
             await this.storageProvider.delete(findedCompany.logo, 'logo');
 
-            await this.companiesRepository.removeCompanyLogo(findedCompany.id);
+            await this.companiesRepository.removeLogo(findedCompany.id);
 
             findedCompany.logo = undefined;
 

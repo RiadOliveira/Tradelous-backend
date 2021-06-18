@@ -11,5 +11,5 @@ export default interface ICompaniesRepository {
     findEmployees(companyId: string): Promise<User[] | undefined>;
     findProducts(companyId: string): Promise<Product[] | undefined>;
     removeEmployee(employeeId: string): Promise<void>;
-    removeCompanyLogo(companyId: string): Promise<void>;
+    removeLogo(companyId: string): Promise<void>;
 }

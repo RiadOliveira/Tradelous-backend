@@ -65,7 +65,7 @@ export class CreateProductsTable1617853473046 implements MigrationInterface {
                         columnNames: ['companyId'],
                         referencedTableName: 'companies',
                         referencedColumnNames: ['id'],
-                        onUpdate: 'CASCADE',
+                        onUpdate: 'RESTRICT',
                         onDelete: 'CASCADE',
                     },
                 ],

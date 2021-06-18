@@ -46,6 +46,7 @@ salesRoutes.post('/', async (request: Request, response: Response) => {
         type,
         quantity,
     });
+    console.log(newSale);
 
     return response.status(201).json(newSale);
 });

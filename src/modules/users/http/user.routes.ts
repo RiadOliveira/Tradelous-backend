@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
 import UpdateUserService from '../services/UpdateUserService';
-import UpdateUsersAvatarService from '../services/UpdateUsersAvatarService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
@@ -72,11 +72,11 @@ userRoutes.patch(
 
         const avatar = request.file ? request.file.filename : '';
 
-        const updateUsersAvatarService = container.resolve(
-            UpdateUsersAvatarService,
+        const updateUserAvatarService = container.resolve(
+            UpdateUserAvatarService,
         );
 
-        const updatedUser = await updateUsersAvatarService.execute({
+        const updatedUser = await updateUserAvatarService.execute({
             userId,
             avatar,
         });

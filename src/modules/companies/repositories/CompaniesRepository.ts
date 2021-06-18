@@ -77,7 +77,7 @@ class CompaniesRepository implements ICompaniesRepository {
         );
     }
 
-    public async removeCompanyLogo(companyId: string): Promise<void> {
+    public async removeLogo(companyId: string): Promise<void> {
         await this.CompaniesRepository.query(
             `UPDATE companies SET "logo" = NULL WHERE id = '${companyId}'`,
         );

@@ -68,8 +68,12 @@ export default class CreateSaleService {
             verifyCompany.id,
         );
 
+        if (!verifyProductOnCompany) {
+            throw new AppError('Requested company has no products.');
+        }
+
         if (
-            !verifyProductOnCompany?.find(
+            !verifyProductOnCompany.find(
                 product => product.id === verifyProduct.id,
             )
         ) {

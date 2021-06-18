@@ -20,8 +20,10 @@ export default class Sale {
     @Column()
     productId: string;
 
-    @Column('timestamp with time zone')
-    date?: Date;
+    @Column('timestamp with time zone', {
+        default: Date.now(),
+    })
+    date: Date;
 
     @Column()
     type: string;
