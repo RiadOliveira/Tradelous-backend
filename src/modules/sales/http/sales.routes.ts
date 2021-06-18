@@ -5,6 +5,7 @@ import ListSalesFromEmployeeService from '../services/ListSalesFromEmployeeServi
 import CreateSaleService from '../services/CreateSaleService';
 import UpdateSaleService from '../services/UpdateSaleService';
 import DeleteSaleService from '../services/DeleteSaleService';
+import { classToClass } from 'class-transformer';
 
 const salesRoutes = Router();
 
@@ -15,7 +16,7 @@ salesRoutes.get('/', async (request: Request, response: Response) => {
 
     const findedSales = await listSalesFromCompany.execute(userId);
 
-    return response.json(findedSales);
+    return response.json(classToClass(findedSales));
 });
 
 salesRoutes.get(
@@ -29,7 +30,7 @@ salesRoutes.get(
 
         const findedSales = await listSalesFromEmployee.execute(employeeId);
 
-        return response.json(findedSales);
+        return response.json(classToClass(findedSales));
     },
 );
 
@@ -46,13 +47,13 @@ salesRoutes.post('/', async (request: Request, response: Response) => {
         type,
         quantity,
     });
-    console.log(newSale);
 
-    return response.status(201).json(newSale);
+    return response.status(201).json(classToClass(newSale));
 });
 
 salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
-    const { id, employeeId, productId, type, quantity } = request.body;
+    const { employeeId, productId, type, quantity } = request.body;
+    const { saleId } = request.params;
 
     const userId = request.user.id;
 
@@ -60,7 +61,7 @@ salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
 
     const updatedSale = await updateSale.execute(
         {
-            id,
+            id: saleId,
             employeeId,
             productId,
             type,
@@ -69,7 +70,7 @@ salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
         userId,
     );
 
-    return response.status(202).json(updatedSale);
+    return response.status(202).json(classToClass(updatedSale));
 });
 
 salesRoutes.delete('/:saleId', async (request: Request, response: Response) => {

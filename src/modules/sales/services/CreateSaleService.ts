@@ -82,10 +82,12 @@ export default class CreateSaleService {
             );
         }
 
-        return this.salesRepository.create({
+        const newSale = await this.salesRepository.create({
             ...sale,
             companyId: verifyCompany.id,
             totalPrice: verifyProduct.price * sale.quantity,
         });
+
+        return newSale;
     }
 }

@@ -5,6 +5,8 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Transform } from 'class-transformer';
+import { format } from 'date-fns';
 
 @Entity('sales')
 export default class Sale {
@@ -23,6 +25,7 @@ export default class Sale {
     @Column('timestamp with time zone', {
         default: Date.now(),
     })
+    @Transform(({ value }) => format(value, 'dd/MM/yyyy'))
     date: Date;
 
     @Column()

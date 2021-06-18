@@ -54,12 +54,14 @@ export default class UpdateSaleService {
 
         const productPrice = verifySale.totalPrice / verifySale.quantity;
 
-        const updatedSale = await this.salesRepository.save({
+        const updatedSale = new Sale();
+
+        Object.assign(updatedSale, {
             ...verifySale,
             ...sale,
             totalPrice: sale.quantity * productPrice,
         });
 
-        return updatedSale;
+        return this.salesRepository.save(updatedSale);
     }
 }
