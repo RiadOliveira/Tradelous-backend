@@ -29,7 +29,7 @@ export default class Sale {
     date: Date;
 
     @Column()
-    type: string;
+    type: 'money' | 'card';
 
     @Column()
     quantity: number;

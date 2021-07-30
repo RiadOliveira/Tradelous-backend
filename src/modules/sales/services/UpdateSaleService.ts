@@ -8,7 +8,7 @@ interface UpdateSale {
     id: string;
     employeeId: string;
     productId: string;
-    type: string;
+    type: 'money' | 'card';
     quantity: number;
 }
 
@@ -50,6 +50,10 @@ export default class UpdateSaleService {
                 'The user does not have permission to execute this action.',
                 401,
             );
+        }
+
+        if (sale.type != 'card' && sale.type != 'money') {
+            throw new AppError('Invalid sale type.');
         }
 
         const productPrice = verifySale.totalPrice / verifySale.quantity;
