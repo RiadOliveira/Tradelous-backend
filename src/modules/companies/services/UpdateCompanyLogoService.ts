@@ -53,9 +53,7 @@ export default class UpdateCompanyLogoService {
             findedCompany.logo = undefined;
 
             return findedCompany;
-        }
-
-        if (findedCompany.logo) {
+        } else if (findedCompany.logo) {
             await this.storageProvider.delete(findedCompany.logo, 'logo');
         }
 

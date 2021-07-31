@@ -41,7 +41,7 @@ export default class AddEmployeeToCompanyService {
             findedEmployee.companyId === findedAdmin.companyId
         ) {
             throw new AppError(
-                'The requested Employee is already on a company.',
+                'The requested employee is already on a company.',
             );
         }
 

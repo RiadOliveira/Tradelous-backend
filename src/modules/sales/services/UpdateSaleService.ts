@@ -56,7 +56,7 @@ export default class UpdateSaleService {
         }
 
         const verifyProduct = await this.productsRepository.findById(
-            verifySale.id,
+            verifySale.productId,
         );
 
         if (!verifyProduct) {
