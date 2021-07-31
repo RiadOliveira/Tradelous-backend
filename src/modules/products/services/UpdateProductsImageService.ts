@@ -28,18 +28,15 @@ export default class UpdateProductsImageService {
         const verifyProduct = await this.productsRepository.findById(
             product.productId,
         );
-        const verifyUser = await this.usersRepository.findById(userId);
 
         if (!verifyProduct) {
             throw new AppError('Product not found.');
         }
 
+        const verifyUser = await this.usersRepository.findById(userId);
+
         if (!verifyUser) {
             throw new AppError('User not found.');
-        }
-
-        if (!verifyUser.companyId) {
-            throw new AppError('The user is not associated to a company.');
         }
 
         if (verifyUser.companyId !== verifyProduct.companyId) {
@@ -61,9 +58,7 @@ export default class UpdateProductsImageService {
             verifyProduct.image = undefined;
 
             return verifyProduct;
-        }
-
-        if (verifyProduct.image) {
+        } else if (verifyProduct.image) {
             await this.storageProvider.delete(
                 verifyProduct.image,
                 'productImage',

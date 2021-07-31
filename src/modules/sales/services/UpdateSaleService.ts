@@ -1,3 +1,4 @@
+import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import Sale from '@shared/typeorm/entities/Sale';
@@ -19,6 +20,8 @@ export default class UpdateSaleService {
         private usersRepository: IUsersRepository,
         @inject('SalesRepository')
         private salesRepository: ISalesRepository,
+        @inject('ProductsRepository')
+        private productsRepository: IProductsRepository,
     ) {}
 
     public async execute(sale: UpdateSale, userId: string): Promise<Sale> {
@@ -52,20 +55,51 @@ export default class UpdateSaleService {
             );
         }
 
+        const verifyProduct = await this.productsRepository.findById(
+            verifySale.id,
+        );
+
+        if (!verifyProduct) {
+            throw new AppError('Product not found.');
+        }
+
+        if (
+            sale.quantity > verifySale.quantity &&
+            verifyProduct.quantity + verifySale.quantity - sale.quantity < 0
+        ) {
+            throw new AppError(
+                'Requested sale has a quantity bigger than available on stock.',
+            );
+        }
+
         if (sale.method != 'card' && sale.method != 'money') {
             throw new AppError('Invalid sale method.');
         }
 
         const productPrice = verifySale.totalPrice / verifySale.quantity;
 
-        const updatedSale = new Sale();
-
-        Object.assign(updatedSale, {
+        const updatedSale: Sale = await this.salesRepository.save({
             ...verifySale,
             ...sale,
             totalPrice: sale.quantity * productPrice,
         });
 
-        return this.salesRepository.save(updatedSale);
+        if (sale.quantity > verifySale.quantity) {
+            await this.productsRepository.save({
+                ...verifyProduct,
+                quantity:
+                    verifyProduct.quantity -
+                    (sale.quantity - verifySale.quantity),
+            });
+        } else if (sale.quantity < verifySale.quantity) {
+            await this.productsRepository.save({
+                ...verifyProduct,
+                quantity:
+                    verifyProduct.quantity +
+                    (verifySale.quantity - sale.quantity),
+            });
+        }
+
+        return updatedSale;
     }
 }

@@ -40,10 +40,6 @@ export default class UpdateProductService {
             throw new AppError('User not found.');
         }
 
-        if (!verifyUser.companyId) {
-            throw new AppError('The user is not associated to a company.');
-        }
-
         if (verifyUser.companyId !== verifyProduct.companyId) {
             throw new AppError(
                 'The user does not have permission to execute this action.',

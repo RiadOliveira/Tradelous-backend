@@ -31,7 +31,9 @@ export default class ListSalesFromEmployeeService {
         );
 
         if (!findedSales) {
-            throw new AppError('This employee does not make any sales.');
+            throw new AppError(
+                'The requested employee does not make any sales.',
+            );
         }
 
         return findedSales;

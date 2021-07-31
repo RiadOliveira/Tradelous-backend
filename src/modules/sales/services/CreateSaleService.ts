@@ -49,13 +49,6 @@ export default class CreateSaleService {
             throw new AppError('Company not found.');
         }
 
-        if (verifyCompany.id !== verifyEmployee.companyId) {
-            throw new AppError(
-                'The user does not have permission for this action.',
-                401,
-            );
-        }
-
         const verifyProduct = await this.productsRepository.findById(
             sale.productId,
         );
@@ -64,21 +57,15 @@ export default class CreateSaleService {
             throw new AppError('Product not found.');
         }
 
-        const verifyProductOnCompany = await this.companiesRepository.findProducts(
-            verifyCompany.id,
-        );
-
-        if (!verifyProductOnCompany) {
-            throw new AppError('Requested company has no products.');
+        if (verifyProduct.companyId != verifyCompany.id) {
+            throw new AppError(
+                'The company does not have this product registered.',
+            );
         }
 
-        if (
-            !verifyProductOnCompany.find(
-                product => product.id === verifyProduct.id,
-            )
-        ) {
+        if (sale.quantity > verifyProduct.quantity) {
             throw new AppError(
-                'Requested company does not have the requested product.',
+                'Requested quantity is more than available on stock.',
             );
         }
 
@@ -90,6 +77,11 @@ export default class CreateSaleService {
             ...sale,
             companyId: verifyCompany.id,
             totalPrice: verifyProduct.price * sale.quantity,
+        });
+
+        await this.productsRepository.save({
+            ...verifyProduct,
+            quantity: verifyProduct.quantity - sale.quantity,
         });
 
         return newSale;

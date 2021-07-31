@@ -1,3 +1,4 @@
+import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
@@ -10,6 +11,8 @@ export default class DeleteSaleService {
         private usersRepository: IUsersRepository,
         @inject('SalesRepository')
         private salesRepository: ISalesRepository,
+        @inject('ProductsRepository')
+        private productsRepository: IProductsRepository,
     ) {}
 
     public async execute(saleId: string, userId: string): Promise<void> {
@@ -32,6 +35,20 @@ export default class DeleteSaleService {
             );
         }
 
+        const productOfSale = await this.productsRepository.findById(
+            verifySale.productId,
+        );
+
+        if (!productOfSale) {
+            //Just for typescript.
+            throw new AppError('Product of sale not found.');
+        }
+
         await this.salesRepository.delete(saleId);
+
+        await this.productsRepository.save({
+            ...productOfSale,
+            quantity: productOfSale?.quantity + verifySale.quantity,
+        });
     }
 }
