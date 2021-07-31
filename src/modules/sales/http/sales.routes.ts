@@ -35,7 +35,7 @@ salesRoutes.get(
 );
 
 salesRoutes.post('/', async (request: Request, response: Response) => {
-    const { productId, type, quantity } = request.body;
+    const { productId, method, quantity } = request.body;
 
     const userId = request.user.id;
 
@@ -44,7 +44,7 @@ salesRoutes.post('/', async (request: Request, response: Response) => {
     const newSale = await createSale.execute({
         employeeId: userId,
         productId,
-        type,
+        method,
         quantity,
     });
 
@@ -52,7 +52,7 @@ salesRoutes.post('/', async (request: Request, response: Response) => {
 });
 
 salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
-    const { employeeId, productId, type, quantity } = request.body;
+    const { employeeId, productId, method, quantity } = request.body;
     const { saleId } = request.params;
 
     const userId = request.user.id;
@@ -64,7 +64,7 @@ salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
             id: saleId,
             employeeId,
             productId,
-            type,
+            method,
             quantity,
         },
         userId,

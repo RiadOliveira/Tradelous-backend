@@ -8,7 +8,7 @@ interface UpdateSale {
     id: string;
     employeeId: string;
     productId: string;
-    type: 'money' | 'card';
+    method: 'money' | 'card';
     quantity: number;
 }
 
@@ -52,8 +52,8 @@ export default class UpdateSaleService {
             );
         }
 
-        if (sale.type != 'card' && sale.type != 'money') {
-            throw new AppError('Invalid sale type.');
+        if (sale.method != 'card' && sale.method != 'money') {
+            throw new AppError('Invalid sale method.');
         }
 
         const productPrice = verifySale.totalPrice / verifySale.quantity;

@@ -35,7 +35,7 @@ export class CreateSalesTable1624037052535 implements MigrationInterface {
                         default: 'now()',
                     },
                     {
-                        name: 'type',
+                        name: 'method',
                         type: 'varchar',
                     },
                     {

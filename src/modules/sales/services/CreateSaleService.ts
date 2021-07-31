@@ -9,7 +9,7 @@ import ISalesRepository from '../repositories/ISalesRepository';
 interface CreateSale {
     employeeId: string;
     productId: string;
-    type: 'money' | 'card';
+    method: 'money' | 'card';
     quantity: number;
 }
 
@@ -82,8 +82,8 @@ export default class CreateSaleService {
             );
         }
 
-        if (sale.type != 'card' && sale.type != 'money') {
-            throw new AppError('Invalid sale type.');
+        if (sale.method != 'card' && sale.method != 'money') {
+            throw new AppError('Invalid sale method.');
         }
 
         const newSale = await this.salesRepository.create({

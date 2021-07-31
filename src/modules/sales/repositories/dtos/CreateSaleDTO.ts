@@ -2,7 +2,7 @@ export default interface CreateSaleDTO {
     companyId: string;
     employeeId: string;
     productId: string;
-    type: 'money' | 'card';
+    method: 'money' | 'card';
     quantity: number;
     totalPrice: number;
 }
