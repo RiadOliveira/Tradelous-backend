@@ -56,28 +56,45 @@ class SalesRepository implements ISalesRepository {
         day: number,
         month: number,
     ): Promise<Sale[] | undefined> {
-        const parsedDay = day.toString().padStart(2, '0');
-        const parsedMonth = month.toString().padStart(2, '0');
-
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
-                        `to_char(${dateFieldName}, 'DD-MM') = '${parsedDay}-${parsedMonth}'`,
+                        `to_char(${dateFieldName}, 'DD-MM') = '${day}-${month}'`,
                 ),
             },
         });
 
         return findedSales;
     }
-    public async findAllOnMonth(month: number): Promise<Sale[] | undefined> {
-        const parsedMonth = month.toString().padStart(2, '0');
 
+    public async findAllOnWeek(
+        startDay: number,
+        startMonth: number,
+        year: number,
+    ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
-                        `to_char(${dateFieldName}, 'MM') = '${parsedMonth}'`,
+                        `
+                         ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
+                         ${dateFieldName} <= ('${year}-${startMonth}-${startDay}'::date +
+                         '8 days'::interval)
+                        `,
+                ),
+            },
+        });
+
+        return findedSales;
+    }
+
+    public async findAllOnMonth(month: number): Promise<Sale[] | undefined> {
+        const findedSales = await this.SalesRepository.find({
+            where: {
+                date: Raw(
+                    dateFieldName =>
+                        `to_char(${dateFieldName}, 'MM') = '${month}'`,
                 ),
             },
         });

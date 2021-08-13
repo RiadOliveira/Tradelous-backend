@@ -7,6 +7,7 @@ import UpdateSaleService from '../services/UpdateSaleService';
 import DeleteSaleService from '../services/DeleteSaleService';
 import ListSalesOnMonthService from '../services/ListSalesOnMonth';
 import ListSalesOnDayService from '../services/ListSalesOnDay';
+import ListSalesOnWeekService from '../services/ListSalesOnWeek';
 
 import { classToClass } from 'class-transformer';
 
@@ -45,6 +46,18 @@ salesRoutes.get('/day', async (request: Request, response: Response) => {
     const listSalesOnDay = container.resolve(ListSalesOnDayService);
 
     const findedSales = await listSalesOnDay.execute(userId, day, month);
+
+    return response.json(classToClass(findedSales));
+});
+
+salesRoutes.get('/week', async (request: Request, response: Response) => {
+    const userId = request.user.id;
+
+    const { day, month, year } = request.body;
+
+    const listSalesOnWeek = container.resolve(ListSalesOnWeekService);
+
+    const findedSales = await listSalesOnWeek.execute(userId, day, month, year);
 
     return response.json(classToClass(findedSales));
 });

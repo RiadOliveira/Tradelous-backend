@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import ISalesRepository from '../repositories/ISalesRepository';
 
 @injectable()
-export default class ListSalesOnMonthService {
+export default class ListSalesOnWeekService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
@@ -15,7 +15,9 @@ export default class ListSalesOnMonthService {
 
     public async execute(
         userId: string,
-        month: number,
+        startDay: number,
+        startMonth: number,
+        year: number,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -29,10 +31,13 @@ export default class ListSalesOnMonthService {
             );
         }
 
-        const parsedMonth = Number(month.toString().padStart(2, '0'));
+        const parsedDay = Number(startDay.toString().padStart(2, '0'));
+        const parsedMonth = Number(startMonth.toString().padStart(2, '0'));
 
-        const findedSales = await this.salesRepository.findAllOnMonth(
+        const findedSales = await this.salesRepository.findAllOnWeek(
+            parsedDay,
             parsedMonth,
+            year,
         );
 
         return findedSales;

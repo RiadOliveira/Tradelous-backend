@@ -30,7 +30,13 @@ export default class ListSalesOnDayService {
             );
         }
 
-        const findedSales = await this.salesRepository.findAllOnDay(day, month);
+        const parsedDay = Number(day.toString().padStart(2, '0'));
+        const parsedMonth = Number(month.toString().padStart(2, '0'));
+
+        const findedSales = await this.salesRepository.findAllOnDay(
+            parsedDay,
+            parsedMonth,
+        );
 
         return findedSales;
     }
