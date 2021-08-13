@@ -2,11 +2,16 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { format } from 'date-fns';
+
+import User from './User';
+import Product from './Product';
 
 @Entity('sales')
 export default class Sale {
@@ -19,8 +24,33 @@ export default class Sale {
     @Column('uuid')
     employeeId: string;
 
+    @OneToOne(() => User, user => user, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
+    @Transform(({ value: { name, email, avatar } }) => ({
+        name,
+        email,
+        avatar,
+    }))
+    @JoinColumn({ name: 'employeeId', referencedColumnName: 'id' })
+    employee: User;
+
     @Column('uuid')
     productId: string;
+
+    @OneToOne(() => Product, product => product, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
+    @JoinColumn({ name: 'productId', referencedColumnName: 'id' })
+    @Transform(({ value: { name, price, brand, image } }) => ({
+        name,
+        price,
+        brand,
+        image,
+    }))
+    product: Product;
 
     @Column('timestamp with time zone', {
         default: Date.now(),

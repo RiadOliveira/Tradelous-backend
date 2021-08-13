@@ -35,6 +35,10 @@ class SalesRepository implements ISalesRepository {
             where: {
                 companyId,
             },
+            relations: ['employee', 'product'],
+            order: {
+                date: 'ASC',
+            },
         });
 
         return findedSales;
@@ -46,6 +50,10 @@ class SalesRepository implements ISalesRepository {
         const findedSales = await this.SalesRepository.find({
             where: {
                 employeeId,
+            },
+            relations: ['employee', 'product'],
+            order: {
+                date: 'ASC',
             },
         });
 
@@ -62,6 +70,10 @@ class SalesRepository implements ISalesRepository {
                     dateFieldName =>
                         `to_char(${dateFieldName}, 'DD-MM') = '${day}-${month}'`,
                 ),
+            },
+            relations: ['employee', 'product'],
+            order: {
+                date: 'ASC',
             },
         });
 
@@ -84,6 +96,10 @@ class SalesRepository implements ISalesRepository {
                         `,
                 ),
             },
+            relations: ['employee', 'product'],
+            order: {
+                date: 'ASC',
+            },
         });
 
         return findedSales;
@@ -96,6 +112,10 @@ class SalesRepository implements ISalesRepository {
                     dateFieldName =>
                         `to_char(${dateFieldName}, 'MM') = '${month}'`,
                 ),
+            },
+            relations: ['employee', 'product'],
+            order: {
+                date: 'ASC',
             },
         });
 
