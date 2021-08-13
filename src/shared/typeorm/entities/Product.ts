@@ -16,7 +16,7 @@ export default class Product {
     @Column()
     name: string;
 
-    @Column()
+    @Column('uuid')
     companyId: string;
 
     @ManyToOne(() => Company, company => company.products, {

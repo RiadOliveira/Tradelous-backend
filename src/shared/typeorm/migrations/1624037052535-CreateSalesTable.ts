@@ -72,7 +72,7 @@ export class CreateSalesTable1624037052535 implements MigrationInterface {
                         referencedTableName: 'users',
                         referencedColumnNames: ['id'],
                         onUpdate: 'CASCADE',
-                        onDelete: 'RESTRICT',
+                        onDelete: 'CASCADE',
                     },
                     {
                         name: 'productId',
@@ -80,7 +80,7 @@ export class CreateSalesTable1624037052535 implements MigrationInterface {
                         referencedTableName: 'products',
                         referencedColumnNames: ['id'],
                         onUpdate: 'CASCADE',
-                        onDelete: 'RESTRICT',
+                        onDelete: 'CASCADE',
                     },
                 ],
             }),

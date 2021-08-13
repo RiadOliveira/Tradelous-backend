@@ -13,13 +13,13 @@ export default class Sale {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column('uuid')
     companyId: string;
 
-    @Column()
+    @Column('uuid')
     employeeId: string;
 
-    @Column()
+    @Column('uuid')
     productId: string;
 
     @Column('timestamp with time zone', {

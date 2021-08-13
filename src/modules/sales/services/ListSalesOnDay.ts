@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import ISalesRepository from '../repositories/ISalesRepository';
 
 @injectable()
-export default class ListSalesFromCompanyService {
+export default class ListSalesOnDayService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
@@ -13,22 +13,24 @@ export default class ListSalesFromCompanyService {
         private salesRepository: ISalesRepository,
     ) {}
 
-    public async execute(employeeId: string): Promise<Sale[] | undefined> {
-        const verifyEmployee = await this.usersRepository.findById(employeeId);
+    public async execute(
+        userId: string,
+        day: number,
+        month: number,
+    ): Promise<Sale[] | undefined> {
+        const verifyUser = await this.usersRepository.findById(userId);
 
-        if (!verifyEmployee) {
+        if (!verifyUser) {
             throw new AppError('Employee not found.');
         }
 
-        if (!verifyEmployee.companyId) {
+        if (!verifyUser.companyId) {
             throw new AppError(
                 'The requested user is not associated to a company.',
             );
         }
 
-        const findedSales = await this.salesRepository.findAllFromCompany(
-            verifyEmployee.companyId,
-        );
+        const findedSales = await this.salesRepository.findAllOnDay(day, month);
 
         return findedSales;
     }

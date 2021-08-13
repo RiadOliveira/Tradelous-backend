@@ -5,6 +5,9 @@ import ListSalesFromEmployeeService from '../services/ListSalesFromEmployeeServi
 import CreateSaleService from '../services/CreateSaleService';
 import UpdateSaleService from '../services/UpdateSaleService';
 import DeleteSaleService from '../services/DeleteSaleService';
+import ListSalesOnMonthService from '../services/ListSalesOnMonth';
+import ListSalesOnDayService from '../services/ListSalesOnDay';
+
 import { classToClass } from 'class-transformer';
 
 const salesRoutes = Router();
@@ -20,7 +23,7 @@ salesRoutes.get('/', async (request: Request, response: Response) => {
 });
 
 salesRoutes.get(
-    '/:employeeId',
+    '/employee/:employeeId',
     async (request: Request, response: Response) => {
         const { employeeId } = request.params;
 
@@ -33,6 +36,30 @@ salesRoutes.get(
         return response.json(classToClass(findedSales));
     },
 );
+
+salesRoutes.get('/day', async (request: Request, response: Response) => {
+    const userId = request.user.id;
+
+    const { day, month } = request.body;
+
+    const listSalesOnDay = container.resolve(ListSalesOnDayService);
+
+    const findedSales = await listSalesOnDay.execute(userId, day, month);
+
+    return response.json(classToClass(findedSales));
+});
+
+salesRoutes.get('/month', async (request: Request, response: Response) => {
+    const userId = request.user.id;
+
+    const { month } = request.body;
+
+    const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
+
+    const findedSales = await listSalesOnMonth.execute(userId, month);
+
+    return response.json(classToClass(findedSales));
+});
 
 salesRoutes.post('/', async (request: Request, response: Response) => {
     const { productId, method, quantity } = request.body;
