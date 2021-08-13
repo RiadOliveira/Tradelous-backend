@@ -10,9 +10,9 @@ export default interface ISalesRepository {
     findAllFromEmployee(employeeId: string): Promise<Sale[] | undefined>;
     findAllOnDay(day: string, month: string): Promise<Sale[] | undefined>;
     findAllOnWeek(
-        startDay: number,
-        startMonth: number,
-        year: number,
+        startDay: string,
+        startMonth: string,
+        year: string,
     ): Promise<Sale[] | undefined>;
     findAllOnMonth(month: string): Promise<Sale[] | undefined>;
 }

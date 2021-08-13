@@ -38,10 +38,13 @@ salesRoutes.get(
     },
 );
 
-salesRoutes.get('/day', async (request: Request, response: Response) => {
+//Pass day-month on params.
+salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
     const userId = request.user.id;
 
-    const { day, month } = request.body;
+    const { date } = request.params;
+
+    const [day, month] = date.split('-');
 
     const listSalesOnDay = container.resolve(ListSalesOnDayService);
 
@@ -50,10 +53,13 @@ salesRoutes.get('/day', async (request: Request, response: Response) => {
     return response.json(classToClass(findedSales));
 });
 
-salesRoutes.get('/week', async (request: Request, response: Response) => {
+//Pass day-month-year on params.
+salesRoutes.get('/week/:date', async (request: Request, response: Response) => {
     const userId = request.user.id;
 
-    const { day, month, year } = request.body;
+    const { date } = request.params;
+
+    const [day, month, year] = date.split('-');
 
     const listSalesOnWeek = container.resolve(ListSalesOnWeekService);
 
@@ -62,17 +68,20 @@ salesRoutes.get('/week', async (request: Request, response: Response) => {
     return response.json(classToClass(findedSales));
 });
 
-salesRoutes.get('/month', async (request: Request, response: Response) => {
-    const userId = request.user.id;
+salesRoutes.get(
+    '/month/:monthValue',
+    async (request: Request, response: Response) => {
+        const userId = request.user.id;
 
-    const { month } = request.body;
+        const { monthValue } = request.params;
 
-    const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
+        const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
 
-    const findedSales = await listSalesOnMonth.execute(userId, month);
+        const findedSales = await listSalesOnMonth.execute(userId, monthValue);
 
-    return response.json(classToClass(findedSales));
-});
+        return response.json(classToClass(findedSales));
+    },
+);
 
 salesRoutes.post('/', async (request: Request, response: Response) => {
     const { productId, method, quantity } = request.body;

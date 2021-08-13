@@ -81,9 +81,9 @@ class SalesRepository implements ISalesRepository {
     }
 
     public async findAllOnWeek(
-        startDay: number,
-        startMonth: number,
-        year: number,
+        startDay: string,
+        startMonth: string,
+        year: string,
     ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {

@@ -15,7 +15,7 @@ export default class ListSalesOnMonthService {
 
     public async execute(
         userId: string,
-        month: number,
+        month: string,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -29,7 +29,7 @@ export default class ListSalesOnMonthService {
             );
         }
 
-        const parsedMonth = month.toString().padStart(2, '0');
+        const parsedMonth = month.padStart(2, '0');
 
         const findedSales = await this.salesRepository.findAllOnMonth(
             parsedMonth,
