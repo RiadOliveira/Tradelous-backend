@@ -53,8 +53,8 @@ class SalesRepository implements ISalesRepository {
     }
 
     public async findAllOnDay(
-        day: number,
-        month: number,
+        day: string,
+        month: string,
     ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
@@ -89,7 +89,7 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOnMonth(month: number): Promise<Sale[] | undefined> {
+    public async findAllOnMonth(month: string): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(

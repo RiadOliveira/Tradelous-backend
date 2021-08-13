@@ -29,7 +29,7 @@ export default class ListSalesOnMonthService {
             );
         }
 
-        const parsedMonth = Number(month.toString().padStart(2, '0'));
+        const parsedMonth = month.toString().padStart(2, '0');
 
         const findedSales = await this.salesRepository.findAllOnMonth(
             parsedMonth,
