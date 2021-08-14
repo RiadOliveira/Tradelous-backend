@@ -8,7 +8,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
-import { addHours, format } from 'date-fns';
+import { format } from 'date-fns';
 
 import User from './User';
 import Product from './Product';
@@ -52,10 +52,8 @@ export default class Sale {
     }))
     product: Product;
 
-    @Column('timestamp with time zone', {
-        default: Date.now(),
-    })
-    @Transform(({ value }) => format(addHours(value, 6), 'dd/MM/yyyy')) //Add hours to adapt with timezone.
+    @Column('timestamp with time zone')
+    @Transform(({ value }) => format(value, 'dd/MM/yyyy'))
     date: Date;
 
     @Column()

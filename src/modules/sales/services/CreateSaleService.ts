@@ -3,6 +3,7 @@ import IProductsRepository from '@modules/products/repositories/IProductsReposit
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import Sale from '@shared/typeorm/entities/Sale';
+import { startOfDay } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 import ISalesRepository from '../repositories/ISalesRepository';
 
@@ -73,10 +74,13 @@ export default class CreateSaleService {
             throw new AppError('Invalid sale method.');
         }
 
+        const actualDate = startOfDay(new Date(Date.now()));
+
         const newSale = await this.salesRepository.create({
             ...sale,
             companyId: verifyCompany.id,
             totalPrice: verifyProduct.price * sale.quantity,
+            date: actualDate,
         });
 
         await this.productsRepository.save({

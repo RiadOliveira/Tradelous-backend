@@ -32,7 +32,6 @@ export class CreateSalesTable1624037052535 implements MigrationInterface {
                     {
                         name: 'date',
                         type: 'timestamp with time zone',
-                        default: 'now()',
                     },
                     {
                         name: 'method',

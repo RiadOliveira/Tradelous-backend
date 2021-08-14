@@ -5,4 +5,5 @@ export default interface CreateSaleDTO {
     method: 'money' | 'card';
     quantity: number;
     totalPrice: number;
+    date: Date;
 }
