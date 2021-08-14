@@ -44,11 +44,11 @@ salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
 
     const { date } = request.params;
 
-    const [day, month] = date.split('-');
+    const [day, month, year] = date.split('-');
 
     const listSalesOnDay = container.resolve(ListSalesOnDayService);
 
-    const findedSales = await listSalesOnDay.execute(userId, day, month);
+    const findedSales = await listSalesOnDay.execute(userId, day, month, year);
 
     return response.json(classToClass(findedSales));
 });
@@ -68,16 +68,19 @@ salesRoutes.get('/week/:date', async (request: Request, response: Response) => {
     return response.json(classToClass(findedSales));
 });
 
+//Pass month-year on params.
 salesRoutes.get(
-    '/month/:monthValue',
+    '/month/:date',
     async (request: Request, response: Response) => {
         const userId = request.user.id;
 
-        const { monthValue } = request.params;
+        const { date } = request.params;
+
+        const [month, year] = date.split('-');
 
         const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
 
-        const findedSales = await listSalesOnMonth.execute(userId, monthValue);
+        const findedSales = await listSalesOnMonth.execute(userId, month, year);
 
         return response.json(classToClass(findedSales));
     },

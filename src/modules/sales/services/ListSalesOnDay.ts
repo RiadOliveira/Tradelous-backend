@@ -17,6 +17,7 @@ export default class ListSalesOnDayService {
         userId: string,
         day: string,
         month: string,
+        year: string,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -30,12 +31,13 @@ export default class ListSalesOnDayService {
             );
         }
 
-        const parsedDay = day.padStart(2, '0');
-        const parsedMonth = month.padStart(2, '0');
+        const parsedDay = Number(day.padStart(2, '0'));
+        const parsedMonth = Number(month.padStart(2, '0'));
 
         const findedSales = await this.salesRepository.findAllOnDay(
             parsedDay,
             parsedMonth,
+            Number(year),
         );
 
         return findedSales;

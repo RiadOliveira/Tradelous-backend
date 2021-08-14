@@ -1,4 +1,6 @@
 import { getRepository, Raw, Repository } from 'typeorm';
+import { endOfDay, lastDayOfMonth, startOfDay } from 'date-fns';
+
 import Sale from '@shared/typeorm/entities/Sale';
 import ISalesRepository from './ISalesRepository';
 import CreateSaleDTO from './dtos/CreateSaleDTO';
@@ -61,14 +63,20 @@ class SalesRepository implements ISalesRepository {
     }
 
     public async findAllOnDay(
-        day: string,
-        month: string,
+        day: number,
+        month: number,
+        year: number,
     ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
-                        `to_char(${dateFieldName}, 'DD-MM') = '${day}-${month}'`,
+                        `
+                            ${dateFieldName} >= '${year}-${month}-${day}'::date AND
+                            ${dateFieldName} < '${year}-${month}-${
+                            day + 1
+                        }'::date
+                        `,
                 ),
             },
             relations: ['employee', 'product'],
@@ -105,12 +113,22 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOnMonth(month: string): Promise<Sale[] | undefined> {
+    public async findAllOnMonth(
+        month: number,
+        year: number,
+    ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
-                        `to_char(${dateFieldName}, 'MM') = '${month}'`,
+                        `
+                    ${dateFieldName} >= '${startOfDay(
+                            new Date(year, month),
+                        )}'::date AND
+                    ${dateFieldName} <= '${endOfDay(
+                            endOfDay(lastDayOfMonth(new Date(year, month))),
+                        )}'::date
+                `,
                 ),
             },
             relations: ['employee', 'product'],
