@@ -101,7 +101,7 @@ salesRoutes.post('/', async (request: Request, response: Response) => {
 });
 
 salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
-    const { employeeId, productId, method, quantity } = request.body;
+    const { productId, method, quantity } = request.body;
     const { saleId } = request.params;
 
     const userId = request.user.id;
@@ -111,7 +111,6 @@ salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
     const updatedSale = await updateSale.execute(
         {
             id: saleId,
-            employeeId,
             productId,
             method,
             quantity,

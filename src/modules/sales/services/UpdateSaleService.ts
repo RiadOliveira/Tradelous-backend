@@ -7,7 +7,6 @@ import ISalesRepository from '../repositories/ISalesRepository';
 
 interface UpdateSale {
     id: string;
-    employeeId: string;
     productId: string;
     method: 'money' | 'card';
     quantity: number;
@@ -42,13 +41,6 @@ export default class UpdateSaleService {
         }
 
         if (verifyUser.companyId !== verifySale.companyId) {
-            throw new AppError(
-                'The user does not have permission to execute this action.',
-                401,
-            );
-        }
-
-        if (verifyUser.id !== sale.employeeId && !verifyUser.isAdmin) {
             throw new AppError(
                 'The user does not have permission to execute this action.',
                 401,
