@@ -28,7 +28,14 @@ export default class DeleteSaleService {
             throw new AppError('User not found.');
         }
 
-        if (verifyUser.id !== verifySale.employeeId && !verifyUser.isAdmin) {
+        if (!verifyUser.isAdmin) {
+            throw new AppError(
+                'The user does not have permission to execute this action.',
+                401,
+            );
+        }
+
+        if (verifyUser.companyId !== verifySale.companyId) {
             throw new AppError(
                 'The user does not have permission to execute this action.',
                 401,

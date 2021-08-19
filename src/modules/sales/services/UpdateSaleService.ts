@@ -40,6 +40,13 @@ export default class UpdateSaleService {
             throw new AppError('The user is not associated to a company.');
         }
 
+        if (!verifyUser.isAdmin) {
+            throw new AppError(
+                'The user does not have permission to execute this action.',
+                401,
+            );
+        }
+
         if (verifyUser.companyId !== verifySale.companyId) {
             throw new AppError(
                 'The user does not have permission to execute this action.',
