@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import ListSalesFromCompanyService from '../services/ListSalesFromCompanyService';
 import ListSalesFromEmployeeService from '../services/ListSalesFromEmployeeService';
 import CreateSaleService from '../services/CreateSaleService';
 import UpdateSaleService from '../services/UpdateSaleService';
@@ -12,16 +11,6 @@ import ListSalesOnWeekService from '../services/ListSalesOnWeek';
 import { classToClass } from 'class-transformer';
 
 const salesRoutes = Router();
-
-salesRoutes.get('/', async (request: Request, response: Response) => {
-    const userId = request.user.id;
-
-    const listSalesFromCompany = container.resolve(ListSalesFromCompanyService);
-
-    const findedSales = await listSalesFromCompany.execute(userId);
-
-    return response.json(classToClass(findedSales));
-});
 
 salesRoutes.get(
     '/employee/:employeeId',
