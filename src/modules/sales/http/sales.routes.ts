@@ -1,5 +1,3 @@
-import { Router, Request, Response } from 'express';
-import { container } from 'tsyringe';
 import ListSalesFromEmployeeService from '../services/ListSalesFromEmployeeService';
 import CreateSaleService from '../services/CreateSaleService';
 import UpdateSaleService from '../services/UpdateSaleService';
@@ -8,6 +6,8 @@ import ListSalesOnMonthService from '../services/ListSalesOnMonth';
 import ListSalesOnDayService from '../services/ListSalesOnDay';
 import ListSalesOnWeekService from '../services/ListSalesOnWeek';
 
+import { Router, Request, Response } from 'express';
+import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
 const salesRoutes = Router();

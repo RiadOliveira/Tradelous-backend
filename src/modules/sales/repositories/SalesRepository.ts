@@ -1,5 +1,5 @@
 import { getRepository, Raw, Repository } from 'typeorm';
-import { endOfDay, lastDayOfMonth, startOfDay } from 'date-fns';
+import { lastDayOfMonth } from 'date-fns';
 
 import Sale from '@shared/typeorm/entities/Sale';
 import ISalesRepository from './ISalesRepository';
@@ -122,12 +122,10 @@ class SalesRepository implements ISalesRepository {
                 date: Raw(
                     dateFieldName =>
                         `
-                    ${dateFieldName} >= '${startOfDay(
-                            new Date(year, month),
-                        )}'::date AND
-                    ${dateFieldName} <= '${endOfDay(
-                            endOfDay(lastDayOfMonth(new Date(year, month))),
-                        )}'::date
+                    ${dateFieldName} >= '${year}-${month}-1'::date AND
+                    ${dateFieldName} <= '${year}-${month}-${lastDayOfMonth(
+                            month,
+                        ).getDate()}'::date
                 `,
                 ),
             },
