@@ -44,9 +44,10 @@ export default class Sale {
         onUpdate: 'CASCADE',
     })
     @JoinColumn({ name: 'productId', referencedColumnName: 'id' })
-    @Transform(({ value: { name, price, brand, image } }) => ({
+    @Transform(({ value: { name, price, quantity, brand, image } }) => ({
         name,
         price,
+        quantity,
         brand,
         image,
     }))
