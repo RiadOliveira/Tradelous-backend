@@ -51,6 +51,7 @@ export default class RegisterCompanyService {
         const newCompany = await this.companiesRepository.create(company);
 
         findedUser.companyId = newCompany.id;
+        findedUser.isAdmin = true;
 
         await this.usersRepository.save(findedUser);
 
