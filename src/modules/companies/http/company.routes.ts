@@ -1,12 +1,13 @@
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import RegisterCompanyService from '../services/RegisterCompanyService';
-import AddEmployeeToCompanyService from '../services/AddEmployeeToCompanyService';
-import RemoveEmployeeFromCompanyService from '../services/RemoveEmployeeFromCompanyService';
+
+import HireEmployeeService from '../services/HireEmployeeService';
+import FireEmployeeService from '../services/FireEmployeeService';
 import ListEmployeesFromCompanyService from '../services/ListEmployeesFromCompanyService';
 import UpdateCompanyService from '../services/UpdateCompanyService';
 import UpdateCompanyLogoService from '../services/UpdateCompanyLogoService';
-import GetCompanyService from '../services/GetCompanyService';
+import ShowCompanyService from '../services/ShowCompanyService';
 
 import multerConfig from '@config/upload';
 import multer from 'multer';
@@ -18,9 +19,9 @@ const upload = multer(multerConfig);
 companyRoutes.get('/', async (request: Request, response: Response) => {
     const userId = request.user.id;
 
-    const getCompany = container.resolve(GetCompanyService);
+    const showCompany = container.resolve(ShowCompanyService);
 
-    const company = await getCompany.execute(userId);
+    const company = await showCompany.execute(userId);
 
     return response.status(200).json(company);
 });
@@ -50,36 +51,29 @@ companyRoutes.post(
 );
 
 companyRoutes.patch(
-    '/add-employee',
+    '/hire-employee/:employeeId',
     async (request: Request, response: Response) => {
-        const { employeeId } = request.body;
+        const { employeeId } = request.params;
 
         const adminId = request.user.id;
 
-        const addEmployeeToCompany = container.resolve(
-            AddEmployeeToCompanyService,
-        );
+        const hireEmployee = container.resolve(HireEmployeeService);
 
-        const newEmployee = await addEmployeeToCompany.execute(
-            adminId,
-            employeeId,
-        );
+        const newEmployee = await hireEmployee.execute(adminId, employeeId);
 
         return response.status(202).json(newEmployee);
     },
 );
 
 companyRoutes.patch(
-    '/remove-employee/:employeeId',
+    '/fire-employee/:employeeId',
     async (request: Request, response: Response) => {
         const { employeeId } = request.params;
         const adminId = request.user.id;
 
-        const removeEmployeeFromCompany = container.resolve(
-            RemoveEmployeeFromCompanyService,
-        );
+        const fireEmployee = container.resolve(FireEmployeeService);
 
-        await removeEmployeeFromCompany.execute(adminId, employeeId);
+        await fireEmployee.execute(adminId, employeeId);
 
         return response.status(204).json();
     },

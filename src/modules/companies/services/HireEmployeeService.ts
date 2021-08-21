@@ -4,7 +4,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 
 @injectable()
-export default class AddEmployeeToCompanyService {
+export default class HireEmployeeService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,

@@ -4,7 +4,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
 
 @injectable()
-export default class RemoveEmployeeFromCompanyService {
+export default class FireEmployeeService {
     constructor(
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,

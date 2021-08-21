@@ -5,7 +5,7 @@ import Company from '@shared/typeorm/entities/Company';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 @injectable()
-export default class GetCompanyService {
+export default class ShowCompanyService {
     constructor(
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
