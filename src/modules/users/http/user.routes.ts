@@ -1,15 +1,18 @@
 import { Router, Request, Response } from 'express';
+
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
 import UpdateUserService from '../services/UpdateUserService';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 import LeaveCompanyService from '../services/LeaveCompanyService';
+import DeleteUserService from '../services/DeleteUserService';
 
-import { classToClass } from 'class-transformer';
-import { container } from 'tsyringe';
 import multerConfig from '@config/upload';
 import multer from 'multer';
 import EnsureAuthentication from './middlewares/EnsureAuthentication';
+
+import { classToClass } from 'class-transformer';
+import { container } from 'tsyringe';
 
 const userRoutes = Router();
 const upload = multer(multerConfig);
@@ -92,9 +95,23 @@ userRoutes.patch(
 
         const leaveCompany = container.resolve(LeaveCompanyService);
 
-        const updatedUser = await leaveCompany.execute(userId);
+        await leaveCompany.execute(userId);
 
-        return response.status(202).json(classToClass(updatedUser));
+        return response.status(204).json();
+    },
+);
+
+userRoutes.delete(
+    '/',
+    EnsureAuthentication,
+    async (request: Request, response: Response) => {
+        const userId = request.user.id;
+
+        const deleteUser = container.resolve(DeleteUserService);
+
+        await deleteUser.execute(userId);
+
+        return response.status(204).json();
     },
 );
 

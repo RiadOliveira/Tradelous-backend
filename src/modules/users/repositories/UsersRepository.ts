@@ -46,6 +46,10 @@ class UsersRepository implements IUsersRepository {
             `UPDATE users SET "companyId" = NULL WHERE id = '${userId}'`,
         );
     }
+
+    public async delete(userId: string): Promise<void> {
+        await this.UsersRepository.delete(userId);
+    }
 }
 
 export default UsersRepository;
