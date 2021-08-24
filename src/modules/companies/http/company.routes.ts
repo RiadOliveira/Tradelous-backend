@@ -13,6 +13,7 @@ import multerConfig from '@config/upload';
 import multer from 'multer';
 
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 const companyRoutes = Router();
 
@@ -63,7 +64,7 @@ companyRoutes.patch(
 
         const newEmployee = await hireEmployee.execute(adminId, employeeId);
 
-        return response.status(202).json(newEmployee);
+        return response.status(202).json(classToClass(newEmployee));
     },
 );
 
