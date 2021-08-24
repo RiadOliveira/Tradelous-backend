@@ -29,7 +29,7 @@ export default class UpdateUserService {
         const findedUser = await this.usersRepository.findById(userId);
 
         if (!findedUser) {
-            throw new AppError('Informed user does not exist.');
+            throw new AppError('Requested user does not exist.');
         }
 
         if (email !== findedUser.email) {

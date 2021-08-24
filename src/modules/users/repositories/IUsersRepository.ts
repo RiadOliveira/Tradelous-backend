@@ -8,4 +8,5 @@ export default interface IUsersRepository {
     findByEmail(email: string): Promise<User | undefined>;
     findById(id: string): Promise<User | undefined>;
     deleteAvatar(userId: string): Promise<void>;
+    leaveCompany(userId: string): Promise<void>;
 }

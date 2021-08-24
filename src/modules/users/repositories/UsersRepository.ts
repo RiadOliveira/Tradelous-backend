@@ -40,6 +40,12 @@ class UsersRepository implements IUsersRepository {
             `UPDATE users SET "avatar" = NULL WHERE id = '${userId}'`,
         );
     }
+
+    public async leaveCompany(userId: string): Promise<void> {
+        await this.UsersRepository.query(
+            `UPDATE users SET "companyId" = NULL WHERE id = '${userId}'`,
+        );
+    }
 }
 
 export default UsersRepository;

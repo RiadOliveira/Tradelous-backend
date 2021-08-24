@@ -3,6 +3,7 @@ import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
 import UpdateUserService from '../services/UpdateUserService';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import LeaveCompanyService from '../services/LeaveCompanyService';
 
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
@@ -49,9 +50,9 @@ userRoutes.put(
 
         const userId = request.user.id;
 
-        const updateUserService = container.resolve(UpdateUserService);
+        const updateUser = container.resolve(UpdateUserService);
 
-        const updatedUser = await updateUserService.execute({
+        const updatedUser = await updateUser.execute({
             name,
             email,
             oldPassword,
@@ -64,7 +65,7 @@ userRoutes.put(
 );
 
 userRoutes.patch(
-    '/updateAvatar',
+    '/update-avatar',
     EnsureAuthentication,
     upload.single('avatar'),
     async (request: Request, response: Response) => {
@@ -72,14 +73,26 @@ userRoutes.patch(
 
         const avatar = request.file ? request.file.filename : '';
 
-        const updateUserAvatarService = container.resolve(
-            UpdateUserAvatarService,
-        );
+        const updateUserAvatar = container.resolve(UpdateUserAvatarService);
 
-        const updatedUser = await updateUserAvatarService.execute({
+        const updatedUser = await updateUserAvatar.execute({
             userId,
             avatar,
         });
+
+        return response.status(202).json(classToClass(updatedUser));
+    },
+);
+
+userRoutes.patch(
+    '/leave-company',
+    EnsureAuthentication,
+    async (request: Request, response: Response) => {
+        const userId = request.user.id;
+
+        const leaveCompany = container.resolve(LeaveCompanyService);
+
+        const updatedUser = await leaveCompany.execute(userId);
 
         return response.status(202).json(classToClass(updatedUser));
     },
