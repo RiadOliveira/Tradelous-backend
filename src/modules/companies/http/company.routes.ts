@@ -1,16 +1,18 @@
 import { Router, Request, Response } from 'express';
-import { container } from 'tsyringe';
-import RegisterCompanyService from '../services/RegisterCompanyService';
 
+import RegisterCompanyService from '../services/RegisterCompanyService';
 import HireEmployeeService from '../services/HireEmployeeService';
 import FireEmployeeService from '../services/FireEmployeeService';
 import ListEmployeesFromCompanyService from '../services/ListEmployeesFromCompanyService';
 import UpdateCompanyService from '../services/UpdateCompanyService';
 import UpdateCompanyLogoService from '../services/UpdateCompanyLogoService';
 import ShowCompanyService from '../services/ShowCompanyService';
+import DeleteCompanyService from '../services/DeleteCompanyService';
 
 import multerConfig from '@config/upload';
 import multer from 'multer';
+
+import { container } from 'tsyringe';
 
 const companyRoutes = Router();
 
@@ -128,5 +130,15 @@ companyRoutes.patch(
         return response.status(202).json(updatedCompany);
     },
 );
+
+companyRoutes.delete('/', async (request: Request, response: Response) => {
+    const adminId = request.user.id;
+
+    const deleteCompany = container.resolve(DeleteCompanyService);
+
+    await deleteCompany.execute(adminId);
+
+    return response.status(204).json();
+});
 
 export default companyRoutes;

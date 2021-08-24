@@ -82,6 +82,10 @@ class CompaniesRepository implements ICompaniesRepository {
             `UPDATE companies SET "logo" = NULL WHERE id = '${companyId}'`,
         );
     }
+
+    public async delete(companyId: string): Promise<void> {
+        await this.CompaniesRepository.delete(companyId);
+    }
 }
 
 export default CompaniesRepository;
