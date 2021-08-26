@@ -8,7 +8,7 @@ import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider
 interface CompanyData {
     name: string;
     cnpj: number;
-    adress: string;
+    address: string;
     adminId: string;
     logo?: string;
 }

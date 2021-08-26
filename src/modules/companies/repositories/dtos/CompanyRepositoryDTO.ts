@@ -4,5 +4,5 @@ export default interface CompanyRepositoryDTO {
     adminId: string;
     logo?: string;
     cnpj: number;
-    adress: string;
+    address: string;
 }

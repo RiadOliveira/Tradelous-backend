@@ -27,7 +27,7 @@ export class CreateCompaniesTable1611030429428 implements MigrationInterface {
                         width: 14,
                     },
                     {
-                        name: 'adress',
+                        name: 'address',
                         type: 'varchar',
                     },
                     {

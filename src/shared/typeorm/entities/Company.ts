@@ -21,7 +21,7 @@ export default class Company {
     cnpj: number;
 
     @Column()
-    adress: string;
+    address: string;
 
     @Column('uuid')
     adminId: string;

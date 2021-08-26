@@ -7,7 +7,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 interface CompanyData {
     name: string;
     cnpj: number;
-    adress: string;
+    address: string;
     adminId: string;
 }
 

@@ -33,7 +33,7 @@ companyRoutes.post(
     '/',
     upload.single('logo'),
     async (request: Request, response: Response) => {
-        const { name, cnpj, adress } = request.body;
+        const { name, cnpj, address } = request.body;
 
         const logo = request.file ? request.file.filename : '';
 
@@ -44,7 +44,7 @@ companyRoutes.post(
         const newCompany = await registerCompany.execute({
             name,
             cnpj,
-            adress,
+            address,
             adminId,
             logo,
         });
@@ -101,14 +101,14 @@ companyRoutes.put(
     '/',
     upload.single('logo'),
     async (request: Request, response: Response) => {
-        const { name, cnpj, adress } = request.body;
+        const { name, cnpj, address } = request.body;
 
         const adminId = request.user.id;
 
         const updateCompany = container.resolve(UpdateCompanyService);
 
         const updatedCompany = await updateCompany.execute(
-            { name, cnpj, adress, adminId },
+            { name, cnpj, address, adminId },
             adminId,
         );
 
