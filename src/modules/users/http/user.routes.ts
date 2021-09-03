@@ -6,6 +6,7 @@ import UpdateUserService from '../services/UpdateUserService';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 import LeaveCompanyService from '../services/LeaveCompanyService';
 import DeleteUserService from '../services/DeleteUserService';
+import SendForgotPasswordEmailService from '../services/SendForgotPasswordEmailService';
 
 import multerConfig from '@config/upload';
 import multer from 'multer';
@@ -44,6 +45,21 @@ userRoutes.post('/sessions', async (request: Request, response: Response) => {
 
     return response.json({ user: classToClass(user), token });
 });
+
+userRoutes.post(
+    '/forgot-password',
+    async (request: Request, response: Response) => {
+        const { email } = request.body;
+
+        const sendForgotPasswordEmail = container.resolve(
+            SendForgotPasswordEmailService,
+        );
+
+        await sendForgotPasswordEmail.execute(email);
+
+        return response.status(204).json();
+    },
+);
 
 userRoutes.put(
     '/',

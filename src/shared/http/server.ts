@@ -4,6 +4,7 @@ import 'express-async-errors';
 import 'dotenv/config';
 import 'reflect-metadata';
 import '../container';
+
 import GlobalErrorHandler from '../errors/GlobalErrorHandler';
 import routes from './routes';
 import path from 'path';

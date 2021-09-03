@@ -28,12 +28,12 @@ export default class Sale {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
+    @JoinColumn({ name: 'employeeId', referencedColumnName: 'id' })
     @Transform(({ value: { name, email, avatar } }) => ({
         name,
         email,
         avatar,
     }))
-    @JoinColumn({ name: 'employeeId', referencedColumnName: 'id' })
     employee: User;
 
     @Column('uuid')
