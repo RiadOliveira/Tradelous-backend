@@ -2,6 +2,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import IMailProvider from '@shared/providers/MailProvider/IMailProvider';
 
+import path from 'path';
 import jwtConfig from '@config/jwtToken';
 import { sign } from 'jsonwebtoken';
 
@@ -25,15 +26,27 @@ export default class SendForgotPasswordEmailService {
             expiresIn: '1200s',
             subject: findedUser.id,
         });
-        console.log(token);
+
+        const forgotPasswordTemplate = path.resolve(
+            __dirname,
+            '..',
+            'views',
+            'forgot_password.hbs',
+        );
 
         await this.mailProvider.sendMail({
             to: {
-                name: findedUser?.name,
+                name: findedUser.name,
                 email,
             },
             subject: '[Tradelous] Recuperação de senha',
-            text: `Token para recuperação de senha: ${token}`,
+            templateData: {
+                file: forgotPasswordTemplate,
+                variables: {
+                    name: findedUser.name,
+                    token,
+                },
+            },
         });
     }
 }
