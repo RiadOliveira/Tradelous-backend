@@ -4,6 +4,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 
 import { injectable, inject } from 'tsyringe';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 @injectable()
 export default class DeleteCompanyService {
@@ -14,6 +15,8 @@ export default class DeleteCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('StorageProvider')
         private storageProvider: IStorageProvider,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(adminId: string): Promise<void> {
@@ -53,5 +56,9 @@ export default class DeleteCompanyService {
         await this.usersRepository.leaveCompany(findedAdmin.id);
 
         await this.companiesRepository.delete(findedCompany.id);
+
+        await this.cacheProvider.invalidate(
+            `employees-list:${findedCompany.id}`,
+        );
     }
 }

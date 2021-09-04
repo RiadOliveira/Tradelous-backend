@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import User from '@shared/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 @injectable()
 export default class ListEmployeesFromCompanyService {
@@ -11,6 +12,8 @@ export default class ListEmployeesFromCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(userId: string): Promise<User[]> {
@@ -26,12 +29,25 @@ export default class ListEmployeesFromCompanyService {
             );
         }
 
-        const findedEmployees = await this.companiesRepository.findEmployees(
-            findedUser.companyId,
+        const cacheKey = `employees-list:${findedUser.companyId}`;
+
+        let findedEmployees = await this.cacheProvider.recover<User[]>(
+            cacheKey,
         );
 
         if (!findedEmployees) {
-            throw new AppError('This company has no employees.');
+            findedEmployees = await this.companiesRepository.findEmployees(
+                findedUser.companyId,
+            );
+
+            if (!findedEmployees) {
+                throw new AppError('This company has no employees.');
+            }
+
+            await this.cacheProvider.save(
+                `employees-list:${findedUser.companyId}`,
+                JSON.stringify(findedEmployees),
+            );
         }
 
         return findedEmployees;

@@ -2,6 +2,7 @@ import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 @injectable()
 export default class FireEmployeeService {
@@ -10,6 +11,8 @@ export default class FireEmployeeService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(adminId: string, employeeId: string): Promise<void> {
@@ -54,5 +57,9 @@ export default class FireEmployeeService {
         }
 
         await this.companiesRepository.removeEmployee(findedEmployee.id);
+
+        await this.cacheProvider.invalidate(
+            `employees-list:${findedAdmin.companyId}`,
+        );
     }
 }

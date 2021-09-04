@@ -2,12 +2,15 @@ import { injectable, inject } from 'tsyringe';
 import User from '@shared/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 @injectable()
 export default class HireEmployeeService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(adminId: string, employeeId: string): Promise<User> {
@@ -47,6 +50,12 @@ export default class HireEmployeeService {
 
         findedEmployee.companyId = findedAdmin.companyId;
 
-        return this.usersRepository.save(findedEmployee);
+        await this.usersRepository.save(findedEmployee);
+
+        await this.cacheProvider.invalidate(
+            `employees-list:${findedAdmin.companyId}`,
+        );
+
+        return findedEmployee;
     }
 }
