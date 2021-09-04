@@ -1,10 +1,9 @@
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
 import AppError from '@shared/errors/AppError';
-import { injectable, inject } from 'tsyringe';
 import Company from '@shared/typeorm/entities/Company';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
-import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
+import { injectable, inject } from 'tsyringe';
 
 interface CompanyData {
     name: string;
@@ -21,10 +20,7 @@ export default class RegisterCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
-        @inject('StorageProvider')
-        private storageProvider: IStorageProvider,
-        @inject('CacheProvider')
-        private cacheProvider: ICacheProvider,
+        @inject('StorageProvider') private storageProvider: IStorageProvider,
     ) {}
 
     public async execute(company: CompanyData): Promise<Company> {
@@ -58,11 +54,6 @@ export default class RegisterCompanyService {
         findedUser.isAdmin = true;
 
         await this.usersRepository.save(findedUser);
-
-        await this.cacheProvider.save(
-            `company:${newCompany.id}`,
-            JSON.stringify(newCompany),
-        );
 
         return newCompany;
     }

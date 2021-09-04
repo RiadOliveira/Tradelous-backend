@@ -1,10 +1,9 @@
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
 import AppError from '@shared/errors/AppError';
-import { injectable, inject } from 'tsyringe';
 import Company from '@shared/typeorm/entities/Company';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
+import { injectable, inject } from 'tsyringe';
 
 @injectable()
 export default class UpdateCompanyLogoService {
@@ -15,8 +14,6 @@ export default class UpdateCompanyLogoService {
         private companiesRepository: ICompaniesRepository,
         @inject('StorageProvider')
         private storageProvider: IStorageProvider,
-        @inject('CacheProvider')
-        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(logo: string, adminId: string): Promise<Company> {
@@ -64,14 +61,6 @@ export default class UpdateCompanyLogoService {
 
         findedCompany.logo = logo;
 
-        await this.companiesRepository.save(findedCompany);
-
-        const cacheKey = `company:${findedCompany.id}`;
-
-        await this.cacheProvider.invalidate(cacheKey);
-
-        await this.cacheProvider.save(cacheKey, JSON.stringify(findedCompany));
-
-        return findedCompany;
+        return this.companiesRepository.save(findedCompany);
     }
 }

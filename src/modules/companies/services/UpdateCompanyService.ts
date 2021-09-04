@@ -1,9 +1,8 @@
 import ICompaniesRepository from '../repositories/ICompaniesRepository';
 import AppError from '@shared/errors/AppError';
-import { injectable, inject } from 'tsyringe';
 import Company from '@shared/typeorm/entities/Company';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
+import { injectable, inject } from 'tsyringe';
 
 interface CompanyData {
     name: string;
@@ -19,8 +18,6 @@ export default class UpdateCompanyService {
         private usersRepository: IUsersRepository,
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
-        @inject('CacheProvider')
-        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(
@@ -66,14 +63,6 @@ export default class UpdateCompanyService {
 
         const updatedCompany = { ...findedCompany, ...company };
 
-        await this.companiesRepository.save(updatedCompany);
-
-        const cacheKey = `company:${findedCompany.id}`;
-
-        await this.cacheProvider.invalidate(cacheKey);
-
-        await this.cacheProvider.save(cacheKey, JSON.stringify(findedCompany));
-
-        return updatedCompany;
+        return this.companiesRepository.save(updatedCompany);
     }
 }
