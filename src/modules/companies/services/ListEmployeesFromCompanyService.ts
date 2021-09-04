@@ -45,7 +45,7 @@ export default class ListEmployeesFromCompanyService {
             }
 
             await this.cacheProvider.save(
-                `employees-list:${findedUser.companyId}`,
+                cacheKey,
                 JSON.stringify(findedEmployees),
             );
         }

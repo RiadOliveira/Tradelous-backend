@@ -45,7 +45,7 @@ export default class ListProductsFromCompanyService {
             }
 
             await this.cacheProvider.save(
-                `products-list:${findedUser.companyId}`,
+                cacheKey,
                 JSON.stringify(findedProducts),
             );
         }
