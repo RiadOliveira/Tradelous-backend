@@ -1,19 +1,11 @@
 import IUsersRepository from '../repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
-import jwtConfig from '@config/jwtToken';
-
-import { verify } from 'jsonwebtoken';
 
 import { injectable, inject } from 'tsyringe';
 import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
 
-interface IJWT {
-    iat: string;
-    exp: string;
-    sub: string;
-}
-
 interface IRecoverPasswordData {
+    confirmEmail: string;
     recoverToken: string;
     newPassword: string;
 }
@@ -26,25 +18,29 @@ export default class RecoverPasswordService {
     ) {}
 
     public async execute({
+        confirmEmail,
         recoverToken,
         newPassword,
     }: IRecoverPasswordData): Promise<void> {
-        try {
-            const decoded = verify(recoverToken, jwtConfig.secret) as IJWT;
+        const findedUser = await this.usersRepository.findByEmail(confirmEmail);
 
-            const findedUser = await this.usersRepository.findById(decoded.sub);
+        if (!findedUser) {
+            throw new AppError('Requested user does not exist.');
+        }
 
-            if (!findedUser) {
-                throw new AppError('Requested user does not exist.');
-            }
+        const verifyToken = await this.hashProvider.compareHash(
+            findedUser.id + findedUser.updatedAt,
+            recoverToken,
+        );
 
-            const hashedPassword = await this.hashProvider.hash(newPassword);
-
-            findedUser.password = hashedPassword;
-
-            await this.usersRepository.save(findedUser);
-        } catch {
+        if (!verifyToken) {
             throw new AppError('Invalid Recover Token.', 401);
         }
+
+        const hashedPassword = await this.hashProvider.hash(newPassword);
+
+        findedUser.password = hashedPassword;
+
+        await this.usersRepository.save(findedUser);
     }
 }

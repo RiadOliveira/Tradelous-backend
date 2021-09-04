@@ -1,10 +1,10 @@
 import IMailTemplateProvider from '../IMailTemplateProvider';
-import handlebars from 'handlebars';
+import nunjucks from 'nunjucks';
 import IParseMailTemplateDTO from '../dtos/IParseMailTemplateDTO';
 
 import fs from 'fs';
 
-export default class HandlebarsMailTemplateProvider
+export default class NunJucksMailTemplateProvider
     implements IMailTemplateProvider {
     public async parseTemplate({
         file,
@@ -14,8 +14,8 @@ export default class HandlebarsMailTemplateProvider
             encoding: 'utf-8',
         });
 
-        const parseTemplate = handlebars.compile(templateFileContent);
+        const parseTemplate = nunjucks.compile(templateFileContent);
 
-        return parseTemplate(variables);
+        return parseTemplate.render(variables);
     }
 }
