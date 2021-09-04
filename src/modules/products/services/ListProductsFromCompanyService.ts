@@ -1,6 +1,7 @@
 import ICompaniesRepository from '@modules/companies/repositories/ICompaniesRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
 
@@ -11,6 +12,8 @@ export default class ListProductsFromCompanyService {
         private usersRepository: IUsersRepository,
         @inject('CompaniesRepository')
         private companiesRepository: ICompaniesRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(userId: string): Promise<Product[]> {
@@ -26,12 +29,25 @@ export default class ListProductsFromCompanyService {
             );
         }
 
-        const findedProducts = await this.companiesRepository.findProducts(
-            findedUser.companyId,
+        const cacheKey = `products-list:${findedUser.companyId}`;
+
+        let findedProducts = await this.cacheProvider.recover<Product[]>(
+            cacheKey,
         );
 
         if (!findedProducts) {
-            throw new AppError('No products found.');
+            findedProducts = await this.companiesRepository.findProducts(
+                findedUser.companyId,
+            );
+
+            if (!findedProducts) {
+                throw new AppError('No products found.');
+            }
+
+            await this.cacheProvider.save(
+                `products-list:${findedUser.companyId}`,
+                JSON.stringify(findedProducts),
+            );
         }
 
         return findedProducts;
