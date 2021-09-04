@@ -7,6 +7,7 @@ import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 import LeaveCompanyService from '../services/LeaveCompanyService';
 import DeleteUserService from '../services/DeleteUserService';
 import SendForgotPasswordEmailService from '../services/SendForgotPasswordEmailService';
+import RecoverPasswordService from '../services/RecoverPasswordService';
 
 import multerConfig from '@config/upload';
 import multer from 'multer';
@@ -56,6 +57,22 @@ userRoutes.post(
         );
 
         await sendForgotPasswordEmail.execute(email);
+
+        return response.status(204).json();
+    },
+);
+
+userRoutes.post(
+    '/recover-password',
+    async (request: Request, response: Response) => {
+        const { recoverToken, newPassword } = request.body;
+
+        const recoverPassword = container.resolve(RecoverPasswordService);
+
+        await recoverPassword.execute({
+            recoverToken,
+            newPassword,
+        });
 
         return response.status(204).json();
     },
