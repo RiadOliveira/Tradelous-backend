@@ -1,9 +1,10 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import Product from '@shared/typeorm/entities/Product';
-import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
+import { inject, injectable } from 'tsyringe';
 
 interface ProductData {
     name: string;
@@ -23,6 +24,8 @@ export default class AddProductToCompanyService {
         private usersRepository: IUsersRepository,
         @inject('StorageProvider')
         private storageProvider: IStorageProvider,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(
@@ -47,9 +50,15 @@ export default class AddProductToCompanyService {
             product.quantity = 0;
         }
 
-        return this.productsRepository.create({
+        const newProduct = await this.productsRepository.create({
             ...product,
             companyId: verifyUser.companyId,
         });
+
+        await this.cacheProvider.invalidate(
+            `products-list:${verifyUser.companyId}`,
+        );
+
+        return newProduct;
     }
 }

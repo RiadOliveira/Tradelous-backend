@@ -1,5 +1,6 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
@@ -20,6 +21,8 @@ export default class UpdateProductService {
         private usersRepository: IUsersRepository,
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(
@@ -47,11 +50,15 @@ export default class UpdateProductService {
             );
         }
 
-        const updatedProduct: Product = {
+        const updatedProduct: Product = await this.productsRepository.save({
             ...verifyProduct,
             ...product,
-        };
+        });
 
-        return this.productsRepository.save(updatedProduct);
+        await this.cacheProvider.invalidate(
+            `products-list:${verifyUser.companyId}`,
+        );
+
+        return updatedProduct;
     }
 }

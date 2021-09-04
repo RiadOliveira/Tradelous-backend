@@ -1,5 +1,6 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
 import { inject, injectable } from 'tsyringe';
 import IProductsRepository from '../repositories/IProductsRepository';
@@ -13,6 +14,8 @@ export default class DeleteProductToCompanyService {
         private usersRepository: IUsersRepository,
         @inject('StorageProvider')
         private storageProvider: IStorageProvider,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(productId: string, userId: string): Promise<void> {
@@ -43,5 +46,9 @@ export default class DeleteProductToCompanyService {
         }
 
         await this.productsRepository.delete(productId);
+
+        await this.cacheProvider.invalidate(
+            `products-list:${verifyUser.companyId}`,
+        );
     }
 }
