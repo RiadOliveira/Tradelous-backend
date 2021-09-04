@@ -20,7 +20,8 @@ export default class RegisterCompanyService {
         private companiesRepository: ICompaniesRepository,
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
-        @inject('StorageProvider') private storageProvider: IStorageProvider,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider,
     ) {}
 
     public async execute(company: CompanyData): Promise<Company> {

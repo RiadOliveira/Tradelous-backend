@@ -1,17 +1,15 @@
-import { compare, hash } from 'bcrypt';
+import { compare, hash as bcryptHash } from 'bcrypt';
 import IHashProvider from '../IHashProvider';
 
 export default class BCryptProvider implements IHashProvider {
-    public async hash(password: string): Promise<string> {
-        const hashedPassword = await hash(password, 8);
-
-        return hashedPassword;
+    public async hash(value: string): Promise<string> {
+        return bcryptHash(value, 8);
     }
 
     public async compareHash(
-        password: string,
-        hashedPassword: string,
+        value: string,
+        hashedValue: string,
     ): Promise<boolean> {
-        return compare(password, hashedPassword);
+        return compare(value, hashedValue);
     }
 }
