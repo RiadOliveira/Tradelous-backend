@@ -9,6 +9,7 @@ import BCryptProvider from '../providers/HashProvider/implementations/BCryptProv
 import DiskProvider from '../providers/StorageProvider/implementations/DiskProvider';
 import EtherealMailProvider from '../providers/MailProvider/implementations/EtherealMailProvider';
 import NunJucksMailTemplateProvider from '@shared/providers/MailTemplateProvider/implementations/NunjucksMailTemplateProvider';
+import RedisCacheProvider from '@shared/providers/CacheProvider/implementations/RedisCacheProvider';
 
 container.registerSingleton('UsersRepository', UsersRepository);
 container.registerSingleton('CompaniesRepository', CompaniesRepository);
@@ -17,6 +18,7 @@ container.registerSingleton('SalesRepository', SalesRepository);
 
 container.registerSingleton('HashProvider', BCryptProvider);
 container.registerSingleton('StorageProvider', DiskProvider);
+container.registerSingleton('CacheProvider', RedisCacheProvider);
 
 container.registerSingleton(
     'MailTemplateProvider',
