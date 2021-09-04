@@ -1,10 +1,9 @@
 import IUsersRepository from '../repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import IMailProvider from '@shared/providers/MailProvider/IMailProvider';
+import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
 
 import path from 'path';
-import jwtConfig from '@config/jwtToken';
-import { sign } from 'jsonwebtoken';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -13,6 +12,7 @@ export default class SendForgotPasswordEmailService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
         @inject('MailProvider') private mailProvider: IMailProvider,
+        @inject('HashProvider') private hashProvider: IHashProvider,
     ) {}
 
     public async execute(email: string): Promise<void> {
@@ -22,16 +22,15 @@ export default class SendForgotPasswordEmailService {
             throw new AppError('User not found.');
         }
 
-        const token = sign({ email: findedUser.email }, jwtConfig.secret, {
-            expiresIn: '1200s',
-            subject: findedUser.id,
-        });
-
         const forgotPasswordTemplate = path.resolve(
             __dirname,
             '..',
             'views',
-            'forgot_password.hbs',
+            'forgot_password.njk',
+        );
+
+        const token = await this.hashProvider.hash(
+            findedUser.id + findedUser.updatedAt,
         );
 
         await this.mailProvider.sendMail({

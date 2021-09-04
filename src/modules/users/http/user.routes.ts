@@ -65,11 +65,12 @@ userRoutes.post(
 userRoutes.post(
     '/recover-password',
     async (request: Request, response: Response) => {
-        const { recoverToken, newPassword } = request.body;
+        const { confirmEmail, recoverToken, newPassword } = request.body;
 
         const recoverPassword = container.resolve(RecoverPasswordService);
 
         await recoverPassword.execute({
+            confirmEmail,
             recoverToken,
             newPassword,
         });
