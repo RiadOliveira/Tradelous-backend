@@ -1,6 +1,7 @@
 import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import Sale from '@shared/typeorm/entities/Sale';
 import { inject, injectable } from 'tsyringe';
 import ISalesRepository from '../repositories/ISalesRepository';
@@ -21,6 +22,8 @@ export default class UpdateSaleService {
         private salesRepository: ISalesRepository,
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(sale: UpdateSale, userId: string): Promise<Sale> {
@@ -97,6 +100,10 @@ export default class UpdateSaleService {
                     verifyProduct.quantity +
                     (verifySale.quantity - sale.quantity),
             });
+        } else {
+            await this.cacheProvider.invalidate(
+                `products-list:${verifyUser.companyId}`,
+            );
         }
 
         return updatedSale;

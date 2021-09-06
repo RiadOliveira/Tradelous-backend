@@ -2,6 +2,7 @@ import ICompaniesRepository from '@modules/companies/repositories/ICompaniesRepo
 import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import Sale from '@shared/typeorm/entities/Sale';
 import { startOfDay } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
@@ -25,6 +26,8 @@ export default class CreateSaleService {
         private usersRepository: IUsersRepository,
         @inject('SalesRepository')
         private salesRepository: ISalesRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(sale: CreateSale): Promise<Sale> {
@@ -87,6 +90,10 @@ export default class CreateSaleService {
             ...verifyProduct,
             quantity: verifyProduct.quantity - sale.quantity,
         });
+
+        await this.cacheProvider.invalidate(
+            `products-list:${verifyEmployee.companyId}`,
+        );
 
         return newSale;
     }

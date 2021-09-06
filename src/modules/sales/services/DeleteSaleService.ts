@@ -1,6 +1,7 @@
 import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import { inject, injectable } from 'tsyringe';
 import ISalesRepository from '../repositories/ISalesRepository';
 
@@ -13,6 +14,8 @@ export default class DeleteSaleService {
         private salesRepository: ISalesRepository,
         @inject('ProductsRepository')
         private productsRepository: IProductsRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(saleId: string, userId: string): Promise<void> {
@@ -57,5 +60,9 @@ export default class DeleteSaleService {
             ...productOfSale,
             quantity: productOfSale?.quantity + verifySale.quantity,
         });
+
+        await this.cacheProvider.invalidate(
+            `products-list:${verifyUser.companyId}`,
+        );
     }
 }
