@@ -60,23 +60,27 @@ export default class UpdateProductsImageService {
 
             verifyProduct.image = undefined;
 
-            return verifyProduct;
-        } else if (verifyProduct.image) {
-            await this.storageProvider.delete(
-                verifyProduct.image,
-                'productImage',
+            await this.cacheProvider.invalidate(
+                `products-list:${verifyUser.companyId}`,
+            );
+        } else if (product.image) {
+            if (verifyProduct.image) {
+                await this.storageProvider.delete(
+                    verifyProduct.image,
+                    'productImage',
+                );
+            }
+
+            await this.storageProvider.save(product.image, 'productImage');
+
+            verifyProduct.image = product.image;
+
+            await this.productsRepository.save(verifyProduct);
+
+            await this.cacheProvider.invalidate(
+                `products-list:${verifyUser.companyId}`,
             );
         }
-
-        await this.storageProvider.save(product.image, 'productImage');
-
-        verifyProduct.image = product.image;
-
-        await this.productsRepository.save(verifyProduct);
-
-        await this.cacheProvider.invalidate(
-            `products-list:${verifyUser.companyId}`,
-        );
 
         return verifyProduct;
     }
