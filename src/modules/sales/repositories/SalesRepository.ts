@@ -124,7 +124,7 @@ class SalesRepository implements ISalesRepository {
                         `
                     ${dateFieldName} >= '${year}-${month}-1'::date AND
                     ${dateFieldName} <= '${year}-${month}-${lastDayOfMonth(
-                            month,
+                            new Date(year, month - 1),
                         ).getDate()}'::date
                 `,
                 ),
