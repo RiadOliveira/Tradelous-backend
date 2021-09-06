@@ -24,6 +24,18 @@ class ProductsRepository implements IProductsRepository {
         await this.ProductsRepository.delete(productId);
     }
 
+    public async findAllFromCompany(
+        companyId: string,
+    ): Promise<Product[] | undefined> {
+        const findedProducts = await this.ProductsRepository.find({
+            where: {
+                companyId,
+            },
+        });
+
+        return findedProducts;
+    }
+
     public async findById(productId: string): Promise<Product | undefined> {
         return this.ProductsRepository.findOne(productId);
     }

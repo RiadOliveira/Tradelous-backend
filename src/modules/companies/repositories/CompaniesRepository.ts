@@ -4,7 +4,6 @@ import CompanyRepositoryDTO from './dtos/CompanyRepositoryDTO';
 import ICompaniesRepository from './ICompaniesRepository';
 import { classToClass } from 'class-transformer';
 import User from '@shared/typeorm/entities/User';
-import Product from '@shared/typeorm/entities/Product';
 
 class CompaniesRepository implements ICompaniesRepository {
     private CompaniesRepository: Repository<Company>;
@@ -56,19 +55,6 @@ class CompaniesRepository implements ICompaniesRepository {
         }
 
         return findedCompany ? findedCompany.employees : undefined;
-    }
-
-    public async findProducts(
-        companyId: string,
-    ): Promise<Product[] | undefined> {
-        const findedCompany = await this.CompaniesRepository.findOne(
-            companyId,
-            {
-                relations: ['products'],
-            },
-        );
-
-        return findedCompany ? findedCompany.products : undefined;
     }
 
     public async removeEmployee(employeeId: string): Promise<void> {

@@ -1,5 +1,4 @@
 import Company from '@shared/typeorm/entities/Company';
-import Product from '@shared/typeorm/entities/Product';
 import User from '@shared/typeorm/entities/User';
 import CompanyRepositoryDTO from './dtos/CompanyRepositoryDTO';
 
@@ -9,7 +8,6 @@ export default interface ICompaniesRepository {
     findById(id: string): Promise<Company | undefined>;
     findByCnpj(cnpj: number): Promise<Company | undefined>;
     findEmployees(companyId: string): Promise<User[] | undefined>;
-    findProducts(companyId: string): Promise<Product[] | undefined>;
     removeEmployee(employeeId: string): Promise<void>;
     removeLogo(companyId: string): Promise<void>;
     delete(companyId: string): Promise<void>;

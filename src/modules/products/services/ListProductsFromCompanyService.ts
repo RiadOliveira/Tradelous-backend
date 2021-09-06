@@ -1,17 +1,17 @@
-import ICompaniesRepository from '@modules/companies/repositories/ICompaniesRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import Product from '@shared/typeorm/entities/Product';
 import { inject, injectable } from 'tsyringe';
+import IProductsRepository from '../repositories/IProductsRepository';
 
 @injectable()
 export default class ListProductsFromCompanyService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
-        @inject('CompaniesRepository')
-        private companiesRepository: ICompaniesRepository,
+        @inject('ProductsRepository')
+        private productsRepository: IProductsRepository,
         @inject('CacheProvider')
         private cacheProvider: ICacheProvider,
     ) {}
@@ -36,7 +36,7 @@ export default class ListProductsFromCompanyService {
         );
 
         if (!findedProducts) {
-            findedProducts = await this.companiesRepository.findProducts(
+            findedProducts = await this.productsRepository.findAllFromCompany(
                 findedUser.companyId,
             );
 
