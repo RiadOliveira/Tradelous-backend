@@ -31,6 +31,9 @@ class ProductsRepository implements IProductsRepository {
             where: {
                 companyId,
             },
+            order: {
+                name: 'ASC',
+            },
         });
 
         return findedProducts;
