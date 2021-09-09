@@ -19,7 +19,7 @@ import { container } from 'tsyringe';
 const userRoutes = Router();
 const upload = multer(multerConfig);
 
-userRoutes.post('/signUp', async (request: Request, response: Response) => {
+userRoutes.post('/sign-up', async (request: Request, response: Response) => {
     const { name, email, password, isAdmin } = request.body;
 
     const createUser = container.resolve(CreateUserService);
