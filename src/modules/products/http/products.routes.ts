@@ -6,8 +6,8 @@ import multer from 'multer';
 import multerConfig from '@config/upload';
 import UpdateProductsImageService from '../services/UpdateProductsImageService';
 
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router, Request, Response } from 'express';
+import { celebrate, Joi, Segments } from 'celebrate';
 import { container } from 'tsyringe';
 
 const productsRoutes = Router();

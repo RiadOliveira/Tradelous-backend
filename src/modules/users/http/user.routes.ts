@@ -1,6 +1,3 @@
-import { Router, Request, Response } from 'express';
-import { celebrate, Joi, Segments } from 'celebrate';
-
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
 import UpdateUserService from '../services/UpdateUserService';
@@ -14,6 +11,8 @@ import multerConfig from '@config/upload';
 import multer from 'multer';
 import EnsureAuthentication from './middlewares/EnsureAuthentication';
 
+import { Router, Request, Response } from 'express';
+import { celebrate, Joi, Segments } from 'celebrate';
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
 

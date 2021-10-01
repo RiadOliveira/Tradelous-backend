@@ -1,5 +1,3 @@
-import { Router, Request, Response } from 'express';
-
 import RegisterCompanyService from '../services/RegisterCompanyService';
 import HireEmployeeService from '../services/HireEmployeeService';
 import FireEmployeeService from '../services/FireEmployeeService';
@@ -12,8 +10,10 @@ import DeleteCompanyService from '../services/DeleteCompanyService';
 import multerConfig from '@config/upload';
 import multer from 'multer';
 
+import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 const companyRoutes = Router();
 
@@ -32,6 +32,13 @@ companyRoutes.get('/', async (request: Request, response: Response) => {
 companyRoutes.post(
     '/',
     upload.single('logo'),
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            cnpj: Joi.number().required(),
+            address: Joi.string().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { name, cnpj, address } = request.body;
 
@@ -55,6 +62,11 @@ companyRoutes.post(
 
 companyRoutes.patch(
     '/hire-employee/:employeeId',
+    celebrate({
+        [Segments.PARAMS]: {
+            employeeId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { employeeId } = request.params;
 
@@ -70,6 +82,11 @@ companyRoutes.patch(
 
 companyRoutes.patch(
     '/fire-employee/:employeeId',
+    celebrate({
+        [Segments.PARAMS]: {
+            employeeId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { employeeId } = request.params;
         const adminId = request.user.id;
@@ -100,6 +117,13 @@ companyRoutes.get(
 companyRoutes.put(
     '/',
     upload.single('logo'),
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            cnpj: Joi.number().required(),
+            address: Joi.string().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { name, cnpj, address } = request.body;
 
