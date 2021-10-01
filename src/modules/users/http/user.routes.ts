@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 import CreateUserService from '../services/CreateUserService';
 import CreateSessionService from '../services/CreateSessionService';
@@ -19,36 +20,62 @@ import { container } from 'tsyringe';
 const userRoutes = Router();
 const upload = multer(multerConfig);
 
-userRoutes.post('/sign-up', async (request: Request, response: Response) => {
-    const { name, email, password, isAdmin } = request.body;
+userRoutes.post(
+    '/sign-up',
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+            isAdmin: Joi.boolean().required(),
+        },
+    }),
+    async (request: Request, response: Response) => {
+        const { name, email, password, isAdmin } = request.body;
 
-    const createUser = container.resolve(CreateUserService);
+        const createUser = container.resolve(CreateUserService);
 
-    const createdUser = await createUser.execute({
-        name,
-        email,
-        password,
-        isAdmin,
-    });
+        const createdUser = await createUser.execute({
+            name,
+            email,
+            password,
+            isAdmin,
+        });
 
-    return response.status(201).json(classToClass(createdUser));
-});
+        return response.status(201).json(classToClass(createdUser));
+    },
+);
 
-userRoutes.post('/sessions', async (request: Request, response: Response) => {
-    const { email, password } = request.body;
+userRoutes.post(
+    '/sessions',
+    celebrate({
+        [Segments.BODY]: {
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+        },
+    }),
+    async (request: Request, response: Response) => {
+        const { email, password } = request.body;
 
-    const createSession = container.resolve(CreateSessionService);
+        const createSession = container.resolve(CreateSessionService);
 
-    const { user, token } = await createSession.execute({
-        email,
-        password,
-    });
+        const { user, token } = await createSession.execute({
+            email,
+            password,
+        });
 
-    return response.json({ user: classToClass(user), token });
-});
+        return response.json({ user: classToClass(user), token });
+    },
+);
 
 userRoutes.post(
     '/forgot-password',
+    celebrate({
+        [Segments.BODY]: {
+            email: Joi.string().email().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { email } = request.body;
 
@@ -64,6 +91,14 @@ userRoutes.post(
 
 userRoutes.post(
     '/recover-password',
+    celebrate({
+        [Segments.BODY]: {
+            confirmEmail: Joi.string().email().required(),
+            recoverToken: Joi.string().required(),
+            newPassword: Joi.string().required(),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { confirmEmail, recoverToken, newPassword } = request.body;
 
@@ -82,6 +117,14 @@ userRoutes.post(
 userRoutes.put(
     '/',
     EnsureAuthentication,
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            email: Joi.string().email().required(),
+            oldPassword: Joi.string().required(),
+            newPassword: Joi.string().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { name, email, oldPassword, newPassword } = request.body;
 

@@ -1,6 +1,7 @@
 import DiskProvider from '@shared/providers/StorageProvider/implementations/DiskProvider';
-import { NextFunction, Request, Response } from 'express';
 import AppError from './AppError';
+import { CelebrateError } from 'celebrate';
+import { NextFunction, Request, Response } from 'express';
 
 function GlobalErrorHandler(
     err: Error,
@@ -19,6 +20,12 @@ function GlobalErrorHandler(
 
     if (err instanceof AppError) {
         return response.status(err.statusCode).json({
+            error: { message: err.message, status: 'error' },
+        });
+    }
+
+    if (err instanceof CelebrateError) {
+        return response.status(400).json({
             error: { message: err.message, status: 'error' },
         });
     }
