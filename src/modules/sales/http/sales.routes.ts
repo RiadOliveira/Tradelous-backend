@@ -6,6 +6,7 @@ import ListSalesOnMonthService from '../services/ListSalesOnMonth';
 import ListSalesOnDayService from '../services/ListSalesOnDay';
 import ListSalesOnWeekService from '../services/ListSalesOnWeek';
 
+import { celebrate, Joi, Segments } from 'celebrate';
 import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
@@ -14,6 +15,11 @@ const salesRoutes = Router();
 
 salesRoutes.get(
     '/employee/:employeeId',
+    celebrate({
+        [Segments.PARAMS]: {
+            employeeId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { employeeId } = request.params;
 
@@ -75,54 +81,82 @@ salesRoutes.get(
     },
 );
 
-salesRoutes.post('/', async (request: Request, response: Response) => {
-    const { productId, method, quantity } = request.body;
+salesRoutes.post(
+    '/',
+    celebrate({
+        [Segments.BODY]: {
+            productId: Joi.string().uuid().required(),
+            method: Joi.string().valid('money', 'card').required(),
+            quantity: Joi.number().required(),
+        },
+    }),
+    async (request: Request, response: Response) => {
+        const { productId, method, quantity } = request.body;
 
-    const userId = request.user.id;
+        const userId = request.user.id;
 
-    const createSale = container.resolve(CreateSaleService);
+        const createSale = container.resolve(CreateSaleService);
 
-    const newSale = await createSale.execute({
-        employeeId: userId,
-        productId,
-        method,
-        quantity,
-    });
-
-    return response.status(201).json(classToClass(newSale));
-});
-
-salesRoutes.put('/:saleId', async (request: Request, response: Response) => {
-    const { productId, method, quantity } = request.body;
-    const { saleId } = request.params;
-
-    const userId = request.user.id;
-
-    const updateSale = container.resolve(UpdateSaleService);
-
-    const updatedSale = await updateSale.execute(
-        {
-            id: saleId,
+        const newSale = await createSale.execute({
+            employeeId: userId,
             productId,
             method,
             quantity,
+        });
+
+        return response.status(201).json(classToClass(newSale));
+    },
+);
+
+salesRoutes.put(
+    '/:saleId',
+    celebrate({
+        [Segments.BODY]: {
+            productId: Joi.string().uuid().required(),
+            method: Joi.string().valid('money', 'card').required(),
+            quantity: Joi.number().required(),
         },
-        userId,
-    );
+    }),
+    async (request: Request, response: Response) => {
+        const { productId, method, quantity } = request.body;
+        const { saleId } = request.params;
 
-    return response.status(202).json(classToClass(updatedSale));
-});
+        const userId = request.user.id;
 
-salesRoutes.delete('/:saleId', async (request: Request, response: Response) => {
-    const { saleId } = request.params;
+        const updateSale = container.resolve(UpdateSaleService);
 
-    const userId = request.user.id;
+        const updatedSale = await updateSale.execute(
+            {
+                id: saleId,
+                productId,
+                method,
+                quantity,
+            },
+            userId,
+        );
 
-    const deleteSale = container.resolve(DeleteSaleService);
+        return response.status(202).json(classToClass(updatedSale));
+    },
+);
 
-    await deleteSale.execute(saleId, userId);
+salesRoutes.delete(
+    '/:saleId',
+    celebrate({
+        [Segments.PARAMS]: {
+            saleId: Joi.string().uuid().required(),
+        },
+    }),
+    async (request: Request, response: Response) => {
+        const { saleId } = request.params;
 
-    return response.status(204).json();
-});
+        const userId = request.user.id;
+
+        const deleteSale = container.resolve(DeleteSaleService);
+
+        await deleteSale.execute(saleId, userId);
+
+        return response.status(204).json();
+    },
+);
 
 export default salesRoutes;
