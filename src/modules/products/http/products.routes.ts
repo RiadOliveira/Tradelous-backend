@@ -1,5 +1,3 @@
-import { Router, Request, Response } from 'express';
-import { container } from 'tsyringe';
 import ListProductsFromCompanyService from '../services/ListProductsFromCompanyService';
 import AddProductToCompanyService from '../services/AddProductToCompanyService';
 import DeleteProductFromCompanyService from '../services/DeleteProductFromCompanyService';
@@ -7,6 +5,10 @@ import UpdateProductService from '../services/UpdateProductService';
 import multer from 'multer';
 import multerConfig from '@config/upload';
 import UpdateProductsImageService from '../services/UpdateProductsImageService';
+
+import { celebrate, Joi, Segments } from 'celebrate';
+import { Router, Request, Response } from 'express';
+import { container } from 'tsyringe';
 
 const productsRoutes = Router();
 const upload = multer(multerConfig);
@@ -26,6 +28,15 @@ productsRoutes.get('/', async (request: Request, response: Response) => {
 productsRoutes.post(
     '/',
     upload.single('image'),
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            price: Joi.number().required(),
+            quantity: Joi.number().required(),
+            brand: Joi.string().required(),
+            barCode: Joi.string().optional(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { name, price, quantity, brand, barCode } = request.body;
 
@@ -55,6 +66,18 @@ productsRoutes.post(
 
 productsRoutes.put(
     '/:productId',
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            price: Joi.number().required(),
+            quantity: Joi.number().required(),
+            brand: Joi.string().required(),
+            barCode: Joi.string().optional(),
+        },
+        [Segments.PARAMS]: {
+            productId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
         const { name, price, quantity, brand, barCode } = request.body;
@@ -82,6 +105,11 @@ productsRoutes.put(
 productsRoutes.patch(
     '/updateImage/:productId',
     upload.single('image'),
+    celebrate({
+        [Segments.PARAMS]: {
+            productId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
 
@@ -107,6 +135,11 @@ productsRoutes.patch(
 
 productsRoutes.delete(
     '/:productId',
+    celebrate({
+        [Segments.PARAMS]: {
+            productId: Joi.string().uuid().required(),
+        },
+    }),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
 
