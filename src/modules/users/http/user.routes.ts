@@ -95,7 +95,9 @@ userRoutes.post(
             confirmEmail: Joi.string().email().required(),
             recoverToken: Joi.string().required(),
             newPassword: Joi.string().required(),
-            confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+            confirmPassword: Joi.string()
+                .required()
+                .valid(Joi.ref('newPassword')),
         },
     }),
     async (request: Request, response: Response) => {
