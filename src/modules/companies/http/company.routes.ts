@@ -116,7 +116,6 @@ companyRoutes.get(
 
 companyRoutes.put(
     '/',
-    upload.single('logo'),
     celebrate({
         [Segments.BODY]: {
             name: Joi.string().required(),
