@@ -33,7 +33,7 @@ salesRoutes.get(
     },
 );
 
-//Pass day-month on params.
+//Pass day-month-year on params.
 salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
     const userId = request.user.id;
 

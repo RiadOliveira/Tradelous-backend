@@ -124,6 +124,9 @@ userRoutes.put(
             email: Joi.string().email().required(),
             oldPassword: Joi.string().required(),
             newPassword: Joi.string().required(),
+            confirmPassword: Joi.string()
+                .required()
+                .valid(Joi.ref('newPassword')),
         },
     }),
     async (request: Request, response: Response) => {

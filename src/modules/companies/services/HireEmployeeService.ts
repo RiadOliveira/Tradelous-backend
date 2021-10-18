@@ -39,12 +39,16 @@ export default class HireEmployeeService {
             throw new AppError('Requested employee not found.');
         }
 
+        if (findedEmployee.isAdmin) {
+            throw new AppError('The requested employee has an admin account.');
+        }
+
         if (
             findedEmployee.companyId ||
             findedEmployee.companyId === findedAdmin.companyId
         ) {
             throw new AppError(
-                'The requested employee is already on a company.',
+                'The requested employee is already associated to a company.',
             );
         }
 

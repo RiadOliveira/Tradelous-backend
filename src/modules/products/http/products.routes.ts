@@ -103,7 +103,7 @@ productsRoutes.put(
 );
 
 productsRoutes.patch(
-    '/updateImage/:productId',
+    '/update-image/:productId',
     upload.single('image'),
     celebrate({
         [Segments.PARAMS]: {

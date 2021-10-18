@@ -31,7 +31,6 @@ companyRoutes.get('/', async (request: Request, response: Response) => {
 
 companyRoutes.post(
     '/',
-    upload.single('logo'),
     celebrate({
         [Segments.BODY]: {
             name: Joi.string().required(),
@@ -42,8 +41,6 @@ companyRoutes.post(
     async (request: Request, response: Response) => {
         const { name, cnpj, address } = request.body;
 
-        const logo = request.file ? request.file.filename : '';
-
         const adminId = request.user.id;
 
         const registerCompany = container.resolve(RegisterCompanyService);
@@ -53,10 +50,24 @@ companyRoutes.post(
             cnpj,
             address,
             adminId,
-            logo,
         });
 
         return response.status(201).json(newCompany);
+    },
+);
+
+companyRoutes.get(
+    '/list-employees',
+    async (request: Request, response: Response) => {
+        const userId = request.user.id;
+
+        const listEmployees = container.resolve(
+            ListEmployeesFromCompanyService,
+        );
+
+        const employees = await listEmployees.execute(userId);
+
+        return response.json(employees);
     },
 );
 
@@ -99,21 +110,6 @@ companyRoutes.patch(
     },
 );
 
-companyRoutes.get(
-    '/list-employees',
-    async (request: Request, response: Response) => {
-        const userId = request.user.id;
-
-        const listEmployees = container.resolve(
-            ListEmployeesFromCompanyService,
-        );
-
-        const employees = await listEmployees.execute(userId);
-
-        return response.json(employees);
-    },
-);
-
 companyRoutes.put(
     '/',
     celebrate({
@@ -140,7 +136,7 @@ companyRoutes.put(
 );
 
 companyRoutes.patch(
-    '/updateLogo',
+    '/update-logo',
     upload.single('logo'),
     async (request: Request, response: Response) => {
         const logo = request.file ? request.file.filename : '';
