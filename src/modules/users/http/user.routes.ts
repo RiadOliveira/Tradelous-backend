@@ -122,10 +122,14 @@ userRoutes.put(
         [Segments.BODY]: {
             name: Joi.string().required(),
             email: Joi.string().email().required(),
-            oldPassword: Joi.string().required(),
-            newPassword: Joi.string().required(),
+            oldPassword: Joi.string().optional(),
+            newPassword: Joi.string().optional(),
             confirmPassword: Joi.string()
-                .required()
+                .when('newPassword', {
+                    is: Joi.exist(),
+                    then: Joi.required(),
+                    otherwise: Joi.optional(),
+                })
                 .valid(Joi.ref('newPassword')),
         },
     }),
