@@ -53,7 +53,7 @@ export default class UpdateProductsImageService {
             //If not receive the image name, indicates that the product's image was removed by the user.
             await this.storageProvider.delete(
                 verifyProduct.image,
-                'productImage',
+                'product-image',
             );
 
             await this.productsRepository.deleteImage(verifyProduct.id);
@@ -67,11 +67,11 @@ export default class UpdateProductsImageService {
             if (verifyProduct.image) {
                 await this.storageProvider.delete(
                     verifyProduct.image,
-                    'productImage',
+                    'product-image',
                 );
             }
 
-            await this.storageProvider.save(product.image, 'productImage');
+            await this.storageProvider.save(product.image, 'product-image');
 
             verifyProduct.image = product.image;
 

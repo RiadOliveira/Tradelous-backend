@@ -43,7 +43,7 @@ export default class AddProductToCompanyService {
         }
 
         if (product.image) {
-            await this.storageProvider.save(product.image, 'productImage');
+            await this.storageProvider.save(product.image, 'product-image');
         }
 
         if (!product.quantity) {

@@ -5,7 +5,7 @@ import path from 'path';
 export default class DiskProvider implements IStorageProvider {
     public async save(
         filename: string,
-        type: 'avatar' | 'logo' | 'productImage',
+        type: 'avatar' | 'logo' | 'product-image',
     ): Promise<void> {
         await fs.promises.copyFile(
             `tmp/${filename}`,
@@ -17,7 +17,7 @@ export default class DiskProvider implements IStorageProvider {
 
     public async delete(
         filename: string,
-        type: 'avatar' | 'logo' | 'productImage',
+        type: 'avatar' | 'logo' | 'product-image',
     ): Promise<void> {
         await fs.promises.unlink(`tmp/uploads/${type}/${filename}`);
     }

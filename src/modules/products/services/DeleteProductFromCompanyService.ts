@@ -41,7 +41,7 @@ export default class DeleteProductToCompanyService {
         if (verifyProduct.image) {
             await this.storageProvider.delete(
                 verifyProduct.image,
-                'productImage',
+                'product-image',
             );
         }
 
