@@ -17,6 +17,6 @@ tmp/uploads/avatar/*
 tmp/uploads/logo/*
 !tmp/uploads/logo/.gitkeep
 
-!tmp/uploads/productImage
-tmp/uploads/productImage/*
-!tmp/uploads/productImage/.gitkeep
+!tmp/uploads/product-image
+tmp/uploads/product-image/*
+!tmp/uploads/product-image/.gitkeep
