@@ -99,7 +99,7 @@ class SalesRepository implements ISalesRepository {
                     dateFieldName =>
                         `
                          ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
-                         ${dateFieldName} <= ('${year}-${startMonth}-${startDay}'::date +
+                         ${dateFieldName} < ('${year}-${startMonth}-${startDay}'::date +
                          '7 days'::interval)
                         `,
                 ),
