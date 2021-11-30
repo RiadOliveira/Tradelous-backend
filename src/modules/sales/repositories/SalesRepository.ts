@@ -1,5 +1,5 @@
 import { getRepository, Raw, Repository } from 'typeorm';
-import { lastDayOfMonth } from 'date-fns';
+import { addDays, addMonths } from 'date-fns';
 
 import Sale from '@shared/typeorm/entities/Sale';
 import ISalesRepository from './ISalesRepository';
@@ -67,15 +67,15 @@ class SalesRepository implements ISalesRepository {
         month: number,
         year: number,
     ): Promise<Sale[] | undefined> {
+        const nextDate = addDays(new Date(year, month - 1, day), 1);
+
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
                         `
-                            ${dateFieldName} >= '${year}-${month}-${day}'::date AND
-                            ${dateFieldName} < '${year}-${month}-${
-                            day + 1
-                        }'::date
+                        ${dateFieldName} >= '${year}-${month}-${day}'::date AND
+                        ${dateFieldName} < '${nextDate.toDateString()}'
                         `,
                 ),
             },
@@ -100,7 +100,7 @@ class SalesRepository implements ISalesRepository {
                         `
                          ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
                          ${dateFieldName} <= ('${year}-${startMonth}-${startDay}'::date +
-                         '8 days'::interval)
+                         '7 days'::interval)
                         `,
                 ),
             },
@@ -123,9 +123,10 @@ class SalesRepository implements ISalesRepository {
                     dateFieldName =>
                         `
                     ${dateFieldName} >= '${year}-${month}-1'::date AND
-                    ${dateFieldName} <= '${year}-${month}-${lastDayOfMonth(
+                    ${dateFieldName} < '${addMonths(
                             new Date(year, month - 1),
-                        ).getDate()}'::date
+                            1,
+                        ).toDateString()}'
                 `,
                 ),
             },
