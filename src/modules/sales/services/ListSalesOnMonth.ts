@@ -15,9 +15,9 @@ export default class ListSalesOnMonthService {
 
     public async execute(
         userId: string,
-        day: string,
-        month: string,
-        year: string,
+        startDay: string,
+        startMonth: string,
+        startYear: string,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -31,13 +31,17 @@ export default class ListSalesOnMonthService {
             );
         }
 
-        const parsedDay = day.padStart(2, '0');
-        const parsedMonth = month.padStart(2, '0');
+        if (!Number(startDay + startMonth + startYear)) {
+            throw new AppError('Invalid date to search.');
+        }
+
+        const parsedDay = startDay.padStart(2, '0');
+        const parsedMonth = startMonth.padStart(2, '0');
 
         const findedSales = await this.salesRepository.findAllOnMonth(
             parsedDay,
             parsedMonth,
-            year,
+            startYear,
         );
 
         return findedSales;

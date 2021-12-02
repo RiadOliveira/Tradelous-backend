@@ -17,7 +17,7 @@ export default class ListSalesOnWeekService {
         userId: string,
         startDay: string,
         startMonth: string,
-        year: string,
+        startYear: string,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
 
@@ -31,13 +31,17 @@ export default class ListSalesOnWeekService {
             );
         }
 
+        if (!Number(startDay + startMonth + startYear)) {
+            throw new AppError('Invalid date to search.');
+        }
+
         const parsedDay = startDay.padStart(2, '0');
         const parsedMonth = startMonth.padStart(2, '0');
 
         const findedSales = await this.salesRepository.findAllOnWeek(
             parsedDay,
             parsedMonth,
-            year,
+            startYear,
         );
 
         return findedSales;

@@ -31,6 +31,10 @@ export default class ListSalesOnDayService {
             );
         }
 
+        if (!Number(day + month + year)) {
+            throw new AppError('Invalid date to search.');
+        }
+
         const parsedDay = Number(day.padStart(2, '0'));
         const parsedMonth = Number(month.padStart(2, '0'));
 
