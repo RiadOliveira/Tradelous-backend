@@ -63,7 +63,7 @@ salesRoutes.get('/week/:date', async (request: Request, response: Response) => {
     return response.json(classToClass(findedSales));
 });
 
-//Pass day-month-year or month-year on params.
+//Pass day-month-year on params.
 salesRoutes.get(
     '/month/:date',
     async (request: Request, response: Response) => {
@@ -71,19 +71,16 @@ salesRoutes.get(
 
         const { date } = request.params;
 
-        const splittedDate = date.split('-');
-        let month = '';
-        let year = '';
-
-        if (splittedDate.length === 3) {
-            [, month, year] = splittedDate;
-        } else {
-            [month, year] = splittedDate;
-        }
+        const [day, month, year] = date.split('-');
 
         const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
 
-        const findedSales = await listSalesOnMonth.execute(userId, month, year);
+        const findedSales = await listSalesOnMonth.execute(
+            userId,
+            day,
+            month,
+            year,
+        );
 
         return response.json(classToClass(findedSales));
     },

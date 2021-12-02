@@ -18,5 +18,9 @@ export default interface ISalesRepository {
         startMonth: string,
         year: string,
     ): Promise<Sale[] | undefined>;
-    findAllOnMonth(month: number, year: number): Promise<Sale[] | undefined>;
+    findAllOnMonth(
+        startDay: string,
+        startMonth: string,
+        year: string,
+    ): Promise<Sale[] | undefined>;
 }

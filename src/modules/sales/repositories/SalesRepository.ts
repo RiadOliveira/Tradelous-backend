@@ -1,5 +1,5 @@
 import { getRepository, Raw, Repository } from 'typeorm';
-import { addDays, addMonths } from 'date-fns';
+import { addDays } from 'date-fns';
 
 import Sale from '@shared/typeorm/entities/Sale';
 import ISalesRepository from './ISalesRepository';
@@ -114,20 +114,19 @@ class SalesRepository implements ISalesRepository {
     }
 
     public async findAllOnMonth(
-        month: number,
-        year: number,
+        startDay: string,
+        startMonth: string,
+        year: string,
     ): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
                         `
-                    ${dateFieldName} >= '${year}-${month}-1'::date AND
-                    ${dateFieldName} < '${addMonths(
-                            new Date(year, month - 1),
-                            1,
-                        ).toDateString()}'
-                `,
+                    ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
+                    ${dateFieldName} < ('${year}-${startMonth}-${startDay}'::date +
+                    '30 days'::interval)
+                   `,
                 ),
             },
             relations: ['employee', 'product'],
