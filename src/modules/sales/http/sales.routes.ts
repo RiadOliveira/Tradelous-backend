@@ -117,13 +117,12 @@ salesRoutes.put(
     '/:saleId',
     celebrate({
         [Segments.BODY]: {
-            productId: Joi.string().uuid().required(),
             method: Joi.string().valid('money', 'card').required(),
             quantity: Joi.number().required(),
         },
     }),
     async (request: Request, response: Response) => {
-        const { productId, method, quantity } = request.body;
+        const { method, quantity } = request.body;
         const { saleId } = request.params;
 
         const userId = request.user.id;
@@ -133,7 +132,6 @@ salesRoutes.put(
         const updatedSale = await updateSale.execute(
             {
                 id: saleId,
-                productId,
                 method,
                 quantity,
             },

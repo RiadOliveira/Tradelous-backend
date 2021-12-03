@@ -8,7 +8,6 @@ import ISalesRepository from '../repositories/ISalesRepository';
 
 interface UpdateSale {
     id: string;
-    productId: string;
     method: 'money' | 'card';
     quantity: number;
 }
