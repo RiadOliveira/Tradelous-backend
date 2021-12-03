@@ -3,6 +3,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import IStorageProvider from '@shared/providers/StorageProvider/IStorageProvider';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 interface UserData {
     avatar: string;
@@ -14,6 +15,8 @@ export default class UpdateUserAvatarService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
         @inject('StorageProvider') private storageProvider: IStorageProvider,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(userData: UserData): Promise<User> {
@@ -42,6 +45,14 @@ export default class UpdateUserAvatarService {
 
         findedUser.avatar = userData.avatar;
 
-        return this.usersRepository.save(findedUser);
+        const updatedUser = this.usersRepository.save(findedUser);
+
+        if (findedUser.companyId) {
+            await this.cacheProvider.invalidate(
+                `employees-list:${findedUser.companyId}`,
+            );
+        }
+
+        return updatedUser;
     }
 }

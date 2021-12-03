@@ -3,6 +3,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '@shared/providers/HashProvider/IHashProvider';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 
 interface UserData {
     name: string;
@@ -17,6 +18,8 @@ export default class UpdateUserService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
         @inject('HashProvider') private hashProvider: IHashProvider,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute({
@@ -62,6 +65,14 @@ export default class UpdateUserService {
 
         findedUser.name = name;
 
-        return this.usersRepository.save(findedUser);
+        const updatedUser = this.usersRepository.save(findedUser);
+
+        if (findedUser.companyId) {
+            await this.cacheProvider.invalidate(
+                `employees-list:${findedUser.companyId}`,
+            );
+        }
+
+        return updatedUser;
     }
 }
