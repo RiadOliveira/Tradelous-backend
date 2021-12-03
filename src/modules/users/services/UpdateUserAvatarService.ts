@@ -34,10 +34,14 @@ export default class UpdateUserAvatarService {
 
             findedUser.avatar = undefined;
 
-            return findedUser;
-        }
+            if (findedUser.companyId) {
+                await this.cacheProvider.invalidate(
+                    `employees-list:${findedUser.companyId}`,
+                );
+            }
 
-        if (findedUser.avatar) {
+            return findedUser;
+        } else if (findedUser.avatar) {
             await this.storageProvider.delete(findedUser.avatar, 'avatar');
         }
 
