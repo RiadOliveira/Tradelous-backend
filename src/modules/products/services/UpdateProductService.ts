@@ -50,6 +50,19 @@ export default class UpdateProductService {
             );
         }
 
+        if (product.barCode && product.barCode !== verifyProduct.barCode) {
+            const verifyProduct = await this.productsRepository.findByBarCode(
+                verifyUser.companyId,
+                product.barCode,
+            );
+
+            if (verifyProduct) {
+                throw new AppError(
+                    'A product with this barcode already exists.',
+                );
+            }
+        }
+
         if (verifyProduct.barCode && !product.barCode) {
             await this.productsRepository.deleteBarCode(verifyProduct.id);
         } else {

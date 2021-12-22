@@ -42,6 +42,19 @@ export default class AddProductToCompanyService {
             throw new AppError('The user is not associated to a company.');
         }
 
+        if (product.barCode) {
+            const verifyProduct = await this.productsRepository.findByBarCode(
+                verifyUser.companyId,
+                product.barCode,
+            );
+
+            if (verifyProduct) {
+                throw new AppError(
+                    'A product with this barcode already exists.',
+                );
+            }
+        }
+
         if (product.image) {
             await this.storageProvider.save(product.image, 'product-image');
         }

@@ -43,6 +43,18 @@ class ProductsRepository implements IProductsRepository {
         return this.ProductsRepository.findOne(productId);
     }
 
+    public async findByBarCode(
+        companyId: string,
+        barCode: string,
+    ): Promise<Product | undefined> {
+        return this.ProductsRepository.findOne({
+            where: {
+                barCode,
+                companyId,
+            },
+        });
+    }
+
     public async deleteImage(productId: string): Promise<void> {
         await this.ProductsRepository.query(
             `UPDATE products SET "image" = NULL WHERE id = '${productId}'`,
