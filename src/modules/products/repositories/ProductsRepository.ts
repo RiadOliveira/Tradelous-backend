@@ -48,6 +48,12 @@ class ProductsRepository implements IProductsRepository {
             `UPDATE products SET "image" = NULL WHERE id = '${productId}'`,
         );
     }
+
+    public async deleteBarCode(productId: string): Promise<void> {
+        await this.ProductsRepository.query(
+            `UPDATE products SET "barCode" = NULL WHERE id = '${productId}'`,
+        );
+    }
 }
 
 export default ProductsRepository;

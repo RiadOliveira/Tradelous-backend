@@ -50,15 +50,19 @@ export default class UpdateProductService {
             );
         }
 
-        const updatedProduct: Product = await this.productsRepository.save({
-            ...verifyProduct,
-            ...product,
-        });
+        if (verifyProduct.barCode && !product.barCode) {
+            await this.productsRepository.deleteBarCode(verifyProduct.id);
+        } else {
+            await this.productsRepository.save({
+                ...verifyProduct,
+                ...product,
+            });
+        }
 
         await this.cacheProvider.invalidate(
             `products-list:${verifyUser.companyId}`,
         );
 
-        return updatedProduct;
+        return { ...verifyProduct, ...product };
     }
 }

@@ -8,4 +8,5 @@ export default interface IProductsRepository {
     findAllFromCompany(companyId: string): Promise<Product[] | undefined>;
     findById(productId: string): Promise<Product | undefined>;
     deleteImage(productId: string): Promise<void>;
+    deleteBarCode(productId: string): Promise<void>;
 }
