@@ -1,4 +1,5 @@
 import IUsersRepository from '../repositories/IUsersRepository';
+import ICacheProvider from '@shared/providers/CacheProvider/ICacheProvider';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 
@@ -6,6 +7,8 @@ import { injectable, inject } from 'tsyringe';
 export default class LeaveCompanyService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute(userId: string): Promise<void> {
@@ -23,8 +26,8 @@ export default class LeaveCompanyService {
 
         await this.usersRepository.leaveCompany(findedUser.id);
 
-        findedUser.companyId = undefined;
-
-        await this.usersRepository.save(findedUser);
+        await this.cacheProvider.invalidate(
+            `employees-list:${findedUser.companyId}`,
+        );
     }
 }
