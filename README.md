@@ -14,11 +14,11 @@ Contents
 =================
 <!--ts-->
    * [🛠 Technologies](#technologies)
-   * [:computer: Install & run](#install&run)
+   * [:computer: Install & Run](#install&run)
       * [Prerequisites](#prerequisites)
       * [Running the server](#running)
       * [Testing API](#testing)
-   * [Entities](#entities)
+   * [:floppy_disk: Entities](#entities)
       * [User](#entity-user)
       * [Company](#entity-company)
       * [Product](#entity-product)
@@ -39,7 +39,7 @@ Tools used on this project:
 - [Postgresql](https://www.postgresql.org/)
 - [TypeScript](https://www.typescriptlang.org/) </br></br>
 
-<h2 id="install&run">:computer: Install & run</h2>
+<h2 id="install&run">:computer: Install & Run</h2>
 
 <ul>
   <li id="prerequisites"><h3>Prerequisites</h3></li>
@@ -88,7 +88,7 @@ Tools used on this project:
 
 </br>
 
-<h2 id="entities">Entities</h2>
+<h2 id="entities">:floppy_disk: Entities</h2>
 
 - <h3 id="entity-user">User</h3>
 
