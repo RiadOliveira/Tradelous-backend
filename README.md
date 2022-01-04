@@ -90,6 +90,8 @@ Tools used on this project:
     - Request: No Body.
     - Response: No Content.
  
+</br>
+ 
 - <h3 id="company-routes">Company (/company)</h3>
 
   - **Show (GET): Gets company's data from authenticated user (Without employees data).**
@@ -98,9 +100,9 @@ Tools used on this project:
   - **Register (POST): Creates a company with autenticated user as its admin.**
     - Request: name, cnpj and address (logo only can be added to company after its creation).
     - Response: Object with created company's data, including its id, adminId, createdAt and updatedAt.
-  - **List Employees (GET, /list-employees): Gets all employees (and admin) from the company of authenticated user**
+  - **List Employees (GET, /list-employees): Gets all employees (and admin) from authenticated user's company.**
     - Request: No Body.
-    - Response: Array containing one employee object on each position (And admin's object).
+    - Response: Array of users containing all employees and the admin of the company.
   - **Update [Admin] (PUT): Updates company's data.**
     - Request: name, cnpj and address.
     - Response: Object containing updated company's data.
@@ -115,7 +117,55 @@ Tools used on this project:
     - Response: No Content.
   - **Delete [Admin] (DELETE): Deletes admin's company. Sets companyId of all employees (including admin) as null.**
     - Request: No Body.
+    - Response: No Content.
+
+</br>
+
+- <h3 id="products-routes">Products (/products)</h3>
+
+  - **List (GET): Gets all products from authenticated user's company.**
+    - Request: No Body.
+    - Response: Array of products from the company.
+  - **Add (POST): Create a product and associate it to authenticated user's company.**
+    - Request: name, price, quantity, brand, barCode (optional) and image (optional, field containing product's image file).
+    - Response: Object with created product's data, including its id, companyId, createdAt and updatedAt.
+  - **Update (PUT, /:productId): Updates data of the product passed through params.**
+    - Request: name, price, quantity, brand, barCode (optional).
+    - Response: Object containing updated product's data.
+  - **Update Image (PATCH, /update-image/:productId): Updates/removes image of the product passed through params.**
+    - Request: image (field containing logo's file). If nothing is passed and the product has an image, deletes the image from disk and it's data on database.
+    - Response: Object containing updated product's data with (or without) its image. 
+  - **Delete (DELETE, /:productId): Deletes the product passed through params.**
+    - Request: No Body.
+    - Response: No Content.
+
+</br>
+
+- <h3 id="sales-routes">Sales (/sales)</h3>
+
+  - **List from Employee (GET, /employee/:employeeId): Gets all sales made by the employee passed through params.**
+    - Request: No Body.
+    - Response: Array of sales made by passed employee.
+  - **List on Day (GET, /day/:day-:month-:year): Gets all sales on determined date. The date is passed on the format day-month-year (brazilian pattern), using params.** 
+    - Request: No Body, date is passed through params.
+    - Response: Array of sales made on passed date. 
+  - **List on Week (GET, /week/:day-:month-:year): Gets all sales on determined week, starting on passed day and getting all sales made six days after it (including sales made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.** 
+    - Request: No Body, date is passed through params.
+    - Response: Array of sales made on passed week.
+  - - **List on Month (GET, /month/:day-:month-:year): Gets all sales on determined month, starting on passed day and getting all sales made twenty-nine days after it (including sales made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.** 
+    - Request: No Body, date is passed through params.
+    - Response: Array of sales made on passed month. 
+  - **Create (POST): Create a sale of determined product.**
+    - Request: productId, method, quantity.
+    - Response: Object with created sale's data, including its id, companyId, employeeId, date, totalPrice, createdAt and updatedAt. 
+  - **Update (PUT, /:saleId): Updates data of the sale passed through params.**
+    - Request: productId, method, quantity.
+    - Response: Object containing updated sale's data. 
+  - **Delete (DELETE, /:saleId): Deletes the sale passed through params.**
+    - Request: No Body.
     - Response: No Content. 
+
+</br>
 
 <h2 id="author">:man: Author</h2>
 
