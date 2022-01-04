@@ -24,6 +24,12 @@ export default class LeaveCompanyService {
             );
         }
 
+        if (findedUser.isAdmin) {
+            throw new AppError(
+                "An admin of a company cannot leave it, if you want to remove the company from the app, uses delete route of company's routes.",
+            );
+        }
+
         await this.usersRepository.leaveCompany(findedUser.id);
 
         await this.cacheProvider.invalidate(
