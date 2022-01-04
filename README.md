@@ -4,7 +4,7 @@
   Backend of tradelous application, created in order to manage and provide users, companies, products and sales to front-end application. It was made mainly in order to pratice my development skills on backend.
 </p>
 
-<h4 align="center"> 
+<h4 align="center">
 	:convenience_store:&nbsp; Tradelous :heavy_check_mark: Finished &nbsp; :convenience_store: </br>
 </h4>
 
@@ -25,9 +25,9 @@ Contents
       * [Sale](#entity-sale)
    * [:gear: API Routes](#routes)
       * [User](#user-routes)
-      * [Company](#company-routes) 
-      * [Products](#products-routes) 
-      * [Sales](#sales-routes) 
+      * [Company](#company-routes)
+      * [Products](#products-routes)
+      * [Sales](#sales-routes)
    * [:man: Author](#author)
 <!--te-->
 </br>
@@ -43,11 +43,11 @@ Tools used on this project:
 
 <ul>
   <li id="prerequisites"><h3>Prerequisites</h3></li>
-  
+
   Before you start, it will be necessary to install those tools on your machine: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/), [Postgresql](https://www.postgresql.org/).
-  
+
   <li id="running"><h3>Running the server</h3></li>
-  
+
   ```bash
     # Clone this repository
     $ git clone <https://github.com/RiadOliveira/Tradelous-backend.git>
@@ -56,19 +56,19 @@ Tools used on this project:
     $ npm install
     or
     $ yarn
-    
+
     # Fill enviroment variables and ormconfig
         # The project has two example files in order to facilitate that: .env.example and ormconfig.example.json;
-    
-        # In first place, remove the .example part of those files, the .env variables are all ready to test the 
+
+        # In first place, remove the .example part of those files, the .env variables are all ready to test the
         # server, but you can modify some redis' settings or the APP_SECRET (Used to generate jwtTokens).
-    
-        # On ormconfig, you will need to add the login settings of your database, indicating username, password 
+
+        # On ormconfig, you will need to add the login settings of your database, indicating username, password
         # and database's name, as shown on example:
             "username": "postgres",
             "password": "tradelous",
             "database": "tradelous",
-    
+
     # Create entities on database (with postgresql database running on background)
     $ npm run typeorm migration:run
     or
@@ -79,9 +79,9 @@ Tools used on this project:
     or
     $ yarn dev
   ```
-    
+
   <li id="testing"><h3>Testing API</h3></li>
-    
+
   In order to facilitate API tests, here is a [Insomnia](https://insomnia.rest) file (JSON format) containing all possible requests to call the API:
   [tradelous-insomnia.json](https://github.com/RiadOliveira/Tradelous-backend/blob/main/tradelous-insomnia.json).
 </ul>
@@ -137,7 +137,7 @@ Tools used on this project:
 - <h3 id="user-routes">User (/user)</h3>
 
   - **SignUp (POST, /sign-up): Creates an <a href="#entity-user">user</a>.**
-    - Request: name, email, password, confirmPassword and isAdmin (avatar only can be added to <a href="#entity-user">user</a> after the accounts creation).
+    - Request: name, email, password and confirmPassword (avatar only can be added to <a href="#entity-user">user</a> after the accounts creation).
     - Response: Object with created <a href="#entity-user">user</a>'s data (except password), including his id, createdAt and updatedAt.
   - **Sessions (POST, /sessions): Create a session of some <a href="#entity-user">user</a>, generating a token for his authentication.**
     - Request: email and password.
@@ -160,15 +160,15 @@ Tools used on this project:
   - **Delete (DELETE): Deletes authenticated <a href="#entity-user">user</a>. If he is an admin of a <a href="#entity-company">company</a>, the <a href="#entity-company">company</a> is also deleted.**
     - Request: No Body.
     - Response: No Content.
- 
+
 </br>
- 
+
 - <h3 id="company-routes">Company (/company)</h3>
 
   - **Show (GET): Gets <a href="#entity-company">company</a>'s data from authenticated <a href="#entity-user">user</a> (Without employees data).**
     - Request: No Body.
     - Response: Object containing <a href="#entity-company">company</a>'s data.
-  - **Register (POST): Creates a <a href="#entity-company">company</a> with autenticated <a href="#entity-user">user</a> as its admin.**
+  - **Register (POST): Creates a <a href="#entity-company">company</a> with autenticated <a href="#entity-user">user</a> as its admin (isAdmin property of <a href="#entity-user">user</a> is updated to true).**
     - Request: name, cnpj and address (logo only can be added to the <a href="#entity-company">company</a> after its creation).
     - Response: Object with created <a href="#entity-company">company</a>'s data, including its id, adminId, createdAt and updatedAt.
   - **List Employees (GET, /list-employees): Gets all employees (and admin) from authenticated <a href="#entity-user">user</a>'s <a href="#entity-company">company</a>.**
@@ -186,7 +186,7 @@ Tools used on this project:
   - **Fire Employee [Admin] (PATCH, /fire-employee/:employeeId): Dissociate an <a href="#entity-user">user</a> of admin's <a href="#entity-company">company</a>, setting companyId, of fired <a href="#entity-user">user</a>, as null.**
     - Request:  No Body (The employee id is passed through params).
     - Response: No Content.
-  - **Delete [Admin] (DELETE): Deletes admin's <a href="#entity-company">company</a>. Sets companyId of all employees (including admin) as null.**
+  - **Delete [Admin] (DELETE): Deletes admin's <a href="#entity-company">company</a>. Sets companyId of all employees (including admin) as null (isAdmin property of admin is updated to false).**
     - Request: No Body.
     - Response: No Content.
 
@@ -205,7 +205,7 @@ Tools used on this project:
     - Response: Object containing updated <a href="#entity-product">product</a>'s data.
   - **Update Image (PATCH, /update-image/:productId): Updates/removes image of the <a href="#entity-product">product</a> passed through params.**
     - Request: image (field containing logo's file). If nothing is passed and the <a href="#entity-product">product</a> has an image, deletes the image from disk and it's data on database.
-    - Response: Object containing updated <a href="#entity-product">product</a>'s data with (or without) its image. 
+    - Response: Object containing updated <a href="#entity-product">product</a>'s data with (or without) its image.
   - **Delete (DELETE, /:productId): Deletes the <a href="#entity-product">product</a> passed through params.**
     - Request: No Body.
     - Response: No Content.
@@ -217,24 +217,24 @@ Tools used on this project:
   - **List from Employee (GET, /employee/:employeeId): Gets all <a href="#entity-sale">sales</a> made by the employee passed through params.**
     - Request: No Body.
     - Response: Array of <a href="#entity-sale">sales</a> made by passed employee.
-  - **List on Day (GET, /day/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined date. The date is passed on the format day-month-year (brazilian pattern), using params.** 
+  - **List on Day (GET, /day/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined date. The date is passed on the format day-month-year (brazilian pattern), using params.**
     - Request: No Body, date is passed through params.
-    - Response: Array of <a href="#entity-sale">sales</a> made on passed date. 
-  - **List on Week (GET, /week/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined week, starting on passed day and getting all <a href="#entity-sale">sales</a> made six days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.** 
+    - Response: Array of <a href="#entity-sale">sales</a> made on passed date.
+  - **List on Week (GET, /week/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined week, starting on passed day and getting all <a href="#entity-sale">sales</a> made six days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.**
     - Request: No Body, date is passed through params.
     - Response: Array of <a href="#entity-sale">sales</a> made on passed week.
-  - - **List on Month (GET, /month/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined month, starting on passed day and getting all <a href="#entity-sale">sales</a> made twenty-nine days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.** 
+  - - **List on Month (GET, /month/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined month, starting on passed day and getting all <a href="#entity-sale">sales</a> made twenty-nine days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.**
     - Request: No Body, date is passed through params.
-    - Response: Array of <a href="#entity-sale">sales</a> made on passed month. 
+    - Response: Array of <a href="#entity-sale">sales</a> made on passed month.
   - **Create (POST): Create a <a href="#entity-sale">sale</a> of determined <a href="#entity-product">product</a>.**
     - Request: productId, method, quantity.
-    - Response: Object with created <a href="#entity-sale">sale</a>'s data, including its id, companyId, employeeId, date, totalPrice, createdAt and updatedAt. 
+    - Response: Object with created <a href="#entity-sale">sale</a>'s data, including its id, companyId, employeeId, date, totalPrice, createdAt and updatedAt.
   - **Update (PUT, /:saleId): Updates data of the <a href="#entity-sale">sale</a> passed through params.**
     - Request: productId, method, quantity.
-    - Response: Object containing updated <a href="#entity-sale">sale</a>'s data. 
+    - Response: Object containing updated <a href="#entity-sale">sale</a>'s data.
   - **Delete (DELETE, /:saleId): Deletes the <a href="#entity-sale">sale</a> passed through params.**
     - Request: No Body.
-    - Response: No Content. 
+    - Response: No Content.
 
 </br>
 
@@ -249,5 +249,5 @@ Tools used on this project:
 
 </br>Contact:</br>
 
-[![Linkedin Badge](https://img.shields.io/badge/-Ríad&nbsp;Oliveira-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/)](https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/) 
+[![Linkedin Badge](https://img.shields.io/badge/-Ríad&nbsp;Oliveira-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/)](https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/)
 [![Gmail Badge](https://img.shields.io/badge/-riad.oliveira@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:riad.oliveira@gmail.com)](mailto:riad.oliveira@gmail.com)
