@@ -8,7 +8,6 @@ interface UserData {
     name: string;
     email: string;
     password: string;
-    isAdmin: boolean;
 }
 
 @injectable()
@@ -18,12 +17,7 @@ export default class CreateUserService {
         @inject('HashProvider') private hashProvider: IHashProvider,
     ) {}
 
-    public async execute({
-        name,
-        password,
-        email,
-        isAdmin,
-    }: UserData): Promise<User> {
+    public async execute({ name, password, email }: UserData): Promise<User> {
         const findedUser = await this.usersRepository.findByEmail(email);
 
         if (findedUser) {
@@ -35,7 +29,6 @@ export default class CreateUserService {
         const newUser = await this.usersRepository.create({
             name,
             password: hashedPassword,
-            isAdmin,
             email,
         });
 

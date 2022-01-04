@@ -27,11 +27,10 @@ userRoutes.post(
             email: Joi.string().email().required(),
             password: Joi.string().required(),
             confirmPassword: Joi.string().required().valid(Joi.ref('password')),
-            isAdmin: Joi.boolean().required(),
         },
     }),
     async (request: Request, response: Response) => {
-        const { name, email, password, isAdmin } = request.body;
+        const { name, email, password } = request.body;
 
         const createUser = container.resolve(CreateUserService);
 
@@ -39,7 +38,6 @@ userRoutes.post(
             name,
             email,
             password,
-            isAdmin,
         });
 
         return response.status(201).json(classToClass(createdUser));

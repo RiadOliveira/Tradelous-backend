@@ -33,7 +33,7 @@ export default class User {
     })
     company: Company;
 
-    @Column('boolean')
+    @Column('boolean', { default: false })
     isAdmin: boolean;
 
     @Column()

@@ -3,5 +3,4 @@ export default interface CreateUserDTO {
     email: string;
     password: string;
     companyId?: string;
-    isAdmin: boolean;
 }

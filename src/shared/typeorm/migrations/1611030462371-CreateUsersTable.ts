@@ -33,6 +33,7 @@ export class CreateUsersTable1611030462371 implements MigrationInterface {
                     {
                         name: 'isAdmin',
                         type: 'boolean',
+                        default: false,
                     },
                     {
                         name: 'companyId',
