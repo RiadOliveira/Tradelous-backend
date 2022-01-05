@@ -58,13 +58,15 @@ Tools used on this project:
     $ yarn
 
     # Fill enviroment variables and ormconfig
-        # The project has two example files in order to facilitate that: .env.example and ormconfig.example.json;
+        # The project has two example files in order to facilitate that: .env.example and 
+        # ormconfig.example.json;
 
-        # In first place, remove the .example part of those files, the .env variables are all ready to test the
-        # server, but you can modify some redis' settings or the APP_SECRET (Used to generate jwtTokens).
+        # In first place, remove the .example part of those files, the .env variables are 
+        # all ready to test the server, but you can modify some redis' settings or the 
+        # APP_SECRET (Used to generate jwtTokens).
 
-        # On ormconfig, you will need to add the login settings of your database, indicating username, password
-        # and database's name, as shown on example:
+        # On ormconfig, you will need to add the login settings of your database, indicating 
+        # username, password and database's name, as shown on example:
             "username": "postgres",
             "password": "tradelous",
             "database": "tradelous",
