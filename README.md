@@ -28,6 +28,7 @@ Contents
       * [Company](#company-routes)
       * [Products](#products-routes)
       * [Sales](#sales-routes)
+   * [:memo: License](#license) 
    * [:man: Author](#author)
 <!--te-->
 </br>
@@ -240,6 +241,11 @@ Tools used on this project:
   - **Delete (DELETE, /:saleId): Deletes the <a href="#entity-sale">sale</a> passed through params.**
     - Request: No Body.
     - Response: No Content.
+
+</br>
+
+<h2 id="license">:memo: License</h2>
+This project is MIT Licensed. See <a href="https://github.com/RiadOliveira/Tradelous-backend/blob/main/LICENSE">LICENSE</a> file for more details.
 
 </br>
 
