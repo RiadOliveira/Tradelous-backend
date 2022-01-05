@@ -1,7 +1,7 @@
 <h1 align="center">Tradelous (Backend)</h1>
 
 <p align="center">
-  Backend of tradelous application, created in order to manage and provide users, companies, products and sales to front-end application. It was made mainly in order to pratice my development skills on backend.
+  Backend of tradelous application, created in order to manage and provide users (employees and admins), companies, products and sales to front-end application. I have decided to create this application in order to practice my backend development skills.
 </p>
 
 <h4 align="center">
@@ -96,7 +96,7 @@ Tools used on this project:
   - name: string
   - email: string
   - password: string
-  - isAdmin: boolean
+  - isAdmin: boolean (Always false if user isn't associated to a <a href="#entity-company">company</a>)
   - companyId: UUID/null (ID of the <a href="#entity-company">company</a>)
   - avatar: string/null (name of the file)
 
