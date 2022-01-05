@@ -1,7 +1,7 @@
 <h1 align="center">Tradelous (Backend)</h1>
 
 <p align="center">
-  Backend of tradelous application, created in order to manage and provide users (employees and admins), companies, products and sales to front-end application. I have decided to create this application in order to practice my backend development skills.
+  Backend of Tradelous application, created in order to manage and provide users (employees and admins), companies, products and sales to front-end application. I have decided to create this application in order to practice my backend development skills.
 </p>
 
 <h4 align="center">
