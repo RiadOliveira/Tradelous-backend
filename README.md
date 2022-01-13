@@ -1,7 +1,7 @@
 <h1 align="center">Tradelous (Backend)</h1>
 
 <p align="center">
-  Backend of tradelous application, created in order to manage and provide users, companies, products and sales to front-end application. It was made mainly in order to pratice my development skills on backend.
+    Backend of <a href="https://github.com/RiadOliveira/Tradelous-frontend-desktop">Tradelous</a> application, created in order to manage and provide users (employees and admins), companies, products and sales to front-end application. I have decided to create this application in order to practice my backend development skills.
 </p>
 
 <h4 align="center">
@@ -28,6 +28,7 @@ Contents
       * [Company](#company-routes)
       * [Products](#products-routes)
       * [Sales](#sales-routes)
+   * [:memo: License](#license) 
    * [:man: Author](#author)
 <!--te-->
 </br>
@@ -50,7 +51,10 @@ Tools used on this project:
 
   ```bash
     # Clone this repository
-    $ git clone <https://github.com/RiadOliveira/Tradelous-backend.git>
+    $ git clone https://github.com/RiadOliveira/Tradelous-backend.git
+    
+    # Access project's folder
+    $ cd Tradelous-backend
 
     # Install the dependecies
     $ npm install
@@ -58,13 +62,15 @@ Tools used on this project:
     $ yarn
 
     # Fill enviroment variables and ormconfig
-        # The project has two example files in order to facilitate that: .env.example and ormconfig.example.json;
+        # The project has two example files in order to facilitate that: .env.example and 
+        # ormconfig.example.json;
 
-        # In first place, remove the .example part of those files, the .env variables are all ready to test the
-        # server, but you can modify some redis' settings or the APP_SECRET (Used to generate jwtTokens).
+        # In first place, remove the .example part of those files, the .env variables are 
+        # all ready to test the server, but you can modify some redis' settings or the 
+        # APP_SECRET (Used to generate jwtTokens).
 
-        # On ormconfig, you will need to add the login settings of your database, indicating username, password
-        # and database's name, as shown on example:
+        # On ormconfig, you will need to add the login settings of your database, indicating 
+        # username, password and database's name, as shown on example:
             "username": "postgres",
             "password": "tradelous",
             "database": "tradelous",
@@ -96,7 +102,7 @@ Tools used on this project:
   - name: string
   - email: string
   - password: string
-  - isAdmin: boolean
+  - isAdmin: boolean (Always false if user isn't associated to a <a href="#entity-company">company</a>)
   - companyId: UUID/null (ID of the <a href="#entity-company">company</a>)
   - avatar: string/null (name of the file)
 
@@ -235,6 +241,11 @@ Tools used on this project:
   - **Delete (DELETE, /:saleId): Deletes the <a href="#entity-sale">sale</a> passed through params.**
     - Request: No Body.
     - Response: No Content.
+
+</br>
+
+<h2 id="license">:memo: License</h2>
+This project is MIT Licensed. See <a href="https://github.com/RiadOliveira/Tradelous-backend/blob/main/LICENSE">LICENSE</a> file for more details.
 
 </br>
 
