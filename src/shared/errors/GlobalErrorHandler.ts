@@ -18,23 +18,17 @@ function GlobalErrorHandler(
         }, 5000);
     }
 
-    if (err instanceof AppError) {
-        return response.status(err.statusCode).json({
-            error: { message: err.message, status: 'error' },
-        });
+    const error = {
+        error: { message: err.message, status: 'error' },
+    };
+
+    if (err instanceof AppError || err instanceof CelebrateError) {
+        const status = (err as AppError).statusCode || 400;
+        return response.status(status).json(error);
     }
 
-    if (err instanceof CelebrateError) {
-        return response.status(400).json({
-            error: { message: err.message, status: 'error' },
-        });
-    }
-
-    console.error(err);
-
-    return response.status(500).json({
-        error: { message: 'Internal Server Error.', status: 'error' },
-    });
+    error.error.message = 'Internal Server Error.';
+    return response.status(500).json(error);
 }
 
 export default GlobalErrorHandler;

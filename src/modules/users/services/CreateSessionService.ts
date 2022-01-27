@@ -27,19 +27,13 @@ export default class CreateSessionService {
 
     public async execute({ email, password }: UserData): Promise<IResponse> {
         const findedUser = await this.usersRepository.findByEmail(email);
-
-        if (!findedUser) {
-            throw new AppError('Incorrect e-mail or password.');
-        }
+        if (!findedUser) throw new AppError('Incorrect e-mail or password.');
 
         const verifyHash = await this.hashProvider.compareHash(
             password,
             findedUser.password,
         );
-
-        if (!verifyHash) {
-            throw new AppError('Incorrect e-mail or password.');
-        }
+        if (!verifyHash) throw new AppError('Incorrect e-mail or password.');
 
         const token = sign({ name: findedUser.name }, jwtConfig.secret, {
             expiresIn: jwtConfig.expiresIn,

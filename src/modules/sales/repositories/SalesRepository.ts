@@ -14,7 +14,6 @@ class SalesRepository implements ISalesRepository {
 
     public async create(sale: CreateSaleDTO): Promise<Sale> {
         const newSale = this.SalesRepository.create(sale);
-
         return this.SalesRepository.save(newSale);
     }
 

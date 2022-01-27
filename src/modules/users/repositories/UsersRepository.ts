@@ -13,7 +13,6 @@ class UsersRepository implements IUsersRepository {
 
     public async create(user: CreateUserDTO): Promise<User> {
         const newUser = this.UsersRepository.create(user);
-
         await this.UsersRepository.save(newUser);
 
         return newUser;

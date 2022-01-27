@@ -27,16 +27,10 @@ export default class UpdateSaleService {
 
     public async execute(sale: UpdateSale, userId: string): Promise<Sale> {
         const verifySale = await this.salesRepository.findById(sale.id);
-
-        if (!verifySale) {
-            throw new AppError('Sale not found.');
-        }
+        if (!verifySale) throw new AppError('Sale not found.');
 
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('User not found.');
-        }
+        if (!verifyUser) throw new AppError('User not found.');
 
         if (!verifyUser.companyId) {
             throw new AppError('The user is not associated to a company.');
@@ -59,10 +53,7 @@ export default class UpdateSaleService {
         const verifyProduct = await this.productsRepository.findById(
             verifySale.productId,
         );
-
-        if (!verifyProduct) {
-            throw new AppError('Product not found.');
-        }
+        if (!verifyProduct) throw new AppError('Product not found.');
 
         if (
             sale.quantity > verifySale.quantity &&
@@ -85,21 +76,21 @@ export default class UpdateSaleService {
             totalPrice: sale.quantity * productPrice,
         });
 
-        if (sale.quantity > verifySale.quantity) {
+        if (sale.quantity > verifySale.quantity)
             await this.productsRepository.save({
                 ...verifyProduct,
                 quantity:
                     verifyProduct.quantity -
                     (sale.quantity - verifySale.quantity),
             });
-        } else if (sale.quantity < verifySale.quantity) {
+        else if (sale.quantity < verifySale.quantity)
             await this.productsRepository.save({
                 ...verifyProduct,
                 quantity:
                     verifyProduct.quantity +
                     (verifySale.quantity - sale.quantity),
             });
-        } else {
+        else {
             await this.cacheProvider.invalidate(
                 `products-list:${verifyUser.companyId}`,
             );

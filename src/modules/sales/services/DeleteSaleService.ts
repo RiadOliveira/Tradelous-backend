@@ -20,16 +20,10 @@ export default class DeleteSaleService {
 
     public async execute(saleId: string, userId: string): Promise<void> {
         const verifySale = await this.salesRepository.findById(saleId);
-
-        if (!verifySale) {
-            throw new AppError('Sale not found.');
-        }
+        if (!verifySale) throw new AppError('Sale not found.');
 
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('User not found.');
-        }
+        if (!verifyUser) throw new AppError('User not found.');
 
         if (!verifyUser.isAdmin) {
             throw new AppError(
@@ -49,10 +43,8 @@ export default class DeleteSaleService {
             verifySale.productId,
         );
 
-        if (!productOfSale) {
-            //Just for typescript.
-            throw new AppError('Product of sale not found.');
-        }
+        //Just for typescript.
+        if (!productOfSale) throw new AppError('Product of sale not found.');
 
         await this.salesRepository.delete(saleId);
 

@@ -13,10 +13,7 @@ export default class LeaveCompanyService {
 
     public async execute(userId: string): Promise<void> {
         const findedUser = await this.usersRepository.findById(userId);
-
-        if (!findedUser) {
-            throw new AppError('Requested user does not exist.');
-        }
+        if (!findedUser) throw new AppError('Requested user does not exist.');
 
         if (!findedUser.companyId) {
             throw new AppError(

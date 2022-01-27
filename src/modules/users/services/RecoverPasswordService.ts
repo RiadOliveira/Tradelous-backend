@@ -23,22 +23,15 @@ export default class RecoverPasswordService {
         newPassword,
     }: IRecoverPasswordData): Promise<void> {
         const findedUser = await this.usersRepository.findByEmail(confirmEmail);
-
-        if (!findedUser) {
-            throw new AppError('Requested user does not exist.');
-        }
+        if (!findedUser) throw new AppError('Requested user does not exist.');
 
         const verifyToken = await this.hashProvider.compareHash(
             findedUser.id + findedUser.updatedAt,
             recoverToken,
         );
-
-        if (!verifyToken) {
-            throw new AppError('Invalid Recover Token.', 401);
-        }
+        if (!verifyToken) throw new AppError('Invalid Recover Token.', 401);
 
         const hashedPassword = await this.hashProvider.hash(newPassword);
-
         findedUser.password = hashedPassword;
 
         await this.usersRepository.save(findedUser);

@@ -30,22 +30,20 @@ export default class UpdateUserService {
         userId,
     }: UserData): Promise<User> {
         const findedUser = await this.usersRepository.findById(userId);
-
-        if (!findedUser) {
-            throw new AppError('Requested user does not exist.');
-        }
+        if (!findedUser) throw new AppError('Requested user does not exist.');
 
         if (email !== findedUser.email) {
             const verifyEmail = await this.usersRepository.findByEmail(email);
 
-            if (verifyEmail) {
+            if (verifyEmail)
                 throw new AppError(
                     'A user with the informed email already exists.',
                 );
-            }
+
             findedUser.email = email;
         }
 
+        // Password update.
         if (oldPassword && newPassword) {
             const verifyPassword = await this.hashProvider.compareHash(
                 oldPassword,
@@ -59,12 +57,10 @@ export default class UpdateUserService {
             }
 
             const hashedPassword = await this.hashProvider.hash(newPassword);
-
             findedUser.password = hashedPassword;
         }
 
         findedUser.name = name;
-
         const updatedUser = this.usersRepository.save(findedUser);
 
         if (findedUser.companyId) {

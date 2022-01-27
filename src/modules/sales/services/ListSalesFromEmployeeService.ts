@@ -15,10 +15,7 @@ export default class ListSalesFromEmployeeService {
 
     public async execute(employeeId: string): Promise<Sale[] | undefined> {
         const verifyEmployee = await this.usersRepository.findById(employeeId);
-
-        if (!verifyEmployee) {
-            throw new AppError('Employee not found.');
-        }
+        if (!verifyEmployee) throw new AppError('Employee not found.');
 
         if (!verifyEmployee.companyId) {
             throw new AppError(

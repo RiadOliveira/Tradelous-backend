@@ -21,10 +21,7 @@ export default class UpdateUserAvatarService {
 
     public async execute(userData: UserData): Promise<User> {
         const findedUser = await this.usersRepository.findById(userData.userId);
-
-        if (!findedUser) {
-            throw new AppError('Informed user does not exist.');
-        }
+        if (!findedUser) throw new AppError('Informed user does not exist.');
 
         if (findedUser.avatar && !userData.avatar) {
             //If not receive the avatar name, indicates that the user's avatar was removed.
@@ -46,7 +43,6 @@ export default class UpdateUserAvatarService {
         }
 
         await this.storageProvider.save(userData.avatar, 'avatar');
-
         findedUser.avatar = userData.avatar;
 
         const updatedUser = this.usersRepository.save(findedUser);

@@ -34,10 +34,7 @@ export default class CreateSaleService {
         const verifyEmployee = await this.usersRepository.findById(
             sale.employeeId,
         );
-
-        if (!verifyEmployee) {
-            throw new AppError('Employee not found.');
-        }
+        if (!verifyEmployee) throw new AppError('Employee not found.');
 
         if (!verifyEmployee.companyId) {
             throw new AppError(
@@ -48,18 +45,12 @@ export default class CreateSaleService {
         const verifyCompany = await this.companiesRepository.findById(
             verifyEmployee.companyId,
         );
-
-        if (!verifyCompany) {
-            throw new AppError('Company not found.');
-        }
+        if (!verifyCompany) throw new AppError('Company not found.');
 
         const verifyProduct = await this.productsRepository.findById(
             sale.productId,
         );
-
-        if (!verifyProduct) {
-            throw new AppError('Product not found.');
-        }
+        if (!verifyProduct) throw new AppError('Product not found.');
 
         if (verifyProduct.companyId != verifyCompany.id) {
             throw new AppError(

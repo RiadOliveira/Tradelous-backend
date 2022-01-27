@@ -33,7 +33,6 @@ userRoutes.post(
         const { name, email, password } = request.body;
 
         const createUser = container.resolve(CreateUserService);
-
         const createdUser = await createUser.execute({
             name,
             email,
@@ -56,7 +55,6 @@ userRoutes.post(
         const { email, password } = request.body;
 
         const createSession = container.resolve(CreateSessionService);
-
         const { user, token } = await createSession.execute({
             email,
             password,
@@ -79,7 +77,6 @@ userRoutes.post(
         const sendForgotPasswordEmail = container.resolve(
             SendForgotPasswordEmailService,
         );
-
         await sendForgotPasswordEmail.execute(email);
 
         return response.status(204).json();
@@ -102,7 +99,6 @@ userRoutes.post(
         const { confirmEmail, recoverToken, newPassword } = request.body;
 
         const recoverPassword = container.resolve(RecoverPasswordService);
-
         await recoverPassword.execute({
             confirmEmail,
             recoverToken,
@@ -133,11 +129,9 @@ userRoutes.put(
     }),
     async (request: Request, response: Response) => {
         const { name, email, oldPassword, newPassword } = request.body;
-
         const userId = request.user.id;
 
         const updateUser = container.resolve(UpdateUserService);
-
         const updatedUser = await updateUser.execute({
             name,
             email,
@@ -156,11 +150,9 @@ userRoutes.patch(
     upload.single('avatar'),
     async (request: Request, response: Response) => {
         const userId = request.user.id;
-
         const avatar = request.file ? request.file.filename : '';
 
         const updateUserAvatar = container.resolve(UpdateUserAvatarService);
-
         const updatedUser = await updateUserAvatar.execute({
             userId,
             avatar,
@@ -177,7 +169,6 @@ userRoutes.patch(
         const userId = request.user.id;
 
         const leaveCompany = container.resolve(LeaveCompanyService);
-
         await leaveCompany.execute(userId);
 
         return response.status(204).json();
@@ -191,7 +182,6 @@ userRoutes.delete(
         const userId = request.user.id;
 
         const deleteUser = container.resolve(DeleteUserService);
-
         await deleteUser.execute(userId);
 
         return response.status(204).json();

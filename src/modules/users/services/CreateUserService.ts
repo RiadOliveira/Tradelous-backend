@@ -19,10 +19,7 @@ export default class CreateUserService {
 
     public async execute({ name, password, email }: UserData): Promise<User> {
         const findedUser = await this.usersRepository.findByEmail(email);
-
-        if (findedUser) {
-            throw new AppError("User's email already exists.");
-        }
+        if (findedUser) throw new AppError("User's email already exists.");
 
         const hashedPassword = await this.hashProvider.hash(password);
 

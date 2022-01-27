@@ -17,10 +17,7 @@ export default class SendForgotPasswordEmailService {
 
     public async execute(email: string): Promise<void> {
         const findedUser = await this.usersRepository.findByEmail(email);
-
-        if (!findedUser) {
-            throw new AppError('User not found.');
-        }
+        if (!findedUser) throw new AppError('User not found.');
 
         const forgotPasswordTemplate = path.resolve(
             __dirname,

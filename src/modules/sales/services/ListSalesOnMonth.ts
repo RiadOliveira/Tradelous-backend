@@ -20,10 +20,7 @@ export default class ListSalesOnMonthService {
         startYear: string,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('Employee not found.');
-        }
+        if (!verifyUser) throw new AppError('Employee not found.');
 
         if (!verifyUser.companyId) {
             throw new AppError(

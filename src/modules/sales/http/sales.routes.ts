@@ -26,7 +26,6 @@ salesRoutes.get(
         const listSalesFromEmployee = container.resolve(
             ListSalesFromEmployeeService,
         );
-
         const findedSales = await listSalesFromEmployee.execute(employeeId);
 
         return response.json(classToClass(findedSales));
@@ -36,13 +35,11 @@ salesRoutes.get(
 //Pass day-month-year on params.
 salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
     const userId = request.user.id;
-
     const { date } = request.params;
 
     const [day, month, year] = date.split('-');
 
     const listSalesOnDay = container.resolve(ListSalesOnDayService);
-
     const findedSales = await listSalesOnDay.execute(userId, day, month, year);
 
     return response.json(classToClass(findedSales));
@@ -51,13 +48,11 @@ salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
 //Pass day-month-year on params.
 salesRoutes.get('/week/:date', async (request: Request, response: Response) => {
     const userId = request.user.id;
-
     const { date } = request.params;
 
     const [day, month, year] = date.split('-');
 
     const listSalesOnWeek = container.resolve(ListSalesOnWeekService);
-
     const findedSales = await listSalesOnWeek.execute(userId, day, month, year);
 
     return response.json(classToClass(findedSales));
@@ -68,13 +63,11 @@ salesRoutes.get(
     '/month/:date',
     async (request: Request, response: Response) => {
         const userId = request.user.id;
-
         const { date } = request.params;
 
         const [day, month, year] = date.split('-');
 
         const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
-
         const findedSales = await listSalesOnMonth.execute(
             userId,
             day,
@@ -97,11 +90,9 @@ salesRoutes.post(
     }),
     async (request: Request, response: Response) => {
         const { productId, method, quantity } = request.body;
-
         const userId = request.user.id;
 
         const createSale = container.resolve(CreateSaleService);
-
         const newSale = await createSale.execute({
             employeeId: userId,
             productId,
@@ -128,7 +119,6 @@ salesRoutes.put(
         const userId = request.user.id;
 
         const updateSale = container.resolve(UpdateSaleService);
-
         const updatedSale = await updateSale.execute(
             {
                 id: saleId,
@@ -151,11 +141,9 @@ salesRoutes.delete(
     }),
     async (request: Request, response: Response) => {
         const { saleId } = request.params;
-
         const userId = request.user.id;
 
         const deleteSale = container.resolve(DeleteSaleService);
-
         await deleteSale.execute(saleId, userId);
 
         return response.status(204).json();
