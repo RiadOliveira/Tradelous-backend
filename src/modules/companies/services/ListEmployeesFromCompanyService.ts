@@ -18,10 +18,7 @@ export default class ListEmployeesFromCompanyService {
 
     public async execute(userId: string): Promise<User[]> {
         const findedUser = await this.usersRepository.findById(userId);
-
-        if (!findedUser) {
-            throw new AppError('User not found.');
-        }
+        if (!findedUser) throw new AppError('User not found.');
 
         if (!findedUser.companyId) {
             throw new AppError(

@@ -25,10 +25,7 @@ export default class UpdateCompanyService {
         adminId: string,
     ): Promise<Company> {
         const findedAdmin = await this.usersRepository.findById(adminId);
-
-        if (!findedAdmin) {
-            throw new AppError('Admin not found.');
-        }
+        if (!findedAdmin) throw new AppError('Admin not found.');
 
         if (!findedAdmin.companyId) {
             throw new AppError(
@@ -46,10 +43,7 @@ export default class UpdateCompanyService {
         const findedCompany = await this.companiesRepository.findById(
             findedAdmin.companyId,
         );
-
-        if (!findedCompany) {
-            throw new AppError('Company not found.');
-        }
+        if (!findedCompany) throw new AppError('Company not found.');
 
         const verifyCnpj = await this.companiesRepository.findByCnpj(
             company.cnpj,

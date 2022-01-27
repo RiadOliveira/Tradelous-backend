@@ -19,7 +19,6 @@ productsRoutes.get('/', async (request: Request, response: Response) => {
     const listProductsFromCompany = container.resolve(
         ListProductsFromCompanyService,
     );
-
     const allProducts = await listProductsFromCompany.execute(userId);
 
     return response.json(allProducts);
@@ -39,15 +38,12 @@ productsRoutes.post(
     }),
     async (request: Request, response: Response) => {
         const { name, price, quantity, brand, barCode } = request.body;
-
         const image = request.file ? request.file.filename : '';
-
         const userId = request.user.id;
 
         const addProductToCompany = container.resolve(
             AddProductToCompanyService,
         );
-
         const newProduct = await addProductToCompany.execute(
             {
                 name,
@@ -81,11 +77,9 @@ productsRoutes.put(
     async (request: Request, response: Response) => {
         const { productId } = request.params;
         const { name, price, quantity, brand, barCode } = request.body;
-
         const userId = request.user.id;
 
         const updateProduct = container.resolve(UpdateProductService);
-
         const updatedProduct = await updateProduct.execute(
             {
                 name,
@@ -112,15 +106,12 @@ productsRoutes.patch(
     }),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
-
         const image = request.file ? request.file.filename : '';
-
         const userId = request.user.id;
 
         const updateProductsImage = container.resolve(
             UpdateProductsImageService,
         );
-
         const updatedProduct = await updateProductsImage.execute(
             {
                 productId,
@@ -142,13 +133,11 @@ productsRoutes.delete(
     }),
     async (request: Request, response: Response) => {
         const { productId } = request.params;
-
         const userId = request.user.id;
 
         const deleteProductFromCompany = container.resolve(
             DeleteProductFromCompanyService,
         );
-
         await deleteProductFromCompany.execute(productId, userId);
 
         return response.status(204).json();

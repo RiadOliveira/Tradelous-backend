@@ -18,10 +18,7 @@ export default class ListProductsFromCompanyService {
 
     public async execute(userId: string): Promise<Product[]> {
         const findedUser = await this.usersRepository.findById(userId);
-
-        if (!findedUser) {
-            throw new AppError('User not found.');
-        }
+        if (!findedUser) throw new AppError('User not found.');
 
         if (!findedUser.companyId) {
             throw new AppError(
@@ -39,10 +36,7 @@ export default class ListProductsFromCompanyService {
             findedProducts = await this.productsRepository.findAllFromCompany(
                 findedUser.companyId,
             );
-
-            if (!findedProducts) {
-                throw new AppError('No products found.');
-            }
+            if (!findedProducts) throw new AppError('No products found.');
 
             await this.cacheProvider.save(
                 cacheKey,

@@ -32,16 +32,10 @@ export default class UpdateProductService {
         const verifyProduct = await this.productsRepository.findById(
             product.id,
         );
-
-        if (!verifyProduct) {
-            throw new AppError('Product not found.');
-        }
+        if (!verifyProduct) throw new AppError('Product not found.');
 
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('User not found.');
-        }
+        if (!verifyUser) throw new AppError('User not found.');
 
         if (verifyUser.companyId !== verifyProduct.companyId) {
             throw new AppError(
@@ -63,9 +57,9 @@ export default class UpdateProductService {
             }
         }
 
-        if (verifyProduct.barCode && !product.barCode) {
+        if (verifyProduct.barCode && !product.barCode)
             await this.productsRepository.deleteBarCode(verifyProduct.id);
-        } else {
+        else {
             await this.productsRepository.save({
                 ...verifyProduct,
                 ...product,

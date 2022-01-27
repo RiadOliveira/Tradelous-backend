@@ -24,16 +24,10 @@ export default class RegisterCompanyService {
         const findedCompany = await this.companiesRepository.findByCnpj(
             company.cnpj,
         );
-
-        if (findedCompany) {
-            throw new AppError("Company's cnpj already exists.");
-        }
+        if (findedCompany) throw new AppError("Company's cnpj already exists.");
 
         const findedUser = await this.usersRepository.findById(company.adminId);
-
-        if (!findedUser) {
-            throw new AppError('User not found.');
-        }
+        if (!findedUser) throw new AppError('User not found.');
 
         if (findedUser.companyId) {
             throw new AppError(
@@ -47,7 +41,6 @@ export default class RegisterCompanyService {
         findedUser.isAdmin = true;
 
         await this.usersRepository.save(findedUser);
-
         return newCompany;
     }
 }

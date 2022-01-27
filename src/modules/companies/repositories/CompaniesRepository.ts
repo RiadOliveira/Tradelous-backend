@@ -16,7 +16,6 @@ class CompaniesRepository implements ICompaniesRepository {
 
     public async create(company: CompanyRepositoryDTO): Promise<Company> {
         const newCompany = this.CompaniesRepository.create(company);
-
         await this.CompaniesRepository.save(newCompany);
 
         return newCompany;
@@ -24,7 +23,6 @@ class CompaniesRepository implements ICompaniesRepository {
 
     public async save(company: CompanyRepositoryDTO): Promise<Company> {
         const updatedCompany = await this.CompaniesRepository.save(company);
-
         return updatedCompany;
     }
 

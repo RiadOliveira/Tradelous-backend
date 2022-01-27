@@ -33,10 +33,7 @@ export default class AddProductToCompanyService {
         userId: string,
     ): Promise<Product> {
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('User not found.');
-        }
+        if (!verifyUser) throw new AppError('User not found.');
 
         if (!verifyUser.companyId) {
             throw new AppError('The user is not associated to a company.');
@@ -59,9 +56,7 @@ export default class AddProductToCompanyService {
             await this.storageProvider.save(product.image, 'product-image');
         }
 
-        if (!product.quantity) {
-            product.quantity = 0;
-        }
+        if (!product.quantity) product.quantity = 0;
 
         const newProduct = await this.productsRepository.create({
             ...product,

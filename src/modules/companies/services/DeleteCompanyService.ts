@@ -21,10 +21,7 @@ export default class DeleteCompanyService {
 
     public async execute(adminId: string): Promise<void> {
         const findedAdmin = await this.usersRepository.findById(adminId);
-
-        if (!findedAdmin) {
-            throw new AppError('Admin not found.');
-        }
+        if (!findedAdmin) throw new AppError('Admin not found.');
 
         if (!findedAdmin.companyId) {
             throw new AppError(
@@ -42,21 +39,16 @@ export default class DeleteCompanyService {
         const findedCompany = await this.companiesRepository.findById(
             findedAdmin.companyId,
         );
-
-        if (!findedCompany) {
-            throw new AppError('Company not found.');
-        }
+        if (!findedCompany) throw new AppError('Company not found.');
 
         if (findedCompany.logo) {
             await this.storageProvider.delete(findedCompany.logo, 'logo');
         }
 
         await this.usersRepository.save({ ...findedAdmin, isAdmin: false });
-
         await this.usersRepository.leaveCompany(findedAdmin.id);
 
         await this.companiesRepository.delete(findedCompany.id);
-
         await this.cacheProvider.invalidate(
             `employees-list:${findedCompany.id}`,
         );

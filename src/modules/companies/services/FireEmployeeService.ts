@@ -17,10 +17,7 @@ export default class FireEmployeeService {
 
     public async execute(adminId: string, employeeId: string): Promise<void> {
         const findedAdmin = await this.usersRepository.findById(adminId);
-
-        if (!findedAdmin) {
-            throw new AppError('Admin not found.');
-        }
+        if (!findedAdmin) throw new AppError('Admin not found.');
 
         if (!findedAdmin.companyId) {
             throw new AppError(
@@ -36,10 +33,7 @@ export default class FireEmployeeService {
         }
 
         const findedEmployee = await this.usersRepository.findById(employeeId);
-
-        if (!findedEmployee) {
-            throw new AppError('Employee not found.');
-        }
+        if (!findedEmployee) throw new AppError('Employee not found.');
 
         if (!findedEmployee.companyId) {
             throw new AppError(
@@ -57,7 +51,6 @@ export default class FireEmployeeService {
         }
 
         await this.companiesRepository.removeEmployee(findedEmployee.id);
-
         await this.cacheProvider.invalidate(
             `employees-list:${findedAdmin.companyId}`,
         );

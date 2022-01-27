@@ -31,16 +31,10 @@ export default class UpdateProductsImageService {
         const verifyProduct = await this.productsRepository.findById(
             product.productId,
         );
-
-        if (!verifyProduct) {
-            throw new AppError('Product not found.');
-        }
+        if (!verifyProduct) throw new AppError('Product not found.');
 
         const verifyUser = await this.usersRepository.findById(userId);
-
-        if (!verifyUser) {
-            throw new AppError('User not found.');
-        }
+        if (!verifyUser) throw new AppError('User not found.');
 
         if (verifyUser.companyId !== verifyProduct.companyId) {
             throw new AppError(
@@ -57,7 +51,6 @@ export default class UpdateProductsImageService {
             );
 
             await this.productsRepository.deleteImage(verifyProduct.id);
-
             verifyProduct.image = undefined;
 
             await this.cacheProvider.invalidate(
@@ -72,7 +65,6 @@ export default class UpdateProductsImageService {
             }
 
             await this.storageProvider.save(product.image, 'product-image');
-
             verifyProduct.image = product.image;
 
             await this.productsRepository.save(verifyProduct);

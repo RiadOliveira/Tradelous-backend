@@ -18,10 +18,7 @@ export default class UpdateCompanyLogoService {
 
     public async execute(logo: string, adminId: string): Promise<Company> {
         const findedAdmin = await this.usersRepository.findById(adminId);
-
-        if (!findedAdmin) {
-            throw new AppError('Admin not found.');
-        }
+        if (!findedAdmin) throw new AppError('Admin not found.');
 
         if (!findedAdmin.companyId) {
             throw new AppError(
@@ -39,17 +36,13 @@ export default class UpdateCompanyLogoService {
         const findedCompany = await this.companiesRepository.findById(
             findedAdmin.companyId,
         );
-
-        if (!findedCompany) {
-            throw new AppError('Company not found.');
-        }
+        if (!findedCompany) throw new AppError('Company not found.');
 
         if (findedCompany.logo && !logo) {
             //If not receive the image name, indicates that the product's image was removed by the user.
             await this.storageProvider.delete(findedCompany.logo, 'logo');
 
             await this.companiesRepository.removeLogo(findedCompany.id);
-
             findedCompany.logo = undefined;
 
             return findedCompany;
@@ -58,7 +51,6 @@ export default class UpdateCompanyLogoService {
         }
 
         await this.storageProvider.save(logo, 'logo');
-
         findedCompany.logo = logo;
 
         return this.companiesRepository.save(findedCompany);

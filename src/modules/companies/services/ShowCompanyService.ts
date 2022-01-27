@@ -15,10 +15,7 @@ export default class ShowCompanyService {
 
     public async execute(userId: string): Promise<Company> {
         const findedUser = await this.usersRepository.findById(userId);
-
-        if (!findedUser) {
-            throw new AppError('User not found.');
-        }
+        if (!findedUser) throw new AppError('User not found.');
 
         if (!findedUser.companyId) {
             throw new AppError(
@@ -29,10 +26,7 @@ export default class ShowCompanyService {
         const verifyCompany = await this.companiesRepository.findById(
             findedUser.companyId,
         );
-
-        if (!verifyCompany) {
-            throw new AppError('Company not found.');
-        }
+        if (!verifyCompany) throw new AppError('Company not found.');
 
         return verifyCompany;
     }
