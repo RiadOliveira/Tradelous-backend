@@ -4,6 +4,7 @@ import { addDays } from 'date-fns';
 import Sale from '@shared/typeorm/entities/Sale';
 import ISalesRepository from './ISalesRepository';
 import CreateSaleDTO from './dtos/CreateSaleDTO';
+import SearchDateDTO from './dtos/SearchDateDTO';
 
 class SalesRepository implements ISalesRepository {
     private SalesRepository: Repository<Sale>;
@@ -61,19 +62,26 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOnDay(
-        day: number,
-        month: number,
-        year: number,
-    ): Promise<Sale[] | undefined> {
-        const nextDate = addDays(new Date(year, month - 1, day), 1);
+    public async findAllOnDay({
+        startDay,
+        startMonth,
+        startYear,
+    }: SearchDateDTO): Promise<Sale[] | undefined> {
+        const nextDate = addDays(
+            new Date(
+                Number(startYear),
+                Number(startMonth) - 1,
+                Number(startDay),
+            ),
+            1,
+        );
 
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
                         `
-                        ${dateFieldName} >= '${year}-${month}-${day}'::date AND
+                        ${dateFieldName} >= '${startYear}-${startMonth}-${startDay}'::date AND
                         ${dateFieldName} < '${nextDate.toDateString()}'
                         `,
                 ),
@@ -87,18 +95,18 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOnWeek(
-        startDay: string,
-        startMonth: string,
-        year: string,
-    ): Promise<Sale[] | undefined> {
+    public async findAllOnWeek({
+        startDay,
+        startMonth,
+        startYear,
+    }: SearchDateDTO): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
                         `
-                         ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
-                         ${dateFieldName} < ('${year}-${startMonth}-${startDay}'::date +
+                         ${dateFieldName} >= '${startYear}-${startMonth}-${startDay}'::date AND
+                         ${dateFieldName} < ('${startYear}-${startMonth}-${startDay}'::date +
                          '7 days'::interval)
                         `,
                 ),
@@ -112,18 +120,18 @@ class SalesRepository implements ISalesRepository {
         return findedSales;
     }
 
-    public async findAllOnMonth(
-        startDay: string,
-        startMonth: string,
-        year: string,
-    ): Promise<Sale[] | undefined> {
+    public async findAllOnMonth({
+        startDay,
+        startMonth,
+        startYear,
+    }: SearchDateDTO): Promise<Sale[] | undefined> {
         const findedSales = await this.SalesRepository.find({
             where: {
                 date: Raw(
                     dateFieldName =>
                         `
-                    ${dateFieldName} >= '${year}-${startMonth}-${startDay}'::date AND
-                    ${dateFieldName} < ('${year}-${startMonth}-${startDay}'::date +
+                    ${dateFieldName} >= '${startYear}-${startMonth}-${startDay}'::date AND
+                    ${dateFieldName} < ('${startYear}-${startMonth}-${startDay}'::date +
                     '30 days'::interval)
                    `,
                 ),

@@ -2,9 +2,7 @@ import ListSalesFromEmployeeService from '../services/ListSalesFromEmployeeServi
 import CreateSaleService from '../services/CreateSaleService';
 import UpdateSaleService from '../services/UpdateSaleService';
 import DeleteSaleService from '../services/DeleteSaleService';
-import ListSalesOnMonthService from '../services/ListSalesOnMonth';
-import ListSalesOnDayService from '../services/ListSalesOnDay';
-import ListSalesOnWeekService from '../services/ListSalesOnWeek';
+import salesListRoutes from './sales.list.routes';
 
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router, Request, Response } from 'express';
@@ -33,51 +31,9 @@ salesRoutes.get(
 );
 
 //Pass day-month-year on params.
-salesRoutes.get('/day/:date', async (request: Request, response: Response) => {
-    const userId = request.user.id;
-    const { date } = request.params;
-
-    const [day, month, year] = date.split('-');
-
-    const listSalesOnDay = container.resolve(ListSalesOnDayService);
-    const findedSales = await listSalesOnDay.execute(userId, day, month, year);
-
-    return response.json(classToClass(findedSales));
-});
-
-//Pass day-month-year on params.
-salesRoutes.get('/week/:date', async (request: Request, response: Response) => {
-    const userId = request.user.id;
-    const { date } = request.params;
-
-    const [day, month, year] = date.split('-');
-
-    const listSalesOnWeek = container.resolve(ListSalesOnWeekService);
-    const findedSales = await listSalesOnWeek.execute(userId, day, month, year);
-
-    return response.json(classToClass(findedSales));
-});
-
-//Pass day-month-year on params.
-salesRoutes.get(
-    '/month/:date',
-    async (request: Request, response: Response) => {
-        const userId = request.user.id;
-        const { date } = request.params;
-
-        const [day, month, year] = date.split('-');
-
-        const listSalesOnMonth = container.resolve(ListSalesOnMonthService);
-        const findedSales = await listSalesOnMonth.execute(
-            userId,
-            day,
-            month,
-            year,
-        );
-
-        return response.json(classToClass(findedSales));
-    },
-);
+salesRoutes.use('/day', salesListRoutes);
+salesRoutes.use('/week', salesListRoutes);
+salesRoutes.use('/month', salesListRoutes);
 
 salesRoutes.post(
     '/',

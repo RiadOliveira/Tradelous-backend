@@ -1,8 +1,11 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import Sale from '@shared/typeorm/entities/Sale';
-import { inject, injectable } from 'tsyringe';
+import SearchDateDTO from '../repositories/dtos/SearchDateDTO';
 import ISalesRepository from '../repositories/ISalesRepository';
+import { inject, injectable } from 'tsyringe';
+
+type searchType = 'day' | 'week' | 'month';
 
 @injectable()
 export default class ListSalesOnWeekService {
@@ -15,9 +18,8 @@ export default class ListSalesOnWeekService {
 
     public async execute(
         userId: string,
-        startDay: string,
-        startMonth: string,
-        startYear: string,
+        { startDay, startMonth, startYear }: SearchDateDTO,
+        type: searchType,
     ): Promise<Sale[] | undefined> {
         const verifyUser = await this.usersRepository.findById(userId);
         if (!verifyUser) throw new AppError('Employee not found.');
@@ -35,12 +37,21 @@ export default class ListSalesOnWeekService {
         const parsedDay = startDay.padStart(2, '0');
         const parsedMonth = startMonth.padStart(2, '0');
 
-        const findedSales = await this.salesRepository.findAllOnWeek(
-            parsedDay,
-            parsedMonth,
+        const searchDate: SearchDateDTO = {
+            startDay: parsedDay,
+            startMonth: parsedMonth,
             startYear,
-        );
+        };
 
-        return findedSales;
+        return (() => {
+            switch (type) {
+                case 'day':
+                    return this.salesRepository.findAllOnDay(searchDate);
+                case 'week':
+                    return this.salesRepository.findAllOnWeek(searchDate);
+                default:
+                    return this.salesRepository.findAllOnMonth(searchDate);
+            }
+        })();
     }
 }
