@@ -1,264 +1,372 @@
-<h1 align="center">Tradelous (Backend)</h1>
+<h1 align="center">Tradelous Backend</h1>
 
 <p align="center">
-    Backend of <a href="https://github.com/RiadOliveira/Tradelous-frontend-desktop">Tradelous</a> application, created in order to manage and provide users (employees and admins), companies, products and sales to front-end application. I have decided to create this application in order to practice my backend development skills.
+    Backend service for the <a href="https://github.com/RiadOliveira/Tradelous-desktop">Tradelous Desktop</a> and <a href="https://github.com/RiadOliveira/Tradelous-mobile">Tradelous Mobile</a> applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications with efficient data operations.
 </p>
 
-<h4 align="center">
-	:convenience_store:&nbsp; Tradelous :heavy_check_mark: Finished &nbsp; :convenience_store: </br>
-</h4>
-
 ![image](https://img.shields.io/github/license/RiadOliveira/Tradelous-backend)
+
+<br/>
 
 Contents
 =================
 <!--ts-->
-   * [🛠️ Technologies](#technologies)
-   * [:computer: Install & Run](#install&run)
-      * [Prerequisites](#prerequisites)
-      * [Running the server](#running)
-      * [Testing API](#testing)
-   * [:floppy_disk: Entities](#entities)
-      * [User](#entity-user)
-      * [Company](#entity-company)
-      * [Product](#entity-product)
-      * [Sale](#entity-sale)
-   * [:gear: API Routes](#routes)
-      * [User](#user-routes)
-      * [Company](#company-routes)
-      * [Products](#products-routes)
-      * [Sales](#sales-routes)
-   * [:memo: License](#license) 
-   * [:man: Author](#author)
+* [🛠️ Technologies](#technologies)
+* [🚀 Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation & Setup](#setup)
+  * [API Testing](#testing)
+* [⚙️ Features](#features)
+* [🗃️ Database Entities](#entities)
+  * [User](#entity-user)
+  * [Company](#entity-company)
+  * [Product](#entity-product)
+  * [Sale](#entity-sale)
+* [🔗 API Endpoints](#routes)
+  * [User Routes](#user-routes)
+    * [POST /sign-up](#user-sign-up)
+    * [POST /sessions](#user-sessions)
+    * [POST /forgot-password](#user-forgot-password)
+    * [POST /recover-password](#user-recover-password)
+    * [PUT /](#user-update)
+    * [PATCH /update-avatar](#user-update-avatar)
+    * [PATCH /leave-company](#user-leave-company)
+    * [DELETE /](#user-delete)
+  * [Company Routes](#company-routes)
+    * [GET /](#company-show)
+    * [POST /](#company-register)
+    * [GET /list-employees](#company-list-employees)
+    * [PUT /](#company-update)
+    * [PATCH /update-logo](#company-update-logo)
+    * [PATCH /hire-employee/:employeeId](#company-hire-employee)
+    * [PATCH /fire-employee/:employeeId](#company-fire-employee)
+    * [DELETE /](#company-delete)
+  * [Product Routes](#products-routes)
+    * [GET /](#products-list)
+    * [POST /](#products-add)
+    * [PUT /:productId](#products-update)
+    * [PATCH /update-image/:productId](#products-update-image)
+    * [DELETE /:productId](#products-delete)
+  * [Sales Routes](#sales-routes)
+    * [GET /employee/:employeeId](#sales-employee)
+    * [GET /day/:day-:month-:year](#sales-day)
+    * [GET /week/:day-:month-:year](#sales-week)
+    * [GET /month/:day-:month-:year](#sales-month)
+    * [POST /](#sales-create)
+    * [PUT /:saleId](#sales-update)
+    * [DELETE /:saleId](#sales-delete)
+* [📝 License](#license)
+* [👨‍💻 Author](#author)
+* [🌐 Socials](#socials)
 <!--te-->
-</br>
+<br/>
 
 <h2 id="technologies">🛠️ Technologies</h2>
-Tools used on this project:
+Built with:
 
-- [Node.js](https://nodejs.org/en/)
-- [Postgresql](https://www.postgresql.org/)
-- [TypeScript](https://www.typescriptlang.org/) </br></br>
+* [Node.js](https://nodejs.org/en/)
+* [PostgreSQL](https://www.postgresql.org/)
+* [TypeScript](https://www.typescriptlang.org/) <br/><br/>
 
-<h2 id="install&run">:computer: Install & Run</h2>
+<h2 id="getting-started">🚀 Getting Started</h2>
 
-<ul>
-  <li id="prerequisites"><h3>Prerequisites</h3></li>
+<h3 id="prerequisites">Prerequisites</h3>
 
-  Before you start, it will be necessary to install those tools on your machine: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/), [Postgresql](https://www.postgresql.org/).
+Before running the backend service, ensure the following tools are installed on your system:
+* [Git](https://git-scm.com)
+* [Node.js](https://nodejs.org/en/)
+* [PostgreSQL](https://www.postgresql.org/)
 
-  <li id="running"><h3>Running the server</h3></li>
+<h3 id="setup">Installation & Setup</h3>
 
-  ```bash
-    # Clone this repository
-    $ git clone https://github.com/RiadOliveira/Tradelous-backend.git
-    
-    # Access project's folder
-    $ cd Tradelous-backend
+```bash
+# Clone the repository
+$ git clone https://github.com/RiadOliveira/Tradelous-backend.git
 
-    # Install the dependecies
-    $ npm install
-    or
-    $ yarn
+# Navigate to project directory
+$ cd Tradelous-backend
 
-    # Fill enviroment variables and ormconfig
-        # The project has two example files in order to facilitate that: .env.example and 
-        # ormconfig.example.json;
+# Install dependencies
+$ npm install
 
-        # In first place, remove the .example part of those files, the .env variables are 
-        # all ready to test the server, but you can modify some redis' settings or the 
-        # APP_SECRET (Used to generate jwtTokens).
+# Environment Configuration
+# Copy example files and configure your environment
+$ cp .env.example .env
+$ cp ormconfig.example.json ormconfig.json
 
-        # On ormconfig, you will need to add the login settings of your database, indicating 
-        # username, password and database's name, as shown on example:
-            "username": "postgres",
-            "password": "tradelous",
-            "database": "tradelous",
+# Configure database connection in ormconfig.json
+# Update the following fields with your PostgreSQL credentials:
+# "username": "your_username",
+# "password": "your_password",
+# "database": "your_database_name"
 
-    # Create entities on database (with postgresql database running on background)
-    $ npm run typeorm migration:run
-    or
-    $ yarn typeorm migration:run
+# Run database migrations
+$ npm run typeorm migration:run
 
-    # Run the server
-    $ npm run dev
-    or
-    $ yarn dev
-  ```
+# Start the development server
+$ npm run dev
+```
 
-  <li id="testing"><h3>Testing API</h3></li>
+<h3 id="testing">API Testing</h3>
 
-  In order to facilitate API tests, here is a [Insomnia](https://insomnia.rest) file (JSON format) containing all possible requests to call the API:
-  [tradelous-insomnia.json](https://github.com/RiadOliveira/Tradelous-backend/blob/main/tradelous-insomnia.json).
-</ul>
+For comprehensive API testing, an [Insomnia](https://insomnia.rest) collection is available with all configured endpoints: [tradelous-insomnia.json](https://github.com/RiadOliveira/Tradelous-backend/blob/main/tradelous-insomnia.json).
 
-</br>
+<br/>
 
-<h2 id="entities">:floppy_disk: Entities</h2>
+<h2 id="features">⚙️ Features</h2>
 
-- <h3 id="entity-user">User</h3>
+- **Authentication & Authorization** - Complete user authentication system with JWT tokens, password recovery, and role-based access control for administrators and employees.
+- **User Management** - Full user lifecycle management including registration, profile updates, avatar handling, and account deletion with proper data cleanup.
+- **Company Administration** - Comprehensive company management with registration, employee hiring/firing, and administrative controls for business operations.
+- **Product Catalog System** - Complete CRUD operations for product management with image handling, barcode support, and inventory tracking.
+- **Sales Transaction Management** - Sales recording system with multiple payment methods, quantity tracking, and comprehensive reporting capabilities.
+- **File Upload Handling** - File upload and management for user avatars, company logos, and product images.
+- **Data Analytics** - Flexible sales reporting with date-range filtering (daily, weekly, monthly) and employee-specific sales tracking.
+- **Email Integration** - Password recovery system with email notifications using Ethereal for development testing. <br/><br/>
 
-  - id: UUID
-  - name: string
-  - email: string
-  - password: string
-  - isAdmin: boolean (Always false if user isn't associated to a <a href="#entity-company">company</a>)
-  - companyId: UUID/null (ID of the <a href="#entity-company">company</a>)
-  - avatar: string/null (name of the file)
+<h2 id="entities">🗃️ Database Entities</h2>
 
-- <h3 id="entity-company">Company</h3>
+<h3 id="entity-user">User</h3>
 
-  - id: UUID
-  - name: string
-  - cnpj: number
-  - address: string
-  - logo: string/null (name of the file)
-  - adminId: string (ID from an <a href="#entity-user">user</a>)
+- **id**: UUID
+- **name**: string
+- **email**: string
+- **password**: string
+- **isAdmin**: boolean - Administrator privileges (false if not associated with a company)
+- **companyId**: UUID/null
+- **avatar**: string/null - Avatar image filename
 
-- <h3 id="entity-product">Product</h3>
+<h3 id="entity-company">Company</h3>
 
-  - id: UUID
-  - name: string
-  - companyId: UUID (ID of the <a href="#entity-company">company</a>)
-  - price: number
-  - quantity: number
-  - brand: string
-  - barCode: string/null
-  - image: string/null (name of the file)
+- **id**: UUID
+- **name**: string
+- **cnpj**: number
+- **address**: string
+- **logo**: string/null - Company logo filename
+- **adminId**: string
 
-- <h3 id="entity-sale">Sale</h3>
+<h3 id="entity-product">Product</h3>
 
-  - id: UUID
-  - companyId: UUID (ID of the <a href="#entity-company">company</a>)
-  - employeeId: UUID (ID of the <a href="#entity-user">user</a> who made the sale)
-  - productId: UUID (ID of the <a href="#entity-product">product</a> sold)
-  - date: Date (Automatically setted to current date)
-  - method: string (Can be 'money' or 'card')
-  - totalPrice: number (Price of product multiplied by sale's quantity)
+- **id**: UUID
+- **name**: string
+- **companyId**: UUID
+- **price**: number
+- **quantity**: number
+- **brand**: string
+- **barCode**: string/null
+- **image**: string/null - Product image filename
 
-</br>
+<h3 id="entity-sale">Sale</h3>
 
-<h2 id="routes">:gear: API Routes</h2>
+- **id**: UUID
+- **companyId**: UUID
+- **employeeId**: UUID
+- **productId**: UUID
+- **date**: Date - Sale timestamp (auto-generated)
+- **method**: string - Payment method ('money' or 'card')
+- **totalPrice**: number - Total sale amount (price × quantity)
 
-- <h3 id="user-routes">User (/user)</h3>
+<br/>
 
-  - **SignUp (POST, /sign-up): Creates an <a href="#entity-user">user</a>.**
-    - Request: name, email, password and confirmPassword (avatar only can be added to <a href="#entity-user">user</a> after the accounts creation).
-    - Response: Object with created <a href="#entity-user">user</a>'s data (except password), including his id, createdAt and updatedAt.
-  - **Sessions (POST, /sessions): Create a session of some <a href="#entity-user">user</a>, generating a token for his authentication.**
-    - Request: email and password.
-    - Response: Object containing two information: <a href="#entity-user">user</a> (an object containing all <a href="#entity-user">user</a> data, except for his password) and token (a string containing the generated token for authentication).
-  - **Forgot Password (POST, /forgot-password): Sends an email containing a recovery token (It has no expiration date, but can be used just one time) for the requested <a href="#entity-user">user</a>.**
-    - Request: email.
-    - Response: No content, given that this is a training project, that route isn't sending real e-mails, it uses ethereal to simulate it, it's possible to see the email model using a link that appears on console of backend when that route is used.
-  - **Recover Password (POST, /recover-password): Receive the recovery token and updates <a href="#entity-user">user</a>'s password if the token is valid.**
-    - Request: confirmEmail, newPassword, confirmPassword (the new one), recoverToken (string).
-    - Response: No content.
-  - **Update (PUT): Updates authenticated <a href="#entity-user">user</a>.**
-    - Request: Required (name, email), optional (oldPassword, newPassword, confirmPassword).
-    - Response: Object containing updated <a href="#entity-user">user</a>'s data.
-  - **Update Avatar (PATCH, /update-avatar): Updates/removes <a href="#entity-user">user</a>'s avatar.**
-    - Request: avatar (field containing avatar's file). If nothing is passed and the authenticated <a href="#entity-user">user</a> has an avatar, deletes the avatar from disk and it's data on database.
-    - Response: Object containing updated <a href="#entity-user">user</a>'s data with (or without) his avatar.
-  - **Leave Company (PATCH, /leave-company): Dissociate the authenticated <a href="#entity-user">user</a> of his <a href="#entity-company">company</a> (Is he is associated to one, cannot be used for an admin).**
-    - Request: No Body.
-    - Response: No Content.
-  - **Delete (DELETE): Deletes authenticated <a href="#entity-user">user</a>. If he is an admin of a <a href="#entity-company">company</a>, the <a href="#entity-company">company</a> is also deleted.**
-    - Request: No Body.
-    - Response: No Content.
+<h2 id="routes">🔗 API Endpoints</h2>
 
-</br>
+<h3 id="user-routes">User Routes (/user)</h3>
 
-- <h3 id="company-routes">Company (/company)</h3>
+<h4 id="user-sign-up">POST /sign-up</h4>
 
-  - **Show (GET): Gets <a href="#entity-company">company</a>'s data from authenticated <a href="#entity-user">user</a> (Without employees data).**
-    - Request: No Body.
-    - Response: Object containing <a href="#entity-company">company</a>'s data.
-  - **Register (POST): Creates a <a href="#entity-company">company</a> with autenticated <a href="#entity-user">user</a> as its admin (isAdmin property of <a href="#entity-user">user</a> is updated to true).**
-    - Request: name, cnpj and address (logo only can be added to the <a href="#entity-company">company</a> after its creation).
-    - Response: Object with created <a href="#entity-company">company</a>'s data, including its id, adminId, createdAt and updatedAt.
-  - **List Employees (GET, /list-employees): Gets all employees (and admin) from authenticated <a href="#entity-user">user</a>'s <a href="#entity-company">company</a>.**
-    - Request: No Body.
-    - Response: Array of <a href="#entity-user">users</a> containing all employees and the admin of the <a href="#entity-company">company</a>.
-  - **Update [Admin] (PUT): Updates <a href="#entity-company">company</a>'s data.**
-    - Request: name, cnpj and address.
-    - Response: Object containing updated <a href="#entity-company">company</a>'s data.
-  - **Update Logo [Admin] (PATCH, /update-logo): Updates/removes <a href="#entity-company">company</a>'s logo.**
-    - Request: logo (field containing logo's file). If nothing is passed and the <a href="#entity-company">company</a> has a logo, deletes the logo from disk and it's data on database.
-    - Response: Object containing updated <a href="#entity-company">company</a>'s data with (or without) its logo.
-  - **Hire Employee [Admin] (PATCH, /hire-employee/:employeeId): Associates an <a href="#entity-user">user</a> to admin's <a href="#entity-company">company</a>, updating companyId of the hired <a href="#entity-user">user</a>.**
-    - Request: No Body (The employee id is passed through params).
-    - Response: Object containing the hired <a href="#entity-user">user</a>, with his companyId updated.
-  - **Fire Employee [Admin] (PATCH, /fire-employee/:employeeId): Dissociate an <a href="#entity-user">user</a> of admin's <a href="#entity-company">company</a>, setting companyId, of fired <a href="#entity-user">user</a>, as null.**
-    - Request:  No Body (The employee id is passed through params).
-    - Response: No Content.
-  - **Delete [Admin] (DELETE): Deletes admin's <a href="#entity-company">company</a>. Sets companyId of all employees (including admin) as null (isAdmin property of admin is updated to false).**
-    - Request: No Body.
-    - Response: No Content.
+Creates a new user account
+- **Request**: name, email, password, confirmPassword
+- **Response**: User object with generated ID and timestamps
 
-</br>
+<h4 id="user-sessions">POST /sessions</h4>
 
-- <h3 id="products-routes">Products (/products)</h3>
+Generates authentication token for login
+- **Request**: email, password
+- **Response**: User object and JWT token
 
-  - **List (GET): Gets all <a href="#entity-product">products</a> from authenticated <a href="#entity-user">user</a>'s <a href="#entity-company">company</a>.**
-    - Request: No Body.
-    - Response: Array of <a href="#entity-product">products</a> from the <a href="#entity-company">company</a>.
-  - **Add (POST): Create a <a href="#entity-product">product</a> and associate it to authenticated <a href="#entity-user">user</a>'s <a href="#entity-company">company</a>.**
-    - Request: name, price, quantity, brand, barCode (optional) and image (optional, field containing <a href="#entity-product">product</a>'s image file).
-    - Response: Object with created <a href="#entity-product">product</a>'s data, including its id, companyId, createdAt and updatedAt.
-  - **Update (PUT, /:productId): Updates data of the <a href="#entity-product">product</a> passed through params.**
-    - Request: name, price, quantity, brand, barCode (optional).
-    - Response: Object containing updated <a href="#entity-product">product</a>'s data.
-  - **Update Image (PATCH, /update-image/:productId): Updates/removes image of the <a href="#entity-product">product</a> passed through params.**
-    - Request: image (field containing logo's file). If nothing is passed and the <a href="#entity-product">product</a> has an image, deletes the image from disk and it's data on database.
-    - Response: Object containing updated <a href="#entity-product">product</a>'s data with (or without) its image.
-  - **Delete (DELETE, /:productId): Deletes the <a href="#entity-product">product</a> passed through params.**
-    - Request: No Body.
-    - Response: No Content.
+<h4 id="user-forgot-password">POST /forgot-password</h4>
 
-</br>
+Sends recovery email with reset token
+- **Request**: email
+- **Response**: No content (email sent via Ethereal)
 
-- <h3 id="sales-routes">Sales (/sales)</h3>
+<h4 id="user-recover-password">POST /recover-password</h4>
 
-  - **List from Employee (GET, /employee/:employeeId): Gets all <a href="#entity-sale">sales</a> made by the employee passed through params.**
-    - Request: No Body.
-    - Response: Array of <a href="#entity-sale">sales</a> made by passed employee.
-  - **List on Day (GET, /day/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined date. The date is passed on the format day-month-year (brazilian pattern), using params.**
-    - Request: No Body, date is passed through params.
-    - Response: Array of <a href="#entity-sale">sales</a> made on passed date.
-  - **List on Week (GET, /week/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined week, starting on passed day and getting all <a href="#entity-sale">sales</a> made six days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.**
-    - Request: No Body, date is passed through params.
-    - Response: Array of <a href="#entity-sale">sales</a> made on passed week.
-  - - **List on Month (GET, /month/:day-:month-:year): Gets all <a href="#entity-sale">sales</a> on determined month, starting on passed day and getting all <a href="#entity-sale">sales</a> made twenty-nine days after it (including <a href="#entity-sale">sales</a> made on start day). The date is passed on the format day-month-year (brazilian pattern), using params.**
-    - Request: No Body, date is passed through params.
-    - Response: Array of <a href="#entity-sale">sales</a> made on passed month.
-  - **Create (POST): Create a <a href="#entity-sale">sale</a> of determined <a href="#entity-product">product</a>.**
-    - Request: productId, method, quantity.
-    - Response: Object with created <a href="#entity-sale">sale</a>'s data, including its id, companyId, employeeId, date, totalPrice, createdAt and updatedAt.
-  - **Update (PUT, /:saleId): Updates data of the <a href="#entity-sale">sale</a> passed through params.**
-    - Request: productId, method, quantity.
-    - Response: Object containing updated <a href="#entity-sale">sale</a>'s data.
-  - **Delete (DELETE, /:saleId): Deletes the <a href="#entity-sale">sale</a> passed through params.**
-    - Request: No Body.
-    - Response: No Content.
+Updates password using recovery token
+- **Request**: confirmEmail, newPassword, confirmPassword, recoverToken
+- **Response**: No content
 
-</br>
+<h4 id="user-update">PUT /</h4>
 
-<h2 id="license">:memo: License</h2>
+Updates authenticated user's profile
+- **Request**: name, email, oldPassword (optional), newPassword (optional), confirmPassword (optional)
+- **Response**: Updated user object
+
+<h4 id="user-update-avatar">PATCH /update-avatar</h4>
+
+Updates or removes user avatar
+- **Request**: avatar file (multipart/form-data)
+- **Response**: Updated user object
+
+<h4 id="user-leave-company">PATCH /leave-company</h4>
+
+Removes user from associated company
+- **Request**: No body required
+- **Response**: No content
+
+<h4 id="user-delete">DELETE /</h4>
+
+Deletes user account and associated data
+- **Request**: No body required
+- **Response**: No content
+
+<h3 id="company-routes">Company Routes (/company)</h3>
+
+<h4 id="company-show">GET /</h4>
+
+Retrieves authenticated user's company information
+- **Request**: No body required
+- **Response**: Company object
+
+<h4 id="company-register">POST /</h4>
+
+Creates new company with user as administrator
+- **Request**: name, cnpj, address
+- **Response**: Company object with generated ID
+
+<h4 id="company-list-employees">GET /list-employees</h4>
+
+Lists all company employees and administrator
+- **Request**: No body required
+- **Response**: Array of user objects
+
+<h4 id="company-update">[Admin Only] PUT /</h4>
+
+Updates company information
+- **Request**: name, cnpj, address
+- **Response**: Updated company object
+
+<h4 id="company-update-logo">[Admin Only] PATCH /update-logo</h4>
+
+Updates or removes company logo
+- **Request**: logo file (multipart/form-data)
+- **Response**: Updated company object
+
+<h4 id="company-hire-employee">[Admin Only] PATCH /hire-employee/:employeeId</h4>
+
+Associates user with company
+- **Request**: Employee ID via URL parameter
+- **Response**: Updated employee object
+
+<h4 id="company-fire-employee">[Admin Only] PATCH /fire-employee/:employeeId</h4>
+
+Removes employee from company
+- **Request**: Employee ID via URL parameter
+- **Response**: No content
+
+<h4 id="company-delete">[Admin Only] DELETE /</h4>
+
+Deletes company and dissociates all employees
+- **Request**: No body required
+- **Response**: No content
+
+<h3 id="products-routes">Product Routes (/products)</h3>
+
+<h4 id="products-list">GET /</h4>
+
+Retrieves all company products
+- **Request**: No body required
+- **Response**: Array of product objects
+
+<h4 id="products-add">POST /</h4>
+
+Adds new product to company catalog
+- **Request**: name, price, quantity, brand, barCode (optional), image (optional)
+- **Response**: Product object with generated ID
+
+<h4 id="products-update">PUT /:productId</h4>
+
+Updates existing product information
+- **Request**: name, price, quantity, brand, barCode (optional)
+- **Response**: Updated product object
+
+<h4 id="products-update-image">PATCH /update-image/:productId</h4>
+
+Updates or removes product image
+- **Request**: image file (multipart/form-data)
+- **Response**: Updated product object
+
+<h4 id="products-delete">DELETE /:productId</h4>
+
+Removes product from catalog
+- **Request**: Product ID via URL parameter
+- **Response**: No content
+
+<h3 id="sales-routes">Sales Routes (/sales)</h3>
+
+<h4 id="sales-employee">GET /employee/:employeeId</h4>
+
+Retrieves all sales made by specific employee
+- **Request**: Employee ID via URL parameter
+- **Response**: Array of sale objects
+
+<h4 id="sales-day">GET /day/:day-:month-:year</h4>
+
+Retrieves sales for specific date
+- **Request**: Date via URL parameters (DD-MM-YYYY format)
+- **Response**: Array of sale objects
+
+<h4 id="sales-week">GET /week/:day-:month-:year</h4>
+
+Retrieves sales for 7-day period starting from specified date
+- **Request**: Start date via URL parameters (DD-MM-YYYY format)
+- **Response**: Array of sale objects
+
+<h4 id="sales-month">GET /month/:day-:month-:year</h4>
+
+Retrieves sales for 30-day period starting from specified date
+- **Request**: Start date via URL parameters (DD-MM-YYYY format)
+- **Response**: Array of sale objects
+
+<h4 id="sales-create">POST /</h4>
+
+Records new product sale
+- **Request**: productId, method, quantity
+- **Response**: Sale object with calculated total price
+
+<h4 id="sales-update">PUT /:saleId</h4>
+
+Updates existing sale record
+- **Request**: productId, method, quantity
+- **Response**: Updated sale object
+
+<h4 id="sales-delete">DELETE /:saleId</h4>
+
+Removes sale record
+- **Request**: Sale ID via URL parameter
+- **Response**: No content
+
+<br/>
+
+<h2 id="license">📝 License</h2>
 This project is MIT Licensed. See <a href="https://github.com/RiadOliveira/Tradelous-backend/blob/main/LICENSE">LICENSE</a> file for more details.
 
-</br>
+<br/>
 
-<h2 id="author">:man: Author</h2>
+<h2 id="author">👨‍💻 Author</h2>
 
----
-<a href="https://github.com/RiadOliveira">
- <img src="https://avatars.githubusercontent.com/u/69125013?v=4;" width="100px;" alt=""/>
- <br/>
- <sub><b>Ríad Oliveira</b></sub>
-</a>
+<kbd>
+ <a href="https://github.com/RiadOliveira">
+   <img src="https://avatars.githubusercontent.com/u/69125013?v=4" width="100" alt="Ríad Oliveira"/>
+   <br/><br/>
+   <p align="center"><b>Ríad Oliveira</b></p>
+ </a>
+</kbd>
 
-</br>Contact:</br>
+## 🌐 Socials
 
-[![Linkedin Badge](https://img.shields.io/badge/-Ríad&nbsp;Oliveira-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/)](https://www.linkedin.com/in/r%C3%ADad-oliveira-8492891b4/)
-[![Gmail Badge](https://img.shields.io/badge/-riad.oliveira@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:riad.oliveira@gmail.com)](mailto:riad.oliveira@gmail.com)
+<div id="socials">
+ <a href = "mailto:riad.oliveira@hotmail.com"><img class="badge" src="https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white" target="_blank"/></a>
+ <a href = "mailto:riad.oliveira@gmail.com"><img class="badge" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"/></a>
+ <a href="https://www.linkedin.com/in/ríad-oliveira" target="_blank"><img class="badge" src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"/></a>
+</div>
