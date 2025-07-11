@@ -1,7 +1,7 @@
 <h1 align="center">Tradelous Backend</h1>
 
 <p align="center">
-    Backend service for the <a href="https://github.com/RiadOliveira/Tradelous-desktop">Tradelous Desktop</a> and <a href="https://github.com/RiadOliveira/Tradelous-mobile">Tradelous Mobile</a> applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications with efficient data operations.
+    Backend service for the <a href="https://github.com/RiadOliveira/Tradelous-desktop">Tradelous Desktop</a> and <a href="https://github.com/RiadOliveira/Tradelous-mobile">Tradelous Mobile</a> applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications.
 </p>
 
 ![image](https://github.com/user-attachments/assets/d2dc5a49-5220-4cc6-8014-602cd30282c1)
