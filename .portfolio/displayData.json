@@ -2,7 +2,7 @@
   "title": "Tradelous Backend",
   "extendedDescription": "Backend service for the Tradelous Desktop and Tradelous Mobile applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications.",
   "imageId": "d2dc5a49-5220-4cc6-8014-602cd30282c1",
-  "highlightColor": "violet",
+  "highlightColor": "indigo",
   "attachmentsUrl": true,
   "technologies": [
     "NodeJs",
