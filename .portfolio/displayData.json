@@ -1,0 +1,30 @@
+{
+  "title": "Tradelous Backend",
+  "extendedDescription": "Backend service for the Tradelous Desktop and Tradelous Mobile applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications.",
+  "imageId": "d2dc5a49-5220-4cc6-8014-602cd30282c1",
+  "highlightColor": "violet",
+  "attachmentsUrl": true,
+  "technologies": [
+    "NodeJs",
+    "PostgreSQL",
+    "TypeScript",
+    "TypeORM"
+  ],
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Authentication system with JWT tokens and role-based access control.",
+      "icon": "userShield"
+    },
+    {
+      "name": "Business Management",
+      "description": "Company administration with employee management and operational controls.",
+      "icon": "briefcase"
+    },
+    {
+      "name": "Sales & Analytics",
+      "description": "Transaction recording with multiple payment methods and reporting system.",
+      "icon": "chartLine"
+    }
+  ]
+}
