@@ -6,8 +6,9 @@
   "attachmentsUrl": true,
   "technologies": [
     "NodeJs",
-    "PostgreSQL",
+    "Express",
     "TypeScript",
+    "PostgreSQL",
     "TypeORM"
   ],
   "features": [
