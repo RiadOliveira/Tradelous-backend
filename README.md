@@ -4,8 +4,8 @@
     Backend service for the <a href="https://github.com/RiadOliveira/Tradelous-desktop">Tradelous Desktop</a> and <a href="https://github.com/RiadOliveira/Tradelous-mobile">Tradelous Mobile</a> applications, providing comprehensive API endpoints and data management for users, companies, products, and sales. Built as a robust foundation to support the frontend applications.
 </p>
 
-![image](https://github.com/user-attachments/assets/381aa4a1-12e9-41bf-a861-60a8049832a4)
-![image](https://img.shields.io/github/license/RiadOliveira/Tradelous-backend)
+![Preview](https://github.com/user-attachments/assets/381aa4a1-12e9-41bf-a861-60a8049832a4)
+![License](https://img.shields.io/github/license/RiadOliveira/Tradelous-backend)
 
 <br/>
 
@@ -367,7 +367,8 @@ This project is MIT Licensed. See <a href="https://github.com/RiadOliveira/Trade
 ## 🌐 Socials
 
 <div id="socials">
- <a href = "mailto:riad.oliveira@hotmail.com"><img class="badge" src="https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white" target="_blank"/></a>
- <a href = "mailto:riad.oliveira@gmail.com"><img class="badge" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"/></a>
- <a href="https://www.linkedin.com/in/ríad-oliveira" target="_blank"><img class="badge" src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"/></a>
+  <a href="https://portfolio-riadoliveira.vercel.app"><img class="badge" src="https://img.shields.io/badge/Portfolio-%23000000.svg?style=for-the-badge&logo=firefox&logoColor=#FF7139" alt="Portfolio" target="_blank"></a>
+  <a href = "mailto:riad.oliveira@hotmail.com"><img class="badge" src="https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white" alt="E-mail" target="_blank"/></a>
+  <a href = "mailto:riad.oliveira@gmail.com"><img class="badge" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail" target="_blank"/></a>
+  <a href="https://www.linkedin.com/in/ríad-oliveira" target="_blank"><img class="badge" src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Linkedin" target="_blank"/></a>
 </div>
